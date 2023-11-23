@@ -16,7 +16,6 @@ public class ProjetoEdicaoDTO implements IDTO {
     private Integer id;
     private String nome;
     private String descricao;
-    private Date data_inicio;
-    private Date data_termino;
+    private Date data_criacao;
     private List<Status> status;
 }

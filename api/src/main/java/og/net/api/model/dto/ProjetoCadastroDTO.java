@@ -11,11 +11,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class ProjetoCadastroDTO implements IDTO{
 
     private String nome;
     private String descricao;
-    private Date data_inicio;
-    private Date data_termino;
+    private Date data_criacao;
     private List<Status> status;
 }

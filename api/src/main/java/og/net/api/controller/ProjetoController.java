@@ -15,6 +15,8 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
+
 @RequestMapping("/projeto")
 public class ProjetoController {
 

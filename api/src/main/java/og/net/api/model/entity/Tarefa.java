@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -21,7 +21,8 @@ public class Tarefa {
     private String nome;
     private String descricao;
     private Boolean ativo;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date data_criacao;
-    private Date data_termino;
+    private String cor;
 
 }
