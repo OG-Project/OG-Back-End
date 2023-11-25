@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
+import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.Propriedade;
+import og.net.api.model.entity.PropriedadeProjetoTarefa;
+import og.net.api.model.entity.Tarefa;
 import og.net.api.service.PropriedadeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,24 @@ public class PropriedadeController {
     public ResponseEntity<Propriedade> buscarUm(@PathVariable Integer id){
         try {
             return new ResponseEntity<>(propriedadeService.buscarUm(id),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Projeto> buscarUmPorProjeto(@RequestParam Integer id, PropriedadeProjetoTarefa valor){
+        try {
+            return new ResponseEntity<>(propriedadeService.buscarUmProjeto(id,valor),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/id/projeto/tarefa")
+    public ResponseEntity<Collection<Tarefa>> buscarUmPorProjetoPorTarefa(@RequestParam Integer id){
+        try {
+            return new ResponseEntity<>(propriedadeService.buscarProjetoTarefa(id),HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

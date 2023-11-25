@@ -53,12 +53,13 @@ public class TarefaService {
         tarefaRepository.save(tarefa);
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
         TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
             tarefaRepository.save(tarefa);
+            return tarefa;
         }
         throw new DadosNaoEncontradoException();
 

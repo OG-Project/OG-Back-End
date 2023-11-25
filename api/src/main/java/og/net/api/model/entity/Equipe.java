@@ -21,4 +21,5 @@ public class Equipe {
     private String descricao;
     @ManyToOne
     private Projeto projeto;
+
 }

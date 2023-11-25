@@ -8,6 +8,7 @@ import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.ProjetoRepository;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +38,7 @@ public class ProjetoService {
         return projetoRepository.findAll();
     }
 
+
     public void deletar(Integer id){
         projetoRepository.deleteById(id);
     }
@@ -48,12 +50,13 @@ public class ProjetoService {
         projetoRepository.save(projeto);
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoEdicaoDTO,projeto);
         if (projetoRepository.existsById(projeto.getId())){
             projetoRepository.save(projeto);
+             return projeto;
         }
         throw new DadosNaoEncontradoException();
     }

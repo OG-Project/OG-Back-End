@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.Set;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -21,5 +23,7 @@ public class Projeto {
     private String nome;
     private String descricao;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date data_criacao;
+    private Date dataCriacao;
+    @OneToMany(mappedBy = "projeto")
+    private Set<Tarefa>  tarefas;
 }

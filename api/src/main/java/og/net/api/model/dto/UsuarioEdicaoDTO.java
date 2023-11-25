@@ -15,7 +15,7 @@ public class UsuarioEdicaoDTO implements IDTO {
     private String nome;
     private String sobrenome;
     private String username;
-    private Date data_nascimento;
+    private Date dataNascimento;
     private String email;
     private String empresa;
 }

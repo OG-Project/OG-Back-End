@@ -1,5 +1,6 @@
 package og.net.api.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +15,12 @@ public class PropriedadeProjetoTarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "propriedade_id")
-    private Propriedade propriedade;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "projeto_id")
     private Projeto projeto;
-    @ManyToOne
-    @JoinColumn(name = "tarefa_id")
-    private Tarefa tarefa;
+    @OneToOne(mappedBy = "valor")
+    @JoinColumn(name = "propriedade_id")
+    @JsonIgnore
+    private Propriedade propriedade;
+    private String valor;
 }

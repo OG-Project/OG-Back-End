@@ -7,6 +7,7 @@ import og.net.api.model.entity.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -16,6 +17,8 @@ public class ProjetoEdicaoDTO implements IDTO {
     private Integer id;
     private String nome;
     private String descricao;
-    private Date data_criacao;
+    private Date dataCriacao;
     private List<Status> status;
+    private Set<Tarefa> tarefas;
+    private PropriedadeProjetoTarefa propriedadeProjetoTarefa;
 }

@@ -5,6 +5,7 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.Tarefa;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class ProjetoController {
 
     private ProjetoService projetoService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
+    @GetMapping("/id")
+    public ResponseEntity<Projeto> buscarUm(@RequestParam Integer id){
         try {
 
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
@@ -41,6 +42,9 @@ public class ProjetoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+
 
     @GetMapping
     public ResponseEntity<Collection<Projeto>> buscarTodos(){
@@ -74,6 +78,7 @@ public class ProjetoController {
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             e.getMessage();
+            System.out.println("aqui");
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

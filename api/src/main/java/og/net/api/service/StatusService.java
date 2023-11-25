@@ -35,12 +35,13 @@ public class StatusService {
         statusRepository.save(status);
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public Status editar(IDTO dto) throws DadosNaoEncontradoException {
         StatusEdicaoDTO statusEdicaoDTO = (StatusEdicaoDTO) dto;
         Status status = new Status();
         BeanUtils.copyProperties(statusEdicaoDTO,status);
         if (statusRepository.existsById(status.getId())){
             statusRepository.save(status);
+            return status;
         }
         throw new DadosNaoEncontradoException();
 
