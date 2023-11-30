@@ -1,14 +1,13 @@
 package og.net.api.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,10 +22,15 @@ public class Tarefa {
     private String nome;
     private String descricao;
     private Boolean ativo;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date data_criacao;
+    private LocalDate dataCriacao;
     private String cor;
+    @JoinColumn(name = "tarefa_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     @ManyToOne
-    private  Projeto projeto;
-
+    private Status status;
+    @PrePersist
+    private void inserirData(){
+        this.dataCriacao= LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+    }
 }

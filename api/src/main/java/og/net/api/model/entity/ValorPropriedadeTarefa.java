@@ -10,17 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PropriedadeProjetoTarefa {
+public class ValorPropriedadeTarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
-    @OneToOne(mappedBy = "valor")
-    @JoinColumn(name = "propriedade_id")
-    @JsonIgnore
+    @ManyToOne
     private Propriedade propriedade;
-    private String valor;
+    @OneToOne
+    private Tipo valor;
 }

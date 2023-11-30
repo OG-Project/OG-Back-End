@@ -14,9 +14,6 @@ public class EquipeUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
     @ManyToOne
     @JoinColumn(name="equipe_id")
     private Equipe equipe;

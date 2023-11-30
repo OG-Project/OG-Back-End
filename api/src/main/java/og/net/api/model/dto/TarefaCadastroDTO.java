@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.PropriedadeProjetoTarefa;
 import og.net.api.model.entity.Status;
+import og.net.api.model.entity.ValorPropriedadeTarefa;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -21,6 +20,7 @@ public class TarefaCadastroDTO implements IDTO{
     private Boolean ativo;
     private Date data_criacao;
     private String cor;
-    private List<Status> status;
+    private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
+    private Status status;
     private Projeto projeto;
 }

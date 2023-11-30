@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.PropriedadeProjetoTarefa;
 import og.net.api.model.entity.Status;
+import og.net.api.model.entity.ValorPropriedadeTarefa;
 
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -23,6 +22,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private Boolean ativo;
     private Date dataCriacao;
     private String cor;
-    private List<Status> status;
-    private Projeto projeto;;
+    private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
+    private Status status;
+    private Projeto projeto;
 }

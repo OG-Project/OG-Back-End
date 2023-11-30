@@ -9,6 +9,7 @@ import og.net.api.model.entity.Tarefa;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-
+@Controller
 @RequestMapping("/projeto")
 public class ProjetoController {
 
@@ -42,8 +43,6 @@ public class ProjetoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 
 
     @GetMapping

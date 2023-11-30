@@ -18,7 +18,7 @@ public class ProjetoCadastroDTO implements IDTO{
     private String nome;
     private String descricao;
     private Date dataCriacao;
-    private List<Status> status;
+    private List<Status> statusList;
     private Set<Tarefa> tarefas;
-    private PropriedadeProjetoTarefa propriedadeProjetoTarefa;
+    private List<Propriedade> propriedades;
 }

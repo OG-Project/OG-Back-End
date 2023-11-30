@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,12 +24,15 @@ public class Usuario {
     private String email;
     private String empresa;
     private String senha;
-    @OneToOne
-    private UsuarioTarefa usuarioTarefa;
-    @OneToOne
-    private UsuarioProjeto usuarioProjeto;
-    @OneToOne
-    private EquipeUsuario equipeUsuario;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private List<UsuarioTarefa> tarefas;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private List<UsuarioProjeto>  projetos;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private List<EquipeUsuario> equipes;
 
 //    Criar um atributo de equipe ativa que terá a equipe que o usuario estará usando naquele momento
 //

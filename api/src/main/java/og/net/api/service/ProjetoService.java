@@ -2,14 +2,12 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.exception.ProjetoJaExistenteException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.Tarefa;
-import og.net.api.model.entity.Usuario;
 import og.net.api.repository.ProjetoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -60,4 +58,5 @@ public class ProjetoService {
         }
         throw new DadosNaoEncontradoException();
     }
+    
 }

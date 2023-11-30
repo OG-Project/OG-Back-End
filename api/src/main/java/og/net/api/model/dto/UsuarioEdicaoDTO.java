@@ -3,8 +3,12 @@ package og.net.api.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import og.net.api.model.entity.EquipeUsuario;
+import og.net.api.model.entity.UsuarioProjeto;
+import og.net.api.model.entity.UsuarioTarefa;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +22,7 @@ public class UsuarioEdicaoDTO implements IDTO {
     private Date dataNascimento;
     private String email;
     private String empresa;
+    private List<UsuarioTarefa> tarefas;
+    private List<UsuarioProjeto>  projetos;
+    private List<EquipeUsuario> equipes;
 }

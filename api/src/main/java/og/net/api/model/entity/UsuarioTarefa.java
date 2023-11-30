@@ -19,11 +19,7 @@ public class UsuarioTarefa {
     @JoinColumn(name = "tarefa_id")
     private Tarefa tarefa;
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "responsavel_id")
     private Usuario responsavel;
 
