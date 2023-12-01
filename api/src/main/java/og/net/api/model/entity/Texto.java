@@ -7,7 +7,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Texto extends Tipo{
-    private String valor;
+public class Texto extends Valor {
+    private String texto;
 
+    public Texto(Long id, String texto) {
+        super(id);
+        this.texto = texto;
+    }
+
+
+    @Override
+    public Object getValor() {
+        return texto;
+    }
 }

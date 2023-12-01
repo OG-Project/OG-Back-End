@@ -16,7 +16,7 @@ public class Propriedade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    @ManyToOne
+    @Enumerated(value = EnumType.STRING)
     private Tipo tipo;
 
 }

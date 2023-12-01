@@ -72,7 +72,7 @@ public class TarefaController {
             tarefaService.cadastrar(tarefaCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

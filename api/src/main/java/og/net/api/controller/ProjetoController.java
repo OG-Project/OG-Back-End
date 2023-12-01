@@ -61,13 +61,10 @@ public class ProjetoController {
 
     @PostMapping
     public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
-        try{
+
             projetoService.cadastrar(projetoCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
-        }catch (Exception e){
-            e.getMessage();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+
     }
 
     @PutMapping

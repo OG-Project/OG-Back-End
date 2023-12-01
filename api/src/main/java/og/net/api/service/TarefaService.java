@@ -51,6 +51,8 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
         tarefaRepository.save(tarefa);
+
+
     }
 
     public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {

@@ -2,13 +2,23 @@ package og.net.api.model.entity;
 
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Numero extends Tipo{
-    private Double valor;
+public class Numero extends Valor {
+    private Double numero;
+
+
+    public Numero(Long id, Double valor) {
+        super(id);
+        this.numero = valor;
+    }
+
+
+    @Override
+    public Object getValor() {
+        return numero;
+    }
 }
