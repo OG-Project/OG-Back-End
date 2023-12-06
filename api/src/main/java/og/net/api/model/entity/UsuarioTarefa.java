@@ -16,7 +16,6 @@ public class UsuarioTarefa {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "tarefa_id")
     private Tarefa tarefa;
 
     @ManyToOne

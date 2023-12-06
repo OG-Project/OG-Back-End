@@ -33,9 +33,6 @@ public class TarefaService {
         return tarefaRepository.findByNome(nome);
     }
 
-    public List<Tarefa> buscarTarefasPorAtivas(Boolean ativo){
-        return tarefaRepository.findByAtivo(ativo);
-    }
 
     public List<Tarefa> buscarTodos(){
         return tarefaRepository.findAll();

@@ -32,13 +32,15 @@ public class Projeto {
     @OneToMany
     @JoinColumn(name = "projeto_id")
     private Set<Tarefa>  tarefas;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "projeto_id")
     private List<Propriedade> propriedades;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
-
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "projeto_id")
+    private List<ProjetoEquipe> equipes;
     @PrePersist
     private void inserirData(){
         this.dataCriacao= LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));

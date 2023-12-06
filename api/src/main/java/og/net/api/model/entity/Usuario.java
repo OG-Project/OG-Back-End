@@ -19,10 +19,13 @@ public class Usuario {
     private Integer id;
     private String nome;
     private String sobrenome;
+    @Column(unique = true, nullable = false)
     private String username;
     private Date dataNascimento;
+    @Column(unique = true, nullable = false)
     private String email;
     private String empresa;
+    @Column(nullable = false)
     private String senha;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")

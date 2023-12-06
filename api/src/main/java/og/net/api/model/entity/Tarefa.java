@@ -18,10 +18,9 @@ public class Tarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id
     private String nome;
     private String descricao;
-    private Boolean ativo;
     private LocalDate dataCriacao;
     private String cor;
     @JoinColumn(name = "tarefa_id")

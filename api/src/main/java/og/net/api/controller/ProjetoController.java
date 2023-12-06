@@ -73,8 +73,7 @@ public class ProjetoController {
             projetoService.editar(projetoEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            e.getMessage();
-            System.out.println("aqui");
+            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
