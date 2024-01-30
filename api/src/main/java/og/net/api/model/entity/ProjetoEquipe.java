@@ -9,18 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PropriedadeProjetoTarefa {
+public class ProjetoEquipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "propriedade_id")
-    private Propriedade propriedade;
-    @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
-    @ManyToOne
-    @JoinColumn(name = "tarefa_id")
-    private Tarefa tarefa;
+    private Equipe equipe;
+
+
 }

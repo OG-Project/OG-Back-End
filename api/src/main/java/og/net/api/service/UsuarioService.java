@@ -53,12 +53,13 @@ public class UsuarioService {
     }
 
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(ucdto,usuario);
        if (usuarioRepository.existsById(usuario.getId())){
            usuarioRepository.save(usuario);
+           return usuario;
        }
        throw new DadosNaoEncontradoException();
     }

@@ -61,7 +61,7 @@ public class EquipeController {
             equipeService.cadastrar(equipeCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

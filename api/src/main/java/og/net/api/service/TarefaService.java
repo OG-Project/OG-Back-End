@@ -33,9 +33,6 @@ public class TarefaService {
         return tarefaRepository.findByNome(nome);
     }
 
-    public List<Tarefa> buscarTarefasPorAtivas(Boolean ativo){
-        return tarefaRepository.findByAtivo(ativo);
-    }
 
     public List<Tarefa> buscarTodos(){
         return tarefaRepository.findAll();
@@ -51,14 +48,17 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
         tarefaRepository.save(tarefa);
+
+
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
         TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
             tarefaRepository.save(tarefa);
+            return tarefa;
         }
         throw new DadosNaoEncontradoException();
 

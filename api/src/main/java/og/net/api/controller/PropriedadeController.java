@@ -32,6 +32,8 @@ public class PropriedadeController {
         }
     }
 
+
+
     @GetMapping
     public ResponseEntity<Collection<Propriedade>> buscarTodos(){
         try{

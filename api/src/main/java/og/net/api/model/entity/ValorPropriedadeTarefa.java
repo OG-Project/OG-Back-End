@@ -5,25 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ValorEntidadeTarefa {
+public class ValorPropriedadeTarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-
-    @OneToOne
-    @JoinColumn(name = "tarefa_id")
-    private  Tarefa tarefa;
-    @OneToOne
-    @JoinColumn(name = "propriedade_id")
-    private  Propriedade propriedade;
-    private String valor;
-
+    @ManyToOne
+    private Propriedade propriedade;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Valor valor;
 }

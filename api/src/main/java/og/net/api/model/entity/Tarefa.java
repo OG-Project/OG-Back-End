@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,9 +22,15 @@ public class Tarefa {
     private Integer id;
     private String nome;
     private String descricao;
-    private Boolean ativo;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date data_criacao;
+    private LocalDateTime dataCriacao;
     private String cor;
-
+    @JoinColumn(name = "tarefa_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
+    @ManyToOne
+    private Status status;
+    @PrePersist
+    private void inserirData(){
+        this.dataCriacao= LocalDateTime.now();
+    }
 }

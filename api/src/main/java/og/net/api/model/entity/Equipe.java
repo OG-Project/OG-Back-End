@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,6 +18,5 @@ public class Equipe {
     private Integer id;
     private String nome;
     private String descricao;
-    @ManyToOne
-    private Projeto projeto;
+
 }

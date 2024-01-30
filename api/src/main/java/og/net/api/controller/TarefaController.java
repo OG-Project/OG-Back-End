@@ -43,14 +43,6 @@ public class TarefaController {
         }
     }
 
-    @GetMapping("/ativa")
-    public ResponseEntity<Collection<Tarefa>> buscarTarefasPorAtivas(@RequestParam Boolean ativo){
-        try{
-            return new ResponseEntity<>(tarefaService.buscarTarefasPorAtivas(ativo),HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @GetMapping
     public ResponseEntity<Collection<Tarefa>> buscarTodos(){
@@ -72,7 +64,7 @@ public class TarefaController {
             tarefaService.cadastrar(tarefaCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

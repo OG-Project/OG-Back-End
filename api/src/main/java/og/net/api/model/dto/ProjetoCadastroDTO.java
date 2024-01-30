@@ -5,8 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +18,9 @@ public class ProjetoCadastroDTO implements IDTO{
 
     private String nome;
     private String descricao;
-    private Date data_criacao;
-    private List<Status> status;
+    private LocalDateTime dataCriacao;
+    private List<Status> statusList;
+    private Set<Tarefa> tarefas;
+    private List<Propriedade> propriedades;
+    private List<ProjetoEquipe> equipes;
 }

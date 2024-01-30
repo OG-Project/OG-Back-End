@@ -20,10 +20,6 @@ public class UsuarioProjeto {
     private Projeto projeto;
 
     @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-
-    @OneToOne
     @JoinColumn(name = "responsavel_id")
     private Usuario responsavel;
 

@@ -5,9 +5,11 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.Tarefa;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -16,14 +18,14 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-
+@Controller
 @RequestMapping("/projeto")
 public class ProjetoController {
 
     private ProjetoService projetoService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
+    @GetMapping("/id")
+    public ResponseEntity<Projeto> buscarUm(@RequestParam Integer id){
         try {
 
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
@@ -42,6 +44,7 @@ public class ProjetoController {
         }
     }
 
+
     @GetMapping
     public ResponseEntity<Collection<Projeto>> buscarTodos(){
         try{
@@ -58,13 +61,10 @@ public class ProjetoController {
 
     @PostMapping
     public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
-        try{
+
             projetoService.cadastrar(projetoCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
-        }catch (Exception e){
-            e.getMessage();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+
     }
 
     @PutMapping
@@ -73,7 +73,7 @@ public class ProjetoController {
             projetoService.editar(projetoEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Tipo;
+import og.net.api.model.entity.Valor;
 
 @AllArgsConstructor
 @Data
@@ -12,5 +13,6 @@ public class PropriedadeCadastroDTO implements IDTO{
 
     private String nome;
     private Tipo tipo;
+
 
 }
