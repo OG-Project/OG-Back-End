@@ -12,5 +12,5 @@ public class EquipeCadastroDTO implements IDTO {
 
     private String nome;
     private String descricao;
-    private Projeto projeto;
+
 }

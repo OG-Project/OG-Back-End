@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ValorDeserializer extends StdDeserializer<Valor> {
@@ -35,7 +36,7 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
         }else if(isPresent("data")){
 
             String valorJson = jsonNode.get("data").asText();
-            LocalDate data= LocalDate.parse(valorJson);
+            LocalDateTime data= LocalDateTime.parse(valorJson);
             return new Data(id,data);
 
         }else if(isPresent("numero")){

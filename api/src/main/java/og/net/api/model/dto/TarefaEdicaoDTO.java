@@ -8,6 +8,7 @@ import og.net.api.model.entity.Status;
 import og.net.api.model.entity.ValorPropriedadeTarefa;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private String nome;
     private String descricao;
     private Boolean ativo;
-    private Date dataCriacao;
+    private LocalDateTime dataCriacao;
     private String cor;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;

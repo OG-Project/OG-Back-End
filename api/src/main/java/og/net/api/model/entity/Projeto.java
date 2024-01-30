@@ -10,6 +10,7 @@ import javax.swing.text.DateFormatter;
 import java.text.DateFormat;
 import java.text.Format;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
     @OneToMany
     @JoinColumn(name = "projeto_id")
     private Set<Tarefa>  tarefas;
@@ -43,6 +44,6 @@ public class Projeto {
     private List<ProjetoEquipe> equipes;
     @PrePersist
     private void inserirData(){
-        this.dataCriacao= LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        this.dataCriacao= LocalDateTime.now();
     }
 }

@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 public class Data extends Valor {
-    private LocalDate data;
+    private LocalDateTime data;
 
-    public Data(Long id, LocalDate valor) {
+    public Data(Long id, LocalDateTime valor) {
         super(id);
         this.data = valor;
     }

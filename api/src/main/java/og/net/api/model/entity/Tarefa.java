@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class Tarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id
+    private Integer id;
     private String nome;
     private String descricao;
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
     private String cor;
     @JoinColumn(name = "tarefa_id")
     @OneToMany(cascade = CascadeType.ALL)
@@ -30,6 +31,6 @@ public class Tarefa {
     private Status status;
     @PrePersist
     private void inserirData(){
-        this.dataCriacao= LocalDate.parse(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        this.dataCriacao= LocalDateTime.now();
     }
 }
