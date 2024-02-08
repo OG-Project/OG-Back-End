@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ValorPropriedadeTarefa {
-
+public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Propriedade propriedade;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Valor valor;
+    private Long id;
+    private String conteudo;
+    @OneToOne
+    private Usuario autor;
+
 }

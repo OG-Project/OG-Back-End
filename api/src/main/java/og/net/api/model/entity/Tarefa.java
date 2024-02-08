@@ -29,6 +29,8 @@ public class Tarefa {
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     @ManyToOne
     private Status status;
+    @OneToMany
+    private List<Comentario> comentarios;
     @PrePersist
     private void inserirData(){
         this.dataCriacao= LocalDateTime.now();

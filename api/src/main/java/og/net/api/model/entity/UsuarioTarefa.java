@@ -15,7 +15,7 @@ public class UsuarioTarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Tarefa tarefa;
 
     @ManyToOne

@@ -10,6 +10,7 @@ import og.net.api.model.dto.IDTO;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.EquipeRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class EquipeService {
-
+//        private ModelMapper mapper;
     private EquipeRepository equipeRepository;
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
@@ -47,7 +48,10 @@ public class EquipeService {
     }
 
     public void editar(IDTO dto) throws DadosNaoEncontradoException {
-       EquipeEdicaoDTO equipeEdicaoDTO = (EquipeEdicaoDTO) dto;
+        //      Equipe equipe= equipeService.buscarUm(equipeEdicaoDTO.getId());
+        //      //serve para não copiar atributos nulos
+//              mapper.map(equipeEdicaoDTO,equipe);
+        EquipeEdicaoDTO equipeEdicaoDTO = (EquipeEdicaoDTO) dto;
         Equipe equipe = new Equipe();
         BeanUtils.copyProperties(equipeEdicaoDTO,equipe);
         if (!equipeRepository.existsById(equipe.getId())){

@@ -6,6 +6,7 @@ import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.entity.Equipe;
 import og.net.api.service.EquipeService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,13 @@ import java.util.NoSuchElementException;
 @RequestMapping("/equipe")
 public class EquipeController {
 
+
     private EquipeService equipeService;
+    //criar um metodo que retorna um novo modelMapper
+// ou usar a notação Bin, que mapea injeção de dependência
+// criar um contrutor com apenas um this.mapper= new ModelMappper(), já que o serviçe e outras dependencias são injetadas normalmente
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipe> buscarUm(@PathVariable Integer id){
@@ -68,12 +75,19 @@ public class EquipeController {
 
     @PutMapping
     public ResponseEntity<Equipe> editar(@RequestBody EquipeEdicaoDTO equipeEdicaoDTO){
+
         try {
             equipeService.editar(equipeEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
-        }catch (DadosNaoEncontradoException e){
+        } catch (DadosNaoEncontradoException e){
             e.getMessage();
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+//        catch (EquipeNaoEncontradaException e){
+//            e.getMessage();
+//            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
     }
+//    @PatchMapping
+
 }

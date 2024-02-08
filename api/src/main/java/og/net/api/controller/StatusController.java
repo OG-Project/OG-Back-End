@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
+import og.net.api.model.dto.StatusCadastroDTO;
 import og.net.api.model.entity.Propriedade;
 import og.net.api.model.entity.Status;
 import og.net.api.service.PropriedadeService;
@@ -49,9 +50,9 @@ public class StatusController {
     }
 
     @PostMapping
-    public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO){
+    public ResponseEntity<Status> cadastrar(@RequestBody StatusCadastroDTO statusCadastroDTO){
         try{
-            statusService.cadastrar(propriedadeCadastroDTO);
+            statusService.cadastrar(statusCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -59,9 +60,9 @@ public class StatusController {
     }
 
     @PutMapping
-    public ResponseEntity<Propriedade> editar(@RequestBody PropriedadeEdicaoDTO propriedadeEdicaoDTO){
+    public ResponseEntity<Status> editar(@RequestBody StatusCadastroDTO statusCadastroDTO){
         try {
-            statusService.editar(propriedadeEdicaoDTO);
+            statusService.editar(statusCadastroDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             e.getMessage();
