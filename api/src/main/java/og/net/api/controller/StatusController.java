@@ -5,6 +5,7 @@ import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
 import og.net.api.model.dto.StatusCadastroDTO;
+import og.net.api.model.dto.StatusEdicaoDTO;
 import og.net.api.model.entity.Propriedade;
 import og.net.api.model.entity.Status;
 import og.net.api.service.PropriedadeService;
@@ -60,9 +61,9 @@ public class StatusController {
     }
 
     @PutMapping
-    public ResponseEntity<Status> editar(@RequestBody StatusCadastroDTO statusCadastroDTO){
+    public ResponseEntity<Status> editar(@RequestBody StatusEdicaoDTO statusEdicaoDTO){
         try {
-            statusService.editar(statusCadastroDTO);
+            statusService.editar(statusEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             e.getMessage();

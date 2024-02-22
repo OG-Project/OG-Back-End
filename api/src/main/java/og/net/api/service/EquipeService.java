@@ -44,6 +44,7 @@ public class EquipeService {
         EquipeCadastroDTO equipeCadastroDTO = (EquipeCadastroDTO) dto;
         Equipe equipe = new Equipe();
         BeanUtils.copyProperties(equipeCadastroDTO,equipe);
+
         equipeRepository.save(equipe);
     }
 
