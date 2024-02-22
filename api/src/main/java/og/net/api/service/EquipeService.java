@@ -55,12 +55,7 @@ public class EquipeService {
         EquipeCadastroDTO equipeCadastroDTO = (EquipeCadastroDTO) dto;
         Equipe equipe = new Equipe();
         BeanUtils.copyProperties(equipeCadastroDTO,equipe);
-<<<<<<< HEAD
-
-        equipeRepository.save(equipe);
-=======
         return  equipeRepository.save(equipe);
->>>>>>> d6219eea0907cee5863923da93475bae644c725e
     }
 
     public void editar(IDTO dto) throws DadosNaoEncontradoException {
