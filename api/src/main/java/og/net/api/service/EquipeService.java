@@ -8,8 +8,11 @@ import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.entity.Equipe;
+import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.EquipeRepository;
+import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import java.util.List;
 public class EquipeService {
 //        private ModelMapper mapper;
     private EquipeRepository equipeRepository;
+    private EquipeUsuarioRepository equipeUsuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
         if (equipeRepository.existsById(id)){
@@ -37,15 +42,25 @@ public class EquipeService {
     }
 
     public void deletar(Integer id){
+        List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe_id(id);
+        Equipe equipe = equipeRepository.findById(id).get();
+        equipeUsuarios.forEach(eu -> {
+           equipeUsuarioRepository.deleteById(eu.getId());
+        });
+
         equipeRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) throws EquipeJaExistenteException {
+    public Equipe cadastrar(IDTO dto) throws EquipeJaExistenteException {
         EquipeCadastroDTO equipeCadastroDTO = (EquipeCadastroDTO) dto;
         Equipe equipe = new Equipe();
         BeanUtils.copyProperties(equipeCadastroDTO,equipe);
+<<<<<<< HEAD
 
         equipeRepository.save(equipe);
+=======
+        return  equipeRepository.save(equipe);
+>>>>>>> d6219eea0907cee5863923da93475bae644c725e
     }
 
     public void editar(IDTO dto) throws DadosNaoEncontradoException {

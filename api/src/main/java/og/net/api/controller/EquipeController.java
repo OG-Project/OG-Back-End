@@ -16,8 +16,9 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/equipe")
+//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EquipeController {
 
 
@@ -57,16 +58,16 @@ public class EquipeController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Integer id){
-        equipeService.deletar(id);
+    @DeleteMapping("/{equipeId}")
+    public void deletar(@PathVariable Integer equipeId){
+        equipeService.deletar(equipeId);
     }
 
     @PostMapping
     public ResponseEntity<Equipe> cadastrar(@RequestBody EquipeCadastroDTO equipeCadastroDTO){
         try{
-            equipeService.cadastrar(equipeCadastroDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+
+            return new ResponseEntity<>(equipeService.cadastrar(equipeCadastroDTO), HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
