@@ -2,11 +2,14 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.UsuarioInesxistenteException;
 import og.net.api.exception.UsuarioJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.entity.Equipe;
+import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
@@ -20,9 +23,10 @@ import java.util.List;
 public class UsuarioService {
 
      private UsuarioRepository usuarioRepository;
+     private EquipeService equipeService;
 
     public Usuario buscarUm(Integer id) {
-            return usuarioRepository.findById(id).get();
+        return usuarioRepository.findById(id).get();
     }
 
     public List<Usuario> buscarTodos(){
@@ -62,5 +66,44 @@ public class UsuarioService {
            return usuario;
        }
        throw new DadosNaoEncontradoException();
+    }
+
+    public void adicionarAEquipe(Integer userId, Integer equipeId) {
+        System.out.println(userId + " | " + equipeId);
+        System.out.println(buscarUm(userId));
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Usuario user = buscarUm(userId);
+
+            EquipeUsuario eu = new EquipeUsuario();
+            eu.setEquipe(equipe);
+            user.getEquipes().add(eu);
+            usuarioRepository.save(user);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void adicionar2(List<Integer> ids, Integer equipeId) {
+        System.out.println(ids);
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+
+            ids.forEach(id -> {
+                try {
+                    Usuario user = buscarUm(id);
+                    EquipeUsuario eu = new EquipeUsuario();
+                    eu.setEquipe(equipe);
+                    //setar as permissões
+                    user.getEquipes().add(eu);
+                    usuarioRepository.save(user);
+                } catch (Exception ignored) {}
+            });
+
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
     }
 }
