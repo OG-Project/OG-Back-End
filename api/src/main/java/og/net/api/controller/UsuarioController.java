@@ -12,12 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
+//@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
-
 @RequestMapping("/usuario")
 public class UsuarioController {
 
@@ -93,4 +94,20 @@ public class UsuarioController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PatchMapping("/add/{userId}/{equipeId}")
+    public void adicionarAEquipe(
+            @PathVariable Integer userId,
+            @PathVariable Integer equipeId) {
+        usuarioService.adicionarAEquipe(userId, equipeId);
+    }
+
+    @PatchMapping("/add/{equipeId}")
+    public void adicionarAEquipeCadastrada(
+            @RequestBody List<Integer> ids,
+            @PathVariable Integer equipeId) {
+        usuarioService.adicionar2(ids,equipeId);
+    }
+
+
 }
