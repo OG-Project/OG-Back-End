@@ -7,6 +7,7 @@ import og.net.api.exception.TarefaJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
+import og.net.api.model.dto.TarefasPorStatusDTO;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.TarefaRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

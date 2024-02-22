@@ -56,6 +56,7 @@ public class EquipeService {
         Equipe equipe = new Equipe();
         BeanUtils.copyProperties(equipeCadastroDTO,equipe);
         return  equipeRepository.save(equipe);
+
     }
 
     public void editar(IDTO dto) throws DadosNaoEncontradoException {

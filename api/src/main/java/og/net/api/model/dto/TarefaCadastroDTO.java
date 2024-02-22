@@ -23,5 +23,4 @@ public class TarefaCadastroDTO implements IDTO{
     private String cor;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
-    private Projeto projeto;
 }

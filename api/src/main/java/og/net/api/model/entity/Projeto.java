@@ -29,9 +29,9 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
+    @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany
-    @JoinColumn(name = "projeto_id")
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Tarefa>  tarefas;
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "projeto_id")

@@ -1,5 +1,6 @@
 package og.net.api.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,7 @@ public class Tarefa {
     private String descricao;
     private LocalDateTime dataCriacao;
     private String cor;
+    private Integer ordem;
     @JoinColumn(name = "tarefa_id")
     @OneToMany(cascade = CascadeType.ALL)
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
