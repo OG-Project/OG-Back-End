@@ -64,7 +64,7 @@ public class ProjetoController {
     public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
 
             projetoService.cadastrar(projetoCadastroDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
