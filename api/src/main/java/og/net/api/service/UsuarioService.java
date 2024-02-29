@@ -75,9 +75,9 @@ public class UsuarioService {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
 
-            EquipeUsuario eu = new EquipeUsuario();
-            eu.setEquipe(equipe);
-            user.getEquipes().add(eu);
+            EquipeUsuario equipeUsuario = new EquipeUsuario();
+            equipeUsuario.setEquipe(equipe);
+            user.getEquipes().add(equipeUsuario);
             usuarioRepository.save(user);
 
         } catch (EquipeNaoEncontradaException e) {
@@ -85,7 +85,7 @@ public class UsuarioService {
         }
     }
 
-    public void adicionar2(List<Integer> ids, Integer equipeId) {
+    public void adicionarmembros(List<Integer> ids, Integer equipeId) {
         System.out.println(ids);
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
@@ -93,10 +93,10 @@ public class UsuarioService {
             ids.forEach(id -> {
                 try {
                     Usuario user = buscarUm(id);
-                    EquipeUsuario eu = new EquipeUsuario();
-                    eu.setEquipe(equipe);
+                    EquipeUsuario equipeUsuario = new EquipeUsuario();
+                    equipeUsuario.setEquipe(equipe);
                     //setar as permissões
-                    user.getEquipes().add(eu);
+                    user.getEquipes().add(equipeUsuario);
                     usuarioRepository.save(user);
                 } catch (Exception ignored) {}
             });

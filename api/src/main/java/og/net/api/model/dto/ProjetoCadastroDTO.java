@@ -13,18 +13,18 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ProjetoCadastroDTO implements IDTO{
 
     private String nome;
     private String descricao;
     private LocalDateTime dataCriacao;
     private List<Status> statusList;
-    private Set<Tarefa> tarefas;
+    private List<Tarefa> tarefas;
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> equipes;
 
+    //Define a data da criação!
     public LocalDateTime getDataCriacao() {
-        return dataCriacao = LocalDateTime.now();
+        return LocalDateTime.now();
     }
 }

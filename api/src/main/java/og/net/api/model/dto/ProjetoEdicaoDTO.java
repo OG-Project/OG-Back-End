@@ -18,7 +18,6 @@ public class ProjetoEdicaoDTO implements IDTO {
     private Integer id;
     private String nome;
     private String descricao;
-    private LocalDateTime dataCriacao;
     private List<Status> statusList;
     private Set<Tarefa> tarefas;
     private List<Propriedade> propriedades;

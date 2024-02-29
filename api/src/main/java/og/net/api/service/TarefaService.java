@@ -37,7 +37,6 @@ public class TarefaService {
         return tarefaRepository.findByNome(nome);
     }
 
-
     public List<Tarefa> buscarTodos(){
         return tarefaRepository.findAll();
     }

@@ -23,7 +23,6 @@ import java.util.NoSuchElementException;
 public class TarefaController {
 
     private TarefaService tarefaService;
-
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
         try {

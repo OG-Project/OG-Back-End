@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import og.net.api.model.dto.IDTO;
+import og.net.api.model.dto.ProjetoCadastroDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.swing.text.DateFormatter;
@@ -32,9 +34,8 @@ public class Projeto {
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
     @OneToMany(cascade = CascadeType.ALL)
-    private Set<Tarefa>  tarefas;
+    private List<Tarefa>  tarefas;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "projeto_id")
     private List<Propriedade> propriedades;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_id")
