@@ -106,7 +106,7 @@ public class UsuarioController {
     public void adicionarAEquipeCadastrada(
             @RequestBody List<Integer> ids,
             @PathVariable Integer equipeId) {
-        usuarioService.adicionar2(ids,equipeId);
+        usuarioService.adicionarmembros(ids,equipeId);
     }
 
 

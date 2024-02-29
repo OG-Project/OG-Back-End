@@ -12,6 +12,8 @@ import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.TarefaRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,9 @@ public class TarefaService {
     }
 
 
+    public Page<Tarefa> buscarTodos(Pageable pageable){
+        return tarefaRepository.findAll(pageable);
+    }
     public List<Tarefa> buscarTodos(){
         return tarefaRepository.findAll();
     }

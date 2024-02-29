@@ -23,6 +23,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private Boolean ativo;
     private LocalDateTime dataCriacao;
     private String cor;
+    private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
 }

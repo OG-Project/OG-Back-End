@@ -6,6 +6,11 @@ import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.service.TarefaService;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +26,6 @@ import java.util.NoSuchElementException;
 public class TarefaController {
 
     private TarefaService tarefaService;
-
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
         try {
@@ -44,9 +48,14 @@ public class TarefaController {
 
 
     @GetMapping
-    public ResponseEntity<Collection<Tarefa>> buscarTodos(){
+    public ResponseEntity<?> buscarTodos(Pageable pageable){
+        //SpringDataWebProperties.Pageable pageable = new SpringDataWebProperties.Pageable();
         try{
-            return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
+            if(pageable.getSort()== Sort.unsorted()){
+                return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(tarefaService.buscarTodos(pageable), HttpStatus.OK);
+            }
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

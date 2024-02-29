@@ -25,7 +25,7 @@ public class Tarefa {
     private String descricao;
     private LocalDateTime dataCriacao;
     private String cor;
-    private Integer ordem;
+    private Integer indice;
     @JoinColumn(name = "tarefa_id")
     @OneToMany(cascade = CascadeType.ALL)
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
