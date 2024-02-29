@@ -31,19 +31,15 @@ public class Projeto {
     private String descricao;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Tarefa>  tarefas;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<Propriedade> propriedades;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<ProjetoEquipe> equipes;
-    @PrePersist
-    private void inserirData(){
-        this.dataCriacao= LocalDateTime.now();
-    }
 }
