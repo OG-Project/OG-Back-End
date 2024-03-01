@@ -11,8 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -22,7 +25,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/tarefa")
 public class TarefaController {
 
-    private TarefaService tarefaService;
+    private final TarefaService tarefaService;
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
         try {
@@ -82,6 +85,10 @@ public class TarefaController {
             e.getMessage();
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @PatchMapping("/{id}")
+    public void cadastrarFoto(@RequestParam List<MultipartFile> arquivos, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        tarefaService.atualizarFoto(id,arquivos);
     }
 }
 

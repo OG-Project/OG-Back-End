@@ -37,13 +37,6 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
-
-//    Criar um atributo de equipe ativa que terá a equipe que o usuario estará usando naquele momento
-//      será feito de maneira dinamica no front-end com logica
-
-//    entity intermediaria que terá um id da equipe e outro do usuario tendo também um id próprio esse terá relação com o usuario sendo esta OneToOne.
-//
-//    entity intermediaria que terá um id de propriedade que terá também um id de tarefas e um de projetos, tendo uma relação OneToMany.
-//
-//    entity intermediaria que tera um id de permissao tendo também um id de tarefa e de usuario, tendo uma relação OneToOne. Isso serve também para projeto_usuario.
+    @OneToOne(cascade = CascadeType.ALL)
+    private Arquivo foto;
 }

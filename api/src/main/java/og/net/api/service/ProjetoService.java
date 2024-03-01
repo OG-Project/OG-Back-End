@@ -6,12 +6,15 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
+import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.repository.ProjetoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,6 +49,13 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoCadastroDTO,projeto);
         projetoRepository.save(projeto);
+    }
+    public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
+        ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
+        Projeto projeto = new Projeto();
+        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
+        projetoRepository.save(projeto);
+
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {

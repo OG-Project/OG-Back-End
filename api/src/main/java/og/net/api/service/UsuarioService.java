@@ -8,13 +8,16 @@ import og.net.api.exception.UsuarioJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
@@ -83,6 +86,12 @@ public class UsuarioService {
         } catch (EquipeNaoEncontradaException e) {
             e.printStackTrace();
         }
+    }
+
+    public void atualizarFoto(Integer id, MultipartFile foto) throws IOException {
+        Usuario usuario = buscarUm(id);
+        usuario.setFoto(new Arquivo(foto));
+        usuarioRepository.save(usuario);
     }
 
     public void adicionarmembros(List<Integer> ids, Integer equipeId) {

@@ -33,8 +33,6 @@ public class Tarefa {
     private Status status;
     @OneToMany
     private List<Comentario> comentarios;
-    @PrePersist
-    private void inserirData(){
-        this.dataCriacao= LocalDateTime.now();
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Arquivo> arquivos;
 }

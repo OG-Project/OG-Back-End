@@ -10,7 +10,9 @@ import og.net.api.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -108,6 +110,9 @@ public class UsuarioController {
             @PathVariable Integer equipeId) {
         usuarioService.adicionarmembros(ids,equipeId);
     }
-
+    @PatchMapping("/{id}")
+    public void cadastrarFoto(@RequestParam MultipartFile foto, @PathVariable Integer id) throws IOException {
+        usuarioService.atualizarFoto(id,foto);
+    }
 
 }

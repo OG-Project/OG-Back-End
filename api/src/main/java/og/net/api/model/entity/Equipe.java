@@ -18,5 +18,6 @@ public class Equipe {
     private Integer id;
     private String nome;
     private String descricao;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    private Arquivo foto;
 }
