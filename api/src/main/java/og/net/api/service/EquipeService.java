@@ -7,6 +7,7 @@ import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
+import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
@@ -24,7 +25,7 @@ public class EquipeService {
 //        private ModelMapper mapper;
     private EquipeRepository equipeRepository;
     private EquipeUsuarioRepository equipeUsuarioRepository;
-    private UsuarioRepository usuarioRepository;
+
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
         if (equipeRepository.existsById(id)){
@@ -36,6 +37,11 @@ public class EquipeService {
     public List<Equipe> buscarEquipesNome(String nome){
         return equipeRepository.findByNome(nome);
     }
+
+    public List<EquipeUsuario> buscarTodosUsuarios(Equipe equipe) {
+        return equipeUsuarioRepository.findAllByEquipe(equipe);
+    }
+
 
     public List<Equipe> buscarTodos(){
         return equipeRepository.findAll();

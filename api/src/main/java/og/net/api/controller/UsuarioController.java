@@ -2,6 +2,7 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.UsuarioJaExistenteException;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
@@ -109,5 +110,8 @@ public class UsuarioController {
         usuarioService.adicionar2(ids,equipeId);
     }
 
-
+    @GetMapping("/buscarMembros/{equipeId}")
+    public List<Usuario> buscarMembrosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
+        return usuarioService.buscarMembrosEquipe(equipeId);
+    }
 }

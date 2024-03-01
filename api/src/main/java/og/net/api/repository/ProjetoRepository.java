@@ -1,6 +1,7 @@
 package og.net.api.repository;
 
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Propriedade;
 import og.net.api.model.entity.Tarefa;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ import java.util.List;
 public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
    List<Projeto> findByNome(String nome);
-
+   List<Projeto> findByEquipes_Equipe_Id(Integer id);
 }

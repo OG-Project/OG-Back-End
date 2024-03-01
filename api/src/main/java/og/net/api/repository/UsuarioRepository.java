@@ -2,6 +2,7 @@ package og.net.api.repository;
 
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.entity.Equipe;
+import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     List<Usuario> findByEmail(String email);
 
+    Usuario findByEquipesContaining(EquipeUsuario equipeUsuario);
 }
