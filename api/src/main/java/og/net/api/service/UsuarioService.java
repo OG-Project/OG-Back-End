@@ -115,4 +115,16 @@ public class UsuarioService {
         return equipeUsuarioRepository.findAllByEquipe(equipe).stream().map(
                 eu -> usuarioRepository.findByEquipesContaining(eu)).toList();
     }
+
+    public void removerUsuarioDaEquipe(Integer equipeId,Integer userId){
+        Usuario membroEquipe = buscarUm(userId);
+
+        for(EquipeUsuario equipeUsuario : membroEquipe.getEquipes()){
+            if(equipeUsuario.getEquipe().getId().equals(equipeId)){
+                membroEquipe.getEquipes().remove(equipeUsuario);
+                break;
+            }
+        }
+        usuarioRepository.save(membroEquipe);
+    }
 }
