@@ -8,6 +8,7 @@ import og.net.api.exception.UsuarioJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
@@ -15,8 +16,10 @@ import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+
+import java.io.IOException;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
@@ -78,9 +81,9 @@ public class UsuarioService {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
 
-            EquipeUsuario eu = new EquipeUsuario();
-            eu.setEquipe(equipe);
-            user.getEquipes().add(eu);
+            EquipeUsuario equipeUsuario = new EquipeUsuario();
+            equipeUsuario.setEquipe(equipe);
+            user.getEquipes().add(equipeUsuario);
             usuarioRepository.save(user);
 
         } catch (EquipeNaoEncontradaException e) {
@@ -88,7 +91,13 @@ public class UsuarioService {
         }
     }
 
-    public void adicionar2(List<Integer> ids, Integer equipeId) {
+    public void atualizarFoto(Integer id, MultipartFile foto) throws IOException {
+        Usuario usuario = buscarUm(id);
+        usuario.setFoto(new Arquivo(foto));
+        usuarioRepository.save(usuario);
+    }
+
+    public void adicionarmembros(List<Integer> ids, Integer equipeId) {
         System.out.println(ids);
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
@@ -96,10 +105,10 @@ public class UsuarioService {
             ids.forEach(id -> {
                 try {
                     Usuario user = buscarUm(id);
-                    EquipeUsuario eu = new EquipeUsuario();
-                    eu.setEquipe(equipe);
+                    EquipeUsuario equipeUsuario = new EquipeUsuario();
+                    equipeUsuario.setEquipe(equipe);
                     //setar as permissões
-                    user.getEquipes().add(eu);
+                    user.getEquipes().add(equipeUsuario);
                     usuarioRepository.save(user);
                 } catch (Exception ignored) {}
             });

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import og.net.api.model.dto.IDTO;
+import og.net.api.model.dto.ProjetoCadastroDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.swing.text.DateFormatter;
@@ -29,21 +31,16 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
+    @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany
-    @JoinColumn(name = "projeto_id")
-    private Set<Tarefa>  tarefas;
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "projeto_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Tarefa>  tarefas;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Propriedade> propriedades;
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<ProjetoEquipe> equipes;
-    @PrePersist
-    private void inserirData(){
-        this.dataCriacao= LocalDateTime.now();
-    }
 }

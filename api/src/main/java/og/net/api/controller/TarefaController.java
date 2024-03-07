@@ -6,11 +6,16 @@ import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.service.TarefaService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -20,8 +25,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/tarefa")
 public class TarefaController {
 
-    private TarefaService tarefaService;
-
+    private final TarefaService tarefaService;
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
         try {
@@ -44,9 +48,13 @@ public class TarefaController {
 
 
     @GetMapping
-    public ResponseEntity<Collection<Tarefa>> buscarTodos(){
+    public ResponseEntity<?> buscarTodos(Pageable pageable){
         try{
-            return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
+            if (pageable.getSort()== Sort.unsorted()){
+                return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(tarefaService.buscarTodos(pageable), HttpStatus.OK);
+            }
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -77,6 +85,10 @@ public class TarefaController {
             e.getMessage();
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    @PatchMapping("/{id}")
+    public void cadastrarFoto(@RequestParam List<MultipartFile> arquivos, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        tarefaService.atualizarFoto(id,arquivos);
     }
 }
 

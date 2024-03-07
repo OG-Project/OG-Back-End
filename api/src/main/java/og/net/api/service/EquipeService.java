@@ -7,7 +7,7 @@ import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
@@ -17,6 +17,9 @@ import og.net.api.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -55,6 +58,11 @@ public class EquipeService {
         });
 
         equipeRepository.deleteById(id);
+    }
+    public void atualizarFoto(Integer id, MultipartFile foto) throws IOException, EquipeNaoEncontradaException {
+        Equipe equipe = buscarUm(id);
+        equipe.setFoto(new Arquivo(foto));
+        equipeRepository.save(equipe);
     }
 
     public Equipe cadastrar(IDTO dto) throws EquipeJaExistenteException {

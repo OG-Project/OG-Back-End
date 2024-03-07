@@ -5,14 +5,18 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -62,10 +66,8 @@ public class ProjetoController {
 
     @PostMapping
     public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
-
             projetoService.cadastrar(projetoCadastroDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
-
+            return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
