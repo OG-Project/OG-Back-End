@@ -13,20 +13,25 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Arquivo {
+public class Arquivo extends Valor {
 
     public Arquivo(MultipartFile arquivo) throws IOException {
         this.nome = arquivo.getOriginalFilename();
         this.dados = arquivo.getBytes();
         this.tipo = arquivo.getContentType();
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
     private String tipo;
+    private Arquivo arquivo;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] dados;
+
+    @Override
+    public Object getValor() {
+        return arquivo;
+    }
 }
