@@ -33,7 +33,7 @@ public class Projeto {
     private String descricao;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Tarefa>  tarefas;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Propriedade> propriedades;
@@ -43,4 +43,6 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<ProjetoEquipe> equipes;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Usuario> responsaveis;
 }
