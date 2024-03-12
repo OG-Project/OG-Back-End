@@ -119,8 +119,6 @@ public class UsuarioController {
     @GetMapping("/buscarMembros/{equipeId}")
     public List<Usuario> buscarMembrosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return usuarioService.buscarMembrosEquipe(equipeId);
-    }
-
 
     @DeleteMapping("/removerUsuarioEquipe/{equipeId}/{userId}")
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer userId) {

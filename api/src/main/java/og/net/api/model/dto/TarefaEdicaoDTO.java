@@ -32,6 +32,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private Status status;
     private List<Arquivo> arquivos;
 
+
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {
         List<Arquivo> listaDeArquivosTemporaria = new ArrayList<Arquivo>();
         listaDeArquivosTemporaria.stream().forEach(arquivoTemporario-> listaDeArquivosRecebidos.stream().forEach(arquivoRecebido -> {
@@ -43,7 +44,6 @@ public class TarefaEdicaoDTO implements IDTO {
                 e.printStackTrace();
             }
         }));
-
         this.arquivos = listaDeArquivosTemporaria;
     }
 }
