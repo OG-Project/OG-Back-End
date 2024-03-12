@@ -28,7 +28,7 @@ public class EquipeService {
 //        private ModelMapper mapper;
     private EquipeRepository equipeRepository;
     private EquipeUsuarioRepository equipeUsuarioRepository;
-    private UsuarioRepository usuarioRepository;
+
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
         if (equipeRepository.existsById(id)){
@@ -40,6 +40,11 @@ public class EquipeService {
     public List<Equipe> buscarEquipesNome(String nome){
         return equipeRepository.findByNome(nome);
     }
+
+    public List<EquipeUsuario> buscarTodosUsuarios(Equipe equipe) {
+        return equipeUsuarioRepository.findAllByEquipe(equipe);
+    }
+
 
     public List<Equipe> buscarTodos(){
         return equipeRepository.findAll();

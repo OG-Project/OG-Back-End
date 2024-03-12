@@ -5,6 +5,8 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.entity.Equipe;
+import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.service.EquipeService;
 
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,11 @@ public class EquipeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+//   @GetMapping("/projetos/{equipeId}")
+//   public ResponseEntity<Collection<Projeto>> buscarProjetos(@PathVariable Integer equipeId){
+//
+//   }
 
     @GetMapping("/nome")
     public ResponseEntity<Collection<Equipe>> buscarEquipesNome(@RequestParam String nome){
