@@ -12,11 +12,11 @@ import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.Usuario;
+import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -27,6 +27,7 @@ public class UsuarioService {
 
      private UsuarioRepository usuarioRepository;
      private EquipeService equipeService;
+     private EquipeUsuarioRepository equipeUsuarioRepository;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -114,5 +115,23 @@ public class UsuarioService {
         } catch (EquipeNaoEncontradaException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Usuario> buscarMembrosEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
+        Equipe equipe = equipeService.buscarUm(equipeId);
+        return equipeUsuarioRepository.findAllByEquipe(equipe).stream().map(
+                eu -> usuarioRepository.findByEquipesContaining(eu)).toList();
+    }
+
+    public void removerUsuarioDaEquipe(Integer equipeId,Integer userId){
+        Usuario membroEquipe = buscarUm(userId);
+
+        for(EquipeUsuario equipeUsuario : membroEquipe.getEquipes()){
+            if(equipeUsuario.getEquipe().getId().equals(equipeId)){
+                membroEquipe.getEquipes().remove(equipeUsuario);
+                break;
+            }
+        }
+        usuarioRepository.save(membroEquipe);
     }
 }

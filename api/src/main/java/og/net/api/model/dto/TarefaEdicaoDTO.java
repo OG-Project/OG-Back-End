@@ -30,7 +30,8 @@ public class TarefaEdicaoDTO implements IDTO {
     private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
-//    private List<Arquivo> arquivos;
+    private List<Arquivo> arquivos;
+
 
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {
         List<Arquivo> listaDeArquivosTemporaria = new ArrayList<Arquivo>();
@@ -43,7 +44,6 @@ public class TarefaEdicaoDTO implements IDTO {
                 e.printStackTrace();
             }
         }));
-
-//        this.arquivos = listaDeArquivosTemporaria;
+        this.arquivos = listaDeArquivosTemporaria;
     }
 }
