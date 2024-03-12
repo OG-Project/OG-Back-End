@@ -3,6 +3,7 @@ package og.net.api.model.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,16 +23,15 @@ public class Arquivo extends Valor {
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nome;
     private String tipo;
-    private Arquivo arquivo;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] dados;
 
     @Override
     public Object getValor() {
-        return arquivo;
+        return null;
     }
 }
