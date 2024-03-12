@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "tarefa")
 public class Tarefa {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

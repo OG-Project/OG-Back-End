@@ -29,4 +29,8 @@ public class Arquivo {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] dados;
+    @ManyToOne
+    private  Tarefa tarefa;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String chaveAws;
 }
