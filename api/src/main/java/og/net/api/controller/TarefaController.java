@@ -82,7 +82,7 @@ public class TarefaController {
             tarefaService.editar(tarefaEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

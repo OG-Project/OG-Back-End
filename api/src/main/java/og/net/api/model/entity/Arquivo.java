@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Arquivo extends Valor {
+public class Arquivo{
 
     public Arquivo(MultipartFile arquivo) throws IOException {
         this.nome = arquivo.getOriginalFilename();
@@ -25,13 +25,7 @@ public class Arquivo extends Valor {
     private Integer id;
     private String nome;
     private String tipo;
-    private Arquivo arquivo;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] dados;
-
-    @Override
-    public Object getValor() {
-        return arquivo;
-    }
 }
