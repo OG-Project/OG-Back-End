@@ -33,7 +33,7 @@ public class Projeto {
     private String descricao;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Tarefa>  tarefas;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Propriedade> propriedades;
