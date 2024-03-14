@@ -19,7 +19,7 @@ public class ProjetoEdicaoDTO implements IDTO {
     private String nome;
     private String descricao;
     private List<Status> statusList;
-    private Set<Tarefa> tarefas;
+    private List<Tarefa> tarefas;
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> equipes;
 }
