@@ -16,6 +16,5 @@ import java.util.List;
 public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
    List<Projeto> findByNome(String nome);
-   List<Projeto> findByEquipes_Equipe_Id(Integer id);
 
 }

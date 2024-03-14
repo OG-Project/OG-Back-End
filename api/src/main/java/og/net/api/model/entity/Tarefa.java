@@ -27,7 +27,7 @@ public class Tarefa {
     private String cor;
     private Integer indice;
     @JoinColumn(name = "tarefa_id")
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     @ManyToOne
     private Status status;

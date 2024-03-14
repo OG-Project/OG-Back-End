@@ -1,6 +1,8 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
@@ -11,6 +13,7 @@ import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -27,6 +30,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/projeto")
 public class ProjetoController {
 
+    @NonNull
     private ProjetoService projetoService;
 
     @GetMapping("/id")
@@ -80,5 +84,12 @@ public class ProjetoController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @PatchMapping("/add/{projetoId}")
+    public void adicionarAEquipe(
+            @PathVariable Integer projetoId,
+            @RequestBody List<Integer> ids) throws ProjetoNaoEncontradoException {
+        projetoService.adicionarAProjeto(projetoId, ids);
+    }
+
 }
 

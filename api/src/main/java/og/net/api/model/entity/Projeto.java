@@ -41,6 +41,5 @@ public class Projeto {
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "projeto_id")
-    private List<ProjetoEquipe> equipes;
+    private List<ProjetoEquipe> projetoEquipes;
 }
