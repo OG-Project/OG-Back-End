@@ -1,10 +1,6 @@
 package og.net.api.repository;
 
-import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.ProjetoEquipe;
-import og.net.api.model.entity.Propriedade;
-import og.net.api.model.entity.Status;
-import og.net.api.model.entity.Tarefa;
+import og.net.api.model.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +13,5 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
    List<Projeto> findByNome(String nome);
 
+   Projeto findByProjetoEquipesContaining(ProjetoEquipe projetoEquipe);
 }

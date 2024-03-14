@@ -1,8 +1,6 @@
 package og.net.api.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
@@ -15,7 +13,6 @@ import og.net.api.repository.ProjetoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,16 +80,20 @@ public class ProjetoService {
                 try {
                     Equipe equipe = equipeService.buscarUm(id);
                     ProjetoEquipe projetoEquipe = new ProjetoEquipe();
-                    for (Equipe equipe1: equipeService.buscarTodos()) {
-                        if(equipe1.getId().equals(equipe.getId())){
-                            projetoEquipe.setEquipes(List.of(equipe1));
-                        }
-                    }
+                    if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
+                    else projetoEquipe.getEquipes().add(equipe);
                     //setar as permissões
                     projeto.getProjetoEquipes().add(projetoEquipe);
                     projetoRepository.save(projeto);
                 } catch (Exception ignored) {}
             });
     }
+
+    public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
+        Equipe equipe = equipeService.buscarUm(equipeId);
+        return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
+                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+    }
+
     
 }

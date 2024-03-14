@@ -9,6 +9,7 @@ import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Tarefa;
+import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +92,9 @@ public class ProjetoController {
         projetoService.adicionarAProjeto(projetoId, ids);
     }
 
+    @GetMapping("/buscarProjetos/{equipeId}")
+    public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
+        return projetoService.buscarProjetosEquipes(equipeId);
+    }
 }
 
