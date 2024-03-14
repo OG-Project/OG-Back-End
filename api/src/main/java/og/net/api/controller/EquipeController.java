@@ -92,6 +92,8 @@ public class EquipeController {
         } catch (DadosNaoEncontradoException e){
             e.getMessage();
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (EquipeNaoEncontradaException e) {
+            throw new RuntimeException(e);
         }
 //        catch (EquipeNaoEncontradaException e){
 //            e.getMessage();

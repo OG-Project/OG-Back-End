@@ -72,12 +72,13 @@ public class EquipeService {
         return  equipeRepository.save(equipe);
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException {
+    public void editar(IDTO dto) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
         //      Equipe equipe= equipeService.buscarUm(equipeEdicaoDTO.getId());
         //      //serve para não copiar atributos nulos
 //              mapper.map(equipeEdicaoDTO,equipe);
         EquipeEdicaoDTO equipeEdicaoDTO = (EquipeEdicaoDTO) dto;
-        Equipe equipe = new Equipe();
+        System.out.println(equipeEdicaoDTO);
+        Equipe equipe = buscarUm(((EquipeEdicaoDTO) dto).getId());  
         BeanUtils.copyProperties(equipeEdicaoDTO,equipe);
         if (!equipeRepository.existsById(equipe.getId())){
             throw new DadosNaoEncontradoException();

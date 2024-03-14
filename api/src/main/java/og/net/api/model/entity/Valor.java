@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
@@ -17,7 +19,6 @@ public abstract  class Valor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     public abstract Object getValor();
 
 }
