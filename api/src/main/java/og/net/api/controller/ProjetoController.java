@@ -85,16 +85,20 @@ public class ProjetoController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/add/{projetoId}")
-    public void adicionarAEquipe(
-            @PathVariable Integer projetoId,
-            @RequestBody List<Integer> ids) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarAProjeto(projetoId, ids);
+
+    @PatchMapping("/add/{projetoId}/{equipeId}")
+    public void adicionarAEquipeProjeto(@PathVariable Integer projetoId, @PathVariable Integer equipeId) throws ProjetoNaoEncontradoException {
+        projetoService.adicionarAEquipeAProjeto(projetoId,equipeId);
     }
 
     @GetMapping("/buscarProjetos/{equipeId}")
     public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return projetoService.buscarProjetosEquipes(equipeId);
+    }
+
+    @DeleteMapping("/removerProjetoEquipe/{equipeId}/{projetoId}")
+    public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
+        projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
 }
 

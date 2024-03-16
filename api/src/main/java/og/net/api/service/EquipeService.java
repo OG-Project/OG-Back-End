@@ -7,12 +7,10 @@ import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
-import og.net.api.model.entity.Arquivo;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.EquipeUsuario;
-import og.net.api.model.entity.Usuario;
+import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeRepository;
 import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +26,7 @@ public class EquipeService {
 //        private ModelMapper mapper;
     private EquipeRepository equipeRepository;
     private EquipeUsuarioRepository equipeUsuarioRepository;
+    private ProjetoEquipeRepository projetoEquipeRepository;
 
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
@@ -52,10 +51,15 @@ public class EquipeService {
 
     public void deletar(Integer id){
         List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe_id(id);
+        List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe_Id(id);
         Equipe equipe = equipeRepository.findById(id).get();
         equipeUsuarios.forEach(eu -> {
            equipeUsuarioRepository.deleteById(eu.getId());
         });
+        projetoEquipes.forEach(ep ->{
+            projetoEquipeRepository.deleteById(ep.getId());
+        });
+
 
         equipeRepository.deleteById(id);
     }

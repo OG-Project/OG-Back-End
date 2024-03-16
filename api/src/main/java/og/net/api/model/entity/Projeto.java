@@ -42,4 +42,6 @@ public class Projeto {
     private List<Status> statusList;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ProjetoEquipe> projetoEquipes;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Usuario> responsaveis;
 }
