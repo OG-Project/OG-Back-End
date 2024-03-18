@@ -2,26 +2,29 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.ProjetoEquipe;
-import og.net.api.model.entity.Tarefa;
+import og.net.api.model.entity.*;
+import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ProjetoService {
 
+
     private ProjetoRepository projetoRepository;
+    private EquipeService equipeService;
+    private ProjetoEquipeRepository projetoEquipeRepository;
+
+
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)){
@@ -49,6 +52,7 @@ public class ProjetoService {
         BeanUtils.copyProperties(projetoCadastroDTO,projeto);
         projetoRepository.save(projeto);
     }
+
     public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
@@ -67,5 +71,28 @@ public class ProjetoService {
         }
         throw new DadosNaoEncontradoException();
     }
+
+    public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
+        System.out.println(buscarUm(projetoId));
+            Projeto projeto = buscarUm(projetoId);
+            ids.forEach(id -> {
+                try {
+                    Equipe equipe = equipeService.buscarUm(id);
+                    ProjetoEquipe projetoEquipe = new ProjetoEquipe();
+                    if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
+                    else projetoEquipe.getEquipes().add(equipe);
+                    //setar as permissões
+                    projeto.getProjetoEquipes().add(projetoEquipe);
+                    projetoRepository.save(projeto);
+                } catch (Exception ignored) {}
+            });
+    }
+
+    public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
+        Equipe equipe = equipeService.buscarUm(equipeId);
+        return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
+                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+    }
+
     
 }

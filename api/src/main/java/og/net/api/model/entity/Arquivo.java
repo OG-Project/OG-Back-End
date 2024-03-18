@@ -13,14 +13,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Arquivo {
+public class Arquivo{
 
     public Arquivo(MultipartFile arquivo) throws IOException {
         this.nome = arquivo.getOriginalFilename();
         this.dados = arquivo.getBytes();
         this.tipo = arquivo.getContentType();
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

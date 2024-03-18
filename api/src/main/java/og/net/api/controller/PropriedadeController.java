@@ -6,6 +6,7 @@ import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
 import og.net.api.model.entity.Propriedade;
 import og.net.api.service.PropriedadeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/propriedade")
 public class PropriedadeController {
 
+    @Autowired
     private PropriedadeService propriedadeService;
 
     @GetMapping("/{id}")
