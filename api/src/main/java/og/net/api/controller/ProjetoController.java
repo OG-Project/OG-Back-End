@@ -29,8 +29,8 @@ public class ProjetoController {
 
     private ProjetoService projetoService;
 
-    @GetMapping("/id")
-    public ResponseEntity<Projeto> buscarUm(@RequestParam Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
         try {
 
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
@@ -40,8 +40,8 @@ public class ProjetoController {
         }
     }
 
-    @GetMapping("/nome")
-    public ResponseEntity<Collection<Projeto>> buscarProjetoNome(@RequestParam String nome){
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Collection<Projeto>> buscarProjetoNome(@PathVariable String nome){
         try{
             return new ResponseEntity<>(projetoService.buscarProjetosNome(nome),HttpStatus.OK);
         }catch (NoSuchElementException e){

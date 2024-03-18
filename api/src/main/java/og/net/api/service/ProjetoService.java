@@ -26,7 +26,6 @@ public class ProjetoService {
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)){
            return projetoRepository.findById(id).get();
-
         }
         throw new ProjetoNaoEncontradoException();
     }

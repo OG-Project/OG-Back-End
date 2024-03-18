@@ -2,10 +2,13 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
+import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.Propriedade;
+import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.PropriedadeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,7 @@ import java.util.List;
 public class PropriedadeService {
 
     private PropriedadeRepository propriedadeRepository;
-
+    private ProjetoService projetoService;
 
     public Propriedade buscarUm(Integer id){
         return propriedadeRepository.findById(id).get();
@@ -31,9 +34,14 @@ public class PropriedadeService {
         propriedadeRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto){
+    public void cadastrar(IDTO dto, Integer projetoId) throws ProjetoNaoEncontradoException {
         PropriedadeCadastroDTO propriedadeCadastroDTO = (PropriedadeCadastroDTO) dto;
+        Projeto projeto = projetoService.buscarUm(projetoId);
         Propriedade propriedade = new Propriedade();
+        projeto.getPropriedades().add(propriedade);
+        projeto.getTarefas().forEach(tarefa -> {
+
+        });
         BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
         propriedadeRepository.save(propriedade);
     }

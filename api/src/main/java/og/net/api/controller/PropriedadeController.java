@@ -47,10 +47,10 @@ public class PropriedadeController {
         propriedadeService.deletar(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO){
+    @PostMapping("/{id}")
+    public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO, @PathVariable Integer projetoId){
         try{
-            propriedadeService.cadastrar(propriedadeCadastroDTO);
+            propriedadeService.cadastrar(propriedadeCadastroDTO, projetoId);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
