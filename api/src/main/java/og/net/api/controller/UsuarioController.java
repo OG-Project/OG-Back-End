@@ -27,8 +27,8 @@ public class UsuarioController {
 
     private UsuarioService usuarioService;
 
-    @GetMapping("/id")
-    public ResponseEntity<Usuario> buscarUm(@RequestParam Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarUm(@PathVariable Integer id){
         try {
             return new ResponseEntity<>(usuarioService.buscarUm(id), HttpStatus.OK);
         }catch (Exception e){

@@ -7,6 +7,7 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
+import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
@@ -23,6 +24,7 @@ public class ProjetoService {
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
+    private PropriedadeService propriedadeService;
 
 
 
@@ -49,16 +51,9 @@ public class ProjetoService {
     public void cadastrar(IDTO dto) {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
+        BeanUtils.copyProperties(projetoCadastroDTO, projeto);
+        criaValorPorpiredadeTarefa(projeto);
         projetoRepository.save(projeto);
-    }
-
-    public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
-        ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
-        Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
-        projetoRepository.save(projeto);
-
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
@@ -66,10 +61,24 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoEdicaoDTO,projeto);
         if (projetoRepository.existsById(projeto.getId())){
+            criaValorPorpiredadeTarefa(projeto);
             projetoRepository.save(projeto);
              return projeto;
         }
         throw new DadosNaoEncontradoException();
+    }
+
+    public void criaValorPorpiredadeTarefa(Projeto projeto){
+        projeto.getPropriedades().forEach(propriedade -> {
+            if (propriedade.getId()==null){
+                PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
+                try {
+                    propriedadeService.cadastrar(propriedadeCadastroDTO,projeto.getId());
+                } catch (ProjetoNaoEncontradoException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
     public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
@@ -82,7 +91,7 @@ public class ProjetoService {
                     if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
                     else projetoEquipe.getEquipes().add(equipe);
                     //setar as permissões
-                    projeto.getProjetoEquipes().add(projetoEquipe);
+                    projeto.getProjetosEquipes().add(projetoEquipe);
                     projetoRepository.save(projeto);
                 } catch (Exception ignored) {}
             });
@@ -91,7 +100,7 @@ public class ProjetoService {
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
         return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
-                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+                eu -> projetoRepository.findByProjetosEquipesContaining(eu)).toList();
     }
 
     
