@@ -23,6 +23,7 @@ public class ProjetoService {
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
+    private UsuarioService usuarioService;
 
 
 
@@ -104,6 +105,14 @@ public class ProjetoService {
         } catch (EquipeNaoEncontradaException e) {
             e.printStackTrace();
         }
+    }
+
+    public void adicionarResponsavelProjeto(Integer projetoId, Integer userId) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(projetoId);
+        Usuario usuario = usuarioService.buscarUm(userId);
+        projeto.getResponsaveis().add(usuario);
+        projetoRepository.save(projeto);
+
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
