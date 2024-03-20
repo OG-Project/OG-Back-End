@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Propriedade;
 import og.net.api.model.entity.Tipo;
 import og.net.api.model.entity.Valor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 @AllArgsConstructor
 @Data

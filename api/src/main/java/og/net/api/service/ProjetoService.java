@@ -52,7 +52,6 @@ public class ProjetoService {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
-        criaValorPorpiredadeTarefa(projeto);
         projetoRepository.save(projeto);
     }
 

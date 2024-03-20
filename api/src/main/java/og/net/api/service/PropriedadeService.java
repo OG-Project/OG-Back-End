@@ -40,8 +40,10 @@ public class PropriedadeService {
         PropriedadeCadastroDTO propriedadeCadastroDTO = (PropriedadeCadastroDTO) dto;
         Projeto projeto = projetoRepository.findById(projetoId).get();
         Propriedade propriedade = new Propriedade();
+        BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         projeto.getTarefas().forEach(tarefa -> {
+            if(propriedade.getId()==null){
                 List<Indice> lista = List.of(
                         new Indice(null, 0L, Visualizacao.CALENDARIO),
                         new Indice(null, 0L, Visualizacao.LISTA),
@@ -50,9 +52,9 @@ public class PropriedadeService {
 
                 ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false, lista);
                 valorPropriedadeTarefas.add(valorPropriedadeTarefa);
-            tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
+                tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
+            }
         });
-        BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
         propriedadeRepository.save(propriedade);
     }
 
