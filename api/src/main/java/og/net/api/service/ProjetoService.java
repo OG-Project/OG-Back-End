@@ -48,6 +48,8 @@ public class ProjetoService {
 
 
     public void deletar(Integer id) {
+        VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
+        visualizacaoEmListaRepository.delete(visualizacaoEmLista);
         projetoRepository.deleteById(id);
     }
 
