@@ -7,18 +7,12 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.ProjetoEquipe;
-import og.net.api.model.entity.Tarefa;
-import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,11 +21,10 @@ import java.util.NoSuchElementException;
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
-@Controller
+@AllArgsConstructor
 @RequestMapping("/projeto")
 public class ProjetoController {
-
-    @NonNull
+    @Autowired
     private ProjetoService projetoService;
 
     @GetMapping("/id")
@@ -85,16 +78,16 @@ public class ProjetoController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/add/{projetoId}")
-    public void adicionarAEquipe(
-            @PathVariable Integer projetoId,
-            @RequestBody List<Integer> ids) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarAProjeto(projetoId, ids);
-    }
+//    @PatchMapping("/add/{projetoId}")
+//    public void adicionarAEquipe(
+//            @PathVariable Integer projetoId,
+//            @RequestBody List<Integer> ids) throws ProjetoNaoEncontradoException {
+//        projetoService.adicionarAProjeto(projetoId, ids);
+//    }
 
-    @GetMapping("/buscarProjetos/{equipeId}")
-    public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
-        return projetoService.buscarProjetosEquipes(equipeId);
-    }
+//    @GetMapping("/buscarProjetos/{equipeId}")
+//    public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
+//        return projetoService.buscarProjetosEquipes(equipeId);
+//    }
 }
 

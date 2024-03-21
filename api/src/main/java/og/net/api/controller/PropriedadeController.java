@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/propriedade")
 public class PropriedadeController {
 
-    @Autowired
+
     private PropriedadeService propriedadeService;
 
     @GetMapping("/{id}")

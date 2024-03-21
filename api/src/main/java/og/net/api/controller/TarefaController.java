@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/tarefa")
 public class TarefaController {
 
-    @Autowired
+
     private final TarefaService tarefaService;
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){

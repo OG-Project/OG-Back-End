@@ -54,13 +54,13 @@ public class ProjetoService {
         projetoRepository.save(projeto);
     }
 
-    public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
-        ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
-        Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
-        projetoRepository.save(projeto);
-
-    }
+//    public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
+//        ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
+//        Projeto projeto = new Projeto();
+//        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
+//        projetoRepository.save(projeto);
+//
+//    }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
@@ -73,27 +73,27 @@ public class ProjetoService {
         throw new DadosNaoEncontradoException();
     }
 
-    public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
-        System.out.println(buscarUm(projetoId));
-            Projeto projeto = buscarUm(projetoId);
-            ids.forEach(id -> {
-                try {
-                    Equipe equipe = equipeService.buscarUm(id);
-                    ProjetoEquipe projetoEquipe = new ProjetoEquipe();
-                    if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
-                    else projetoEquipe.getEquipes().add(equipe);
-                    //setar as permissões
-                    projeto.getProjetoEquipes().add(projetoEquipe);
-                    projetoRepository.save(projeto);
-                } catch (Exception ignored) {}
-            });
-    }
-
-    public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
-        Equipe equipe = equipeService.buscarUm(equipeId);
-        return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
-                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
-    }
+//    public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
+//        System.out.println(buscarUm(projetoId));
+//            Projeto projeto = buscarUm(projetoId);
+//            ids.forEach(id -> {
+//                try {
+//                    Equipe equipe = equipeService.buscarUm(id);
+//                    ProjetoEquipe projetoEquipe = new ProjetoEquipe();
+//                    if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
+//                    else projetoEquipe.getEquipes().add(equipe);
+//                    //setar as permissões
+//                    projeto.getProjetoEquipes().add(projetoEquipe);
+//                    projetoRepository.save(projeto);
+//                } catch (Exception ignored) {}
+//            });
+//    }
+//
+//    public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
+//        Equipe equipe = equipeService.buscarUm(equipeId);
+//        return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
+//                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+//    }
 
     
 }

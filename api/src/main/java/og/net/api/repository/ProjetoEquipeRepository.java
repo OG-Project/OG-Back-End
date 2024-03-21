@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface ProjetoEquipeRepository extends JpaRepository<ProjetoEquipe, Integer> {
-
-    List<ProjetoEquipe> findAllByEquipes_id(Integer id);
-
-    List<ProjetoEquipe> findAllByEquipes(Equipe equipe);
+//
+//    List<ProjetoEquipe> findAllByEquipes_id(Integer id);
+//
+//    List<ProjetoEquipe> findAllByEquipes(Equipe equipe);
 }
