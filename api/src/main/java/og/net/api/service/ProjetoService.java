@@ -26,6 +26,7 @@ public class ProjetoService {
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
+    private UsuarioService usuarioService;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
@@ -71,7 +72,8 @@ public class ProjetoService {
         }
         throw new DadosNaoEncontradoException();
     }
-
+    public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
+        System.out.println(projetoId + " | " + equipeId);
     public void criaValorPorpiredadeTarefa(Projeto projeto){
         projeto.getPropriedades().forEach(propriedade -> {
             if (propriedade.getId()==null){
@@ -85,9 +87,11 @@ public class ProjetoService {
         });
     }
 
-    public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
-        System.out.println(buscarUm(projetoId));
-            Projeto projeto = buscarUm(projetoId);
+    public void adicionarResponsavelProjeto(Integer projetoId, Integer userId) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(projetoId);
+        Usuario usuario = usuarioService.buscarUm(userId);
+        projeto.getResponsaveis().add(usuario);
+        projetoRepository.save(projeto);
                 try {
                     Equipe equipe = equipeService.buscarUm(id);
                     ProjetoEquipe projetoEquipe = new ProjetoEquipe();
@@ -103,9 +107,19 @@ public class ProjetoService {
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
-        return projetoEquipeRepository.findAllByEquipes(equipe).stream().map(
-                eu -> projetoRepository.findByProjetosEquipesContaining(eu)).toList();
+        return projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
+                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
     }
 
-    
+    public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(projetoId);
+
+        for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
+            if(projetoEquipe.getEquipe().getId().equals(equipeId)){
+                projeto.getProjetoEquipes().remove(projetoEquipe);
+                break;
+            }
+        }
+        projetoRepository.save(projeto);
+    }
 }
