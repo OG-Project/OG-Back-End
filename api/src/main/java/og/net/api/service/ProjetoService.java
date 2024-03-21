@@ -11,9 +11,11 @@ import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
+import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,7 @@ public class ProjetoService {
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
     private PropriedadeService propriedadeService;
+    private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
 
 
@@ -53,6 +56,8 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
         projetoRepository.save(projeto);
+        VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null,new ArrayList<>(),projeto);
+        visualizacaoEmListaRepository.save(visualizacaoEmLista);
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
@@ -83,17 +88,17 @@ public class ProjetoService {
     public void adicionarAProjeto(Integer projetoId, List<Integer> ids) throws ProjetoNaoEncontradoException {
         System.out.println(buscarUm(projetoId));
             Projeto projeto = buscarUm(projetoId);
-            ids.forEach(id -> {
                 try {
                     Equipe equipe = equipeService.buscarUm(id);
                     ProjetoEquipe projetoEquipe = new ProjetoEquipe();
-                    if (projetoEquipe.getEquipes() == null) projetoEquipe.setEquipes(List.of(equipe));
-                    else projetoEquipe.getEquipes().add(equipe);
+                    if (projetoEquipe.getEquipe() == null) {
+                        projetoEquipe.setEquipe(equipe);
+                    }
+                    else projetoEquipe.getEquipe().add(equipe);
                     //setar as permissões
                     projeto.getProjetosEquipes().add(projetoEquipe);
                     projetoRepository.save(projeto);
                 } catch (Exception ignored) {}
-            });
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {

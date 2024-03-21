@@ -11,10 +11,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjetoEquipe {
+public class VisualizacaoEmLista {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Equipe equipe;
+    private Long id;
+    @OneToMany
+    private List<Propriedade> propriedadeVisiveis;
+    @OneToOne
+    private Projeto projeto;
 }

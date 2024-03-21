@@ -41,6 +41,11 @@ public class PropriedadeService {
         Projeto projeto = projetoRepository.findById(projetoId).get();
         Propriedade propriedade = new Propriedade();
         BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
+        criaValorPropriedadeTarefa(projeto,propriedade);
+        propriedadeRepository.save(propriedade);
+    }
+
+    private void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         projeto.getTarefas().forEach(tarefa -> {
             if(propriedade.getId()==null){
@@ -55,9 +60,7 @@ public class PropriedadeService {
                 tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
             }
         });
-        propriedadeRepository.save(propriedade);
     }
-
     private Valor gerarValor(Propriedade propriedade){
         Valor valor = null;
         if(propriedade.getTipo().equals(Tipo.DATA)){
