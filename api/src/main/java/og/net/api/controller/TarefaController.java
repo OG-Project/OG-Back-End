@@ -6,6 +6,7 @@ import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.service.TarefaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/tarefa")
 public class TarefaController {
 
+    @Autowired
     private final TarefaService tarefaService;
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
@@ -65,10 +67,10 @@ public class TarefaController {
         tarefaService.deletar(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Tarefa> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO){
+    @PostMapping("/{projetoId}")
+    public ResponseEntity<Tarefa> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
         try{
-            tarefaService.cadastrar(tarefaCadastroDTO);
+            tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -82,7 +84,7 @@ public class TarefaController {
             tarefaService.editar(tarefaEdicaoDTO);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

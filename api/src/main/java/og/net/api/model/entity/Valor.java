@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @JsonDeserialize(using = ValorDeserializer.class)
 public abstract  class Valor {
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
     public abstract Object getValor();

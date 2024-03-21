@@ -3,10 +3,7 @@ package og.net.api.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import og.net.api.model.entity.Arquivo;
-import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.Status;
-import og.net.api.model.entity.ValorPropriedadeTarefa;
+import og.net.api.model.entity.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -31,6 +28,8 @@ public class TarefaEdicaoDTO implements IDTO {
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
     private List<Arquivo> arquivos;
+    private List<SubTarefa> subTarefas;
+
 
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {
         List<Arquivo> listaDeArquivosTemporaria = new ArrayList<Arquivo>();
@@ -43,7 +42,6 @@ public class TarefaEdicaoDTO implements IDTO {
                 e.printStackTrace();
             }
         }));
-
         this.arquivos = listaDeArquivosTemporaria;
     }
 }

@@ -1,24 +1,21 @@
 package og.net.api.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Table(name = "propriedade")
-public class Propriedade {
-
+public class SubTarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nome;
-    @Enumerated(value = EnumType.STRING)
-    private Tipo tipo;
+    private Boolean concluido;
 }

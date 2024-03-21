@@ -27,8 +27,8 @@ public class UsuarioController {
 
     private UsuarioService usuarioService;
 
-    @GetMapping("/id")
-    public ResponseEntity<Usuario> buscarUm(@RequestParam Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarUm(@PathVariable Integer id){
         try {
             return new ResponseEntity<>(usuarioService.buscarUm(id), HttpStatus.OK);
         }catch (Exception e){
@@ -120,10 +120,9 @@ public class UsuarioController {
     public List<Usuario> buscarMembrosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return usuarioService.buscarMembrosEquipe(equipeId);
     }
-
-
     @DeleteMapping("/removerUsuarioEquipe/{equipeId}/{userId}")
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer userId) {
         usuarioService.removerUsuarioDaEquipe( equipeId, userId);
     }
+
 }

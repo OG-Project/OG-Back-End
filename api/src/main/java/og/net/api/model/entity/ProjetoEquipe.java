@@ -17,5 +17,4 @@ public class ProjetoEquipe {
     private Integer id;
     @ManyToOne(cascade = CascadeType.ALL)
     private Equipe equipe;
-
 }
