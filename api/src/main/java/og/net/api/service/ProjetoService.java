@@ -31,24 +31,23 @@ public class ProjetoService {
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
 
-
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
-        if (projetoRepository.existsById(id)){
-           return projetoRepository.findById(id).get();
+        if (projetoRepository.existsById(id)) {
+            return projetoRepository.findById(id).get();
         }
         throw new ProjetoNaoEncontradoException();
     }
 
-    public List<Projeto> buscarProjetosNome(String nome){
+    public List<Projeto> buscarProjetosNome(String nome) {
         return projetoRepository.findByNome(nome);
     }
 
-    public List<Projeto> buscarTodos(){
+    public List<Projeto> buscarTodos() {
         return projetoRepository.findAll();
     }
 
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) {
         projetoRepository.deleteById(id);
     }
 
@@ -57,29 +56,33 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
         projetoRepository.save(projeto);
-        VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null,new ArrayList<>(),projeto);
+        VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoEdicaoDTO,projeto);
-        if (projetoRepository.existsById(projeto.getId())){
+        BeanUtils.copyProperties(projetoEdicaoDTO, projeto);
+        if (projetoRepository.existsById(projeto.getId())) {
             criaValorPorpiredadeTarefa(projeto);
             projetoRepository.save(projeto);
-             return projeto;
+            return projeto;
         }
         throw new DadosNaoEncontradoException();
     }
+
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
         System.out.println(projetoId + " | " + equipeId);
-    public void criaValorPorpiredadeTarefa(Projeto projeto){
+
+    }
+
+    public void criaValorPorpiredadeTarefa(Projeto projeto) {
         projeto.getPropriedades().forEach(propriedade -> {
-            if (propriedade.getId()==null){
+            if (propriedade.getId() == null) {
                 PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
                 try {
-                    propriedadeService.cadastrar(propriedadeCadastroDTO,projeto.getId());
+                    propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
                 } catch (ProjetoNaoEncontradoException e) {
                     throw new RuntimeException(e);
                 }
@@ -92,17 +95,6 @@ public class ProjetoService {
         Usuario usuario = usuarioService.buscarUm(userId);
         projeto.getResponsaveis().add(usuario);
         projetoRepository.save(projeto);
-                try {
-                    Equipe equipe = equipeService.buscarUm(id);
-                    ProjetoEquipe projetoEquipe = new ProjetoEquipe();
-                    if (projetoEquipe.getEquipe() == null) {
-                        projetoEquipe.setEquipe(equipe);
-                    }
-                    else projetoEquipe.getEquipe().add(equipe);
-                    //setar as permissões
-                    projeto.getProjetosEquipes().add(projetoEquipe);
-                    projetoRepository.save(projeto);
-                } catch (Exception ignored) {}
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
@@ -111,11 +103,11 @@ public class ProjetoService {
                 eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
     }
 
-    public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
+    public void removerProjetoDaEquipe(Integer equipeId, Integer projetoId) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(projetoId);
 
-        for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
-            if(projetoEquipe.getEquipe().getId().equals(equipeId)){
+        for (ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()) {
+            if (projetoEquipe.getEquipe().getId().equals(equipeId)) {
                 projeto.getProjetoEquipes().remove(projetoEquipe);
                 break;
             }
@@ -123,3 +115,4 @@ public class ProjetoService {
         projetoRepository.save(projeto);
     }
 }
+
