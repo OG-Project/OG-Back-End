@@ -49,7 +49,10 @@ public class ProjetoService {
 
     public void deletar(Integer id) {
         VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
-        visualizacaoEmListaRepository.delete(visualizacaoEmLista);
+        //Tirar o if depois de recomeçar o banco de dados
+        if (visualizacaoEmLista!=null){
+            visualizacaoEmListaRepository.delete(visualizacaoEmLista);
+        }
         projetoRepository.deleteById(id);
     }
 
