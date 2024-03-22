@@ -12,6 +12,7 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
+import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ public class ProjetoService {
     public void deletar(Integer id) {
         VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
         //Tirar o if depois de recomeçar o banco de dados
-        if (visualizacaoEmLista!=null){
+        if (visualizacaoEmLista != null) {
             visualizacaoEmListaRepository.delete(visualizacaoEmLista);
         }
         projetoRepository.deleteById(id);
@@ -59,17 +60,38 @@ public class ProjetoService {
     public void cadastrar(IDTO dto) {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
-
-        ArrayList<ProjetoEquipe> projetoEquipeList= new ArrayList<>();
-        projetoCadastroDTO.getProjetoEquipes().forEach((projetoEquipe -> {
-            ProjetoEquipe projetoEquipe1= new ProjetoEquipe(null,projetoEquipe.getEquipe());
-            projetoEquipeList.add(projetoEquipe1);
-        }));
-        projetoCadastroDTO.setProjetoEquipes(projetoEquipeList);
+        if (projetoCadastroDTO.getProjetoEquipes() != null) {
+            projetoCadastroDTO.setProjetoEquipes(criacaoProjetoEquipe(projetoCadastroDTO));
+        }
+        if(projetoCadastroDTO.getResponsaveis()!=null){
+            projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
+        }
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
         projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
+    }
+
+    private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
+        ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
+        projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
+
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null, usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+           projetoResponsaveis.add(usuarioProjeto);
+        }));
+
+        return projetoResponsaveis;
+    }
+
+    private ArrayList<ProjetoEquipe> criacaoProjetoEquipe(ProjetoCadastroDTO projetoCadastroDTO) {
+
+        ArrayList<ProjetoEquipe> projetoEquipeList = new ArrayList<>();
+        projetoCadastroDTO.getProjetoEquipes().forEach((projetoEquipe -> {
+            ProjetoEquipe projetoEquipe1 = new ProjetoEquipe(null, projetoEquipe.getEquipe());
+            projetoEquipeList.add(projetoEquipe1);
+        }));
+
+        return projetoEquipeList;
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
@@ -102,12 +124,6 @@ public class ProjetoService {
         });
     }
 
-    public void adicionarResponsavelProjeto(Integer projetoId, Integer userId) throws ProjetoNaoEncontradoException {
-        Projeto projeto = buscarUm(projetoId);
-        Usuario usuario = usuarioService.buscarUm(userId);
-        projeto.getResponsaveis().add(usuario);
-        projetoRepository.save(projeto);
-    }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);

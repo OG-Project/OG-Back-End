@@ -9,20 +9,23 @@ import java.util.List;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioProjeto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "responsavel_id")
-    private List<Usuario> responsaveis;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Usuario responsavel;
 
-//    @Enumerated(EnumType.ORDINAL)
+
+
+    //    @Enumerated(EnumType.ORDINAL)
 //    @JoinColumn(name = "permissao_id")
 //    private Permissao permissao;
+
+
 
 }
