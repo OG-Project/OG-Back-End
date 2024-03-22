@@ -59,6 +59,13 @@ public class ProjetoService {
     public void cadastrar(IDTO dto) {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
+
+        ArrayList<ProjetoEquipe> projetoEquipeList= new ArrayList<>();
+        projetoCadastroDTO.getProjetoEquipes().forEach((projetoEquipe -> {
+            ProjetoEquipe projetoEquipe1= new ProjetoEquipe(null,projetoEquipe.getEquipe());
+            projetoEquipeList.add(projetoEquipe1);
+        }));
+        projetoCadastroDTO.setProjetoEquipes(projetoEquipeList);
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
         projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
