@@ -5,26 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioProjeto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
-
-    @OneToOne
-    @JoinColumn(name = "responsavel_id")
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Usuario responsavel;
 
-    @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
+
+
+    //    @Enumerated(EnumType.ORDINAL)
+//    @JoinColumn(name = "permissao_id")
+//    private Permissao permissao;
+
+
 
 }
