@@ -4,19 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.ProjetoCadastroDTO;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.swing.text.DateFormatter;
-import java.text.DateFormat;
-import java.text.Format;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -41,7 +31,10 @@ public class Projeto {
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ProjetoEquipe> projetosEquipes;
+    @JoinColumn(name = "projeto_id")
+    private List<ProjetoEquipe> projetoEquipes;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Usuario> responsaveis;
+    @JoinColumn(name = "usuario_id")
+    private List<UsuarioProjeto>  responsveis;
+
 }

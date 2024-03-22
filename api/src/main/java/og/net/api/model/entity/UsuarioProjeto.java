@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -15,16 +17,12 @@ public class UsuarioProjeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
-
     @OneToOne
     @JoinColumn(name = "responsavel_id")
-    private Usuario responsavel;
+    private List<Usuario> responsaveis;
 
-    @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
+//    @Enumerated(EnumType.ORDINAL)
+//    @JoinColumn(name = "permissao_id")
+//    private Permissao permissao;
 
 }

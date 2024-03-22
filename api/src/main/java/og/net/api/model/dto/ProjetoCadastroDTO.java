@@ -21,8 +21,7 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<Status> statusList;
     private List<Tarefa> tarefas;
     private List<Propriedade> propriedades;
-    private List<ProjetoEquipe> projetosEquipes;
-
+    private List<ProjetoEquipe> projetoEquipes;
     //Define a data da criação!
     public LocalDateTime getDataCriacao() {
         return LocalDateTime.now();

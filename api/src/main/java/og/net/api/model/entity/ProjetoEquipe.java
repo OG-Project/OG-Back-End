@@ -15,7 +15,7 @@ public class ProjetoEquipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Equipe equipe;
 
 

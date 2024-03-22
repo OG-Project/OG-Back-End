@@ -1,6 +1,5 @@
 package og.net.api.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +11,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "propriedade")
-public class Propriedade {
+public class VisualizacaoEmLista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nome;
-    @Enumerated(value = EnumType.STRING)
-    private Tipo tipo;
+    @OneToMany
+    private List<Propriedade> propriedadeVisiveis;
+    @OneToOne
+    private Projeto projeto;
 }
