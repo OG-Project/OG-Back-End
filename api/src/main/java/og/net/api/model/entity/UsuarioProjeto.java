@@ -17,8 +17,8 @@ public class UsuarioProjeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Usuario responsavel;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Usuario> responsavel;
 
 
 
