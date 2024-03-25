@@ -124,4 +124,5 @@ public class UsuarioController {
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer userId) {
         usuarioService.removerUsuarioDaEquipe( equipeId, userId);
     }
+
 }
