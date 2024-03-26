@@ -101,6 +101,12 @@ public class ProjetoController {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
 
+    @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
+    public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
+        projetoService.deletarPropriedade(idPropriedade,idProjeto);
+    }
+
+
 
 }
 
