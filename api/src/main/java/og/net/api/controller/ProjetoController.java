@@ -34,8 +34,8 @@ public class ProjetoController {
     @NonNull
     private ProjetoService projetoService;
 
-    @GetMapping("/id")
-    public ResponseEntity<Projeto> buscarUm(@RequestParam Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
         try {
 
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
@@ -45,8 +45,8 @@ public class ProjetoController {
         }
     }
 
-    @GetMapping("/nome")
-    public ResponseEntity<Collection<Projeto>> buscarProjetoNome(@RequestParam String nome){
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Collection<Projeto>> buscarProjetoNome(@PathVariable String nome){
         try{
             return new ResponseEntity<>(projetoService.buscarProjetosNome(nome),HttpStatus.OK);
         }catch (NoSuchElementException e){
@@ -85,16 +85,28 @@ public class ProjetoController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/add/{projetoId}")
-    public void adicionarAEquipe(
-            @PathVariable Integer projetoId,
-            @RequestBody List<Integer> ids) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarAProjeto(projetoId, ids);
+
+    @PatchMapping("/add/{projetoId}/{equipeId}")
+    public void adicionarAEquipeProjeto(@PathVariable Integer projetoId, @PathVariable Integer equipeId) throws ProjetoNaoEncontradoException {
+        projetoService.adicionarAEquipeAProjeto(projetoId,equipeId);
     }
 
     @GetMapping("/buscarProjetos/{equipeId}")
     public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return projetoService.buscarProjetosEquipes(equipeId);
     }
+
+    @DeleteMapping("/removerProjetoEquipe/{equipeId}/{projetoId}")
+    public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
+        projetoService.removerProjetoDaEquipe( equipeId, projetoId);
+    }
+
+    @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
+    public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
+        projetoService.deletarPropriedade(idPropriedade,idProjeto);
+    }
+
+
+
 }
 

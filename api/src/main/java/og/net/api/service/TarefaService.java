@@ -37,6 +37,9 @@ public class TarefaService {
         }
         throw new TarefaInesxistenteException();
     }
+     public List<Tarefa> buscarTarefasPorVisualizacao(String nome){
+        return tarefaRepository.findTarefasByValorPropriedadeTarefas_indice_visualizacaoOrderByValorPropriedadeTarefas_indice_indice(nome);
+     }
 
     public List<Tarefa> buscarTarefasNome(String nome){
         return tarefaRepository.findByNome(nome);

@@ -17,4 +17,7 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Integer> {
     List<Tarefa> findByNome(String nome);
 
     Page<Tarefa> findAll(Pageable pageable);
+
+    List<Tarefa> findTarefasByValorPropriedadeTarefas_indice_visualizacaoOrderByValorPropriedadeTarefas_indice_indice(String nome);
+
 }

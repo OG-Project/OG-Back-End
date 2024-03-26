@@ -21,5 +21,6 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<Status> statusList;
     private List<Tarefa> tarefas;
     private List<Propriedade> propriedades;
-    private List<ProjetoEquipe> equipes;
+    private List<ProjetoEquipe> projetoEquipes;
+    private List<UsuarioProjeto> responsaveis;
 }

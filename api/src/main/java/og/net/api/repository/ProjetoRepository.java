@@ -14,7 +14,5 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
    List<Projeto> findByNome(String nome);
   
    Projeto findByProjetoEquipesContaining(ProjetoEquipe projetoEquipe);
-  
-   List<Projeto> findByEquipes_Equipe_Id(Integer id);
 
 }

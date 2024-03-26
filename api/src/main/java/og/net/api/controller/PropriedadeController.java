@@ -5,6 +5,7 @@ import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
 import og.net.api.model.entity.Propriedade;
+import og.net.api.repository.ProjetoRepository;
 import og.net.api.service.PropriedadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class PropriedadeController {
 
     @Autowired
     private PropriedadeService propriedadeService;
+    private ProjetoRepository projetoRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Propriedade> buscarUm(@PathVariable Integer id){
@@ -49,10 +51,11 @@ public class PropriedadeController {
         propriedadeService.deletar(id);
     }
 
-    @PostMapping
-    public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO){
+    @PostMapping("{projetoId}")
+    public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO, @PathVariable Integer projetoId){
         try{
-            propriedadeService.cadastrar(propriedadeCadastroDTO);
+            propriedadeService.cadastrar(propriedadeCadastroDTO,projetoId);
+            projetoRepository.save(projetoRepository.findById(projetoId).get());
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
