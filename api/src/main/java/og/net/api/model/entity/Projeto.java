@@ -43,5 +43,5 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     private List<ProjetoEquipe> projetoEquipes;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Usuario> responsaveis;
+    private List<UsuarioProjeto> responsaveis;
 }

@@ -100,12 +100,12 @@ public class ProjetoController {
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
-
-    @PatchMapping("/addUser/{projetoId}/{userId}")
-    public void adicionarResponsaveisProjeto(@PathVariable Integer userId, @PathVariable Integer projetoId ) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarResponsavelProjeto(projetoId,userId);
-
-    }
+//
+//    @PatchMapping("/addUser/{projetoId}/{userId}")
+//    public void adicionarResponsaveisProjeto(@PathVariable Integer userId, @PathVariable Integer projetoId ) throws ProjetoNaoEncontradoException {
+//        projetoService.adicionarResponsavelProjeto(projetoId,userId);
+//
+//    }
 
     @PatchMapping("/addProjeto/{userId}/{projetoId}")
     public void adicionarProjetoUsuario(@PathVariable Integer userId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
