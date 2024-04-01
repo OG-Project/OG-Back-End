@@ -3,13 +3,11 @@ package og.net.api.service;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
-import og.net.api.exception.TarefaJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Tarefa;
-import og.net.api.model.entity.Usuario;
 import og.net.api.repository.TarefaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.env.Environment;
@@ -30,10 +28,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 
 
 @Service
@@ -124,9 +122,7 @@ public class TarefaService {
 
     }
 
-
-
-    public void atualizarFoto(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
+    public void atualizarArquivos(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
         Tarefa tarefa = buscarUm(id);
         ArrayList<Arquivo> arquivosTeste = new ArrayList<>() ;
         arquivos.stream().forEach(arquivo->{

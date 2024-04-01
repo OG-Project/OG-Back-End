@@ -3,6 +3,7 @@ package og.net.api.model.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,17 +14,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Arquivo {
+public class Arquivo extends Valor {
 
     public Arquivo(MultipartFile arquivo) throws IOException {
         this.nome = arquivo.getOriginalFilename();
         this.dados = arquivo.getBytes();
         this.tipo = arquivo.getContentType();
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nome;
     private String tipo;
     @Lob
@@ -33,4 +33,11 @@ public class Arquivo {
     private  Tarefa tarefa;
     @GeneratedValue(strategy = GenerationType.UUID)
     private String chaveAws;
+
+
+    @Override
+    public Object getValor() {
+        return null;
+    }
+
 }

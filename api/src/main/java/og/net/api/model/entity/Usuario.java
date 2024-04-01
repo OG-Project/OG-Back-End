@@ -39,4 +39,6 @@ public class Usuario {
     private List<EquipeUsuario> equipes;
     @OneToOne(cascade = CascadeType.ALL)
     private Arquivo foto;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Imagem fotoAws;
 }

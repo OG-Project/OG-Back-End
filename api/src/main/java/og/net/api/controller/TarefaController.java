@@ -89,7 +89,7 @@ public class TarefaController {
     }
     @PatchMapping("/{id}")
     public void cadastrarFoto(@RequestParam List<MultipartFile> arquivos, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
-        tarefaService.atualizarFoto(id,arquivos);
+        tarefaService.atualizarArquivos(id,arquivos);
     }
 }
 
