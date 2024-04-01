@@ -49,6 +49,7 @@ public class TarefaController {
 
     @GetMapping
     public ResponseEntity<?> buscarTodos(Pageable pageable){
+
         try{
             if (pageable.getSort()== Sort.unsorted()){
                 return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
