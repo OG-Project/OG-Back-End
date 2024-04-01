@@ -38,7 +38,7 @@ public class ImagemService {
     private Environment env;
     private UsuarioService usuarioService;
 
-    public boolean uploadFile(MultipartFile file,Integer id) throws IOException {
+    public boolean enviaFoto(MultipartFile file,Integer id) throws IOException {
         String awsKeyId = env.getProperty("keyId");
         String awsKeySecret = env.getProperty("keySecret");
         String region = "us-east-1";
@@ -58,7 +58,6 @@ public class ImagemService {
                 return false;
             }
 
-            String fileKey = file.getOriginalFilename(); // Assumindo que você deseja usar o nome original do arquivo como chave
             String contentType = file.getContentType();
 
             try (InputStream fileInputStream = file.getInputStream()) {
@@ -88,17 +87,14 @@ public class ImagemService {
             return false;
         }
     }
-    public String getArquivo(String keyName){
+    public String getFoto(String keyName) {
         String awsKeyId = env.getProperty("keyId");
         String awsKeySecret = env.getProperty("keySecret");
-        String region = "us-east-1";
         String bucketName = env.getProperty("bucketName");
+        S3Client s3 = S3Client.builder().region(Region.US_EAST_1).build();
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(awsKeyId, awsKeySecret);
-        try (S3Presigner presigner = S3Presigner.builder()
-                .region(Region.US_EAST_1)
-                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .build()
-        ) {
+
+        try (S3Presigner presigner = S3Presigner.builder().region(Region.US_EAST_1).credentialsProvider(StaticCredentialsProvider.create(awsCredentials)).build()) {
 
             GetObjectRequest objectRequest = GetObjectRequest.builder()
                     .bucket(bucketName)
@@ -106,12 +102,11 @@ public class ImagemService {
                     .build();
 
             GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofMinutes(10))  // The URL will expire in 10 minutes.
+                    .signatureDuration(Duration.ofDays(6))  // The URL will expire in 10 minutes.
                     .getObjectRequest(objectRequest)
                     .build();
 
             PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
-
 
             return presignedRequest.url().toExternalForm();
         }

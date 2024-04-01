@@ -19,16 +19,16 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @Controller
-@RequestMapping("/AWS")
+@RequestMapping("/aws")
 public class AwsController {
     private ImagemService imagemService;
 
     @PostMapping("/{id}")
-    public void cadastrarImagem(@RequestParam MultipartFile arquivos, @PathVariable Integer id) throws IOException, TarefaInesxistenteException {
-        imagemService.uploadFile(arquivos,id);
+    public void cadastrarImagem(@RequestParam MultipartFile foto, @PathVariable Integer id) throws IOException, TarefaInesxistenteException {
+        imagemService.enviaFoto(foto,id);
     }
     @GetMapping("/{keyName}")
     public String getImagem(@PathVariable String keyName){
-        return imagemService.getArquivo(keyName);
+        return imagemService.getFoto(keyName);
     }
 }
