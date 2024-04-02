@@ -42,7 +42,10 @@ public class PropriedadeService {
         Propriedade propriedade = new Propriedade();
         BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
         criaValorPropriedadeTarefa(projeto,propriedade);
+        projeto.getPropriedades().add(propriedade);
+        projetoRepository.save(projeto);
         propriedadeRepository.save(propriedade);
+
     }
 
     private void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
