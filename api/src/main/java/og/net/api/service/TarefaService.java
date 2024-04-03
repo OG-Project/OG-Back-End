@@ -56,7 +56,7 @@ public class TarefaService {
         tarefaRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto, Integer projetoId) {
+    public Tarefa cadastrar(IDTO dto, Integer projetoId) {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
         System.out.println(dto);
         Tarefa tarefa = new Tarefa();
@@ -74,7 +74,7 @@ public class TarefaService {
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
-        tarefaRepository.save(tarefa);
+        return tarefaRepository.save(tarefa);
     }
 
     private Valor gerarValor(Propriedade propriedade){
@@ -117,6 +117,15 @@ public class TarefaService {
                 tarefaRepository.save(tarefa);
             System.out.println(tarefa);
             return tarefa;
+        }
+        throw new DadosNaoEncontradoException();
+
+    }
+    public Tarefa editarValorPropriedadetarefa(Integer id,List<ValorPropriedadeTarefa> valorPropriedadeTarefas) throws DadosNaoEncontradoException {
+        Tarefa tarefa = tarefaRepository.findById(id).get();
+        if (tarefaRepository.existsById(tarefa.getId())){
+            tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
+            return tarefaRepository.save(tarefa);
         }
         throw new DadosNaoEncontradoException();
 
