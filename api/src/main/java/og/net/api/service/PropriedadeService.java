@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
+import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
@@ -65,20 +66,7 @@ public class PropriedadeService {
         });
     }
     private Valor gerarValor(Propriedade propriedade){
-        Valor valor = null;
-        if(propriedade.getTipo().equals(Tipo.DATA)){
-            valor = new Data(null, LocalDateTime.now());
-        }
-        else if(propriedade.getTipo().equals(Tipo.NUMERO)){
-            valor = new Numero(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.SELECAO)){
-            valor = new Selecao(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.TEXTO)){
-            valor = new Texto(null, "");
-        }
-        return valor;
+        return ValorFactory.getValor(propriedade.getTipo());
     }
 
     public Propriedade editar(IDTO dto) throws DadosNaoEncontradoException {

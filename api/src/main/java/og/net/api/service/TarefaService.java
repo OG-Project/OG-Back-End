@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.exception.TarefaJaExistenteException;
+import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
@@ -78,20 +79,7 @@ public class TarefaService {
     }
 
     private Valor gerarValor(Propriedade propriedade){
-        Valor valor = null;
-        if(propriedade.getTipo().equals(Tipo.DATA)){
-            valor = new Data(null, LocalDateTime.now());
-        }
-        else if(propriedade.getTipo().equals(Tipo.NUMERO)){
-            valor = new Numero(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.SELECAO)){
-            valor = new Selecao(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.TEXTO)){
-            valor = new Texto(null, "");
-        }
-        return valor;
+        return ValorFactory.getValor(propriedade.getTipo());
     }
 
     public void atualizarFoto(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
