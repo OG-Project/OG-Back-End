@@ -101,6 +101,9 @@ public class ProjetoController {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
 
-
+    @PatchMapping("/adicionarUmaEquipe/{id}")
+    public void adicionarUmaEquipe(@PathVariable Integer id, @RequestBody List<ProjetoEquipe> projetoEquipes) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+        projetoService.atualizarUmaEquipeNoProjeto(projetoEquipes,id);
+    }
 }
 

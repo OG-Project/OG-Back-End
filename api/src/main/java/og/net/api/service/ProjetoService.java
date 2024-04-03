@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.ProjetoCadastroDTO;
-import og.net.api.model.dto.ProjetoEdicaoDTO;
-import og.net.api.model.dto.PropriedadeCadastroDTO;
+import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
@@ -139,6 +136,16 @@ public class ProjetoService {
                 projeto.getProjetoEquipes().remove(projetoEquipe);
                 break;
             }
+        }
+        projetoRepository.save(projeto);
+    }
+
+    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+        Projeto projeto = projetoRepository.findById(id).get();
+        projeto.setProjetoEquipes(projetoEquipes);
+        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
+        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
+            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
         }
         projetoRepository.save(projeto);
     }
