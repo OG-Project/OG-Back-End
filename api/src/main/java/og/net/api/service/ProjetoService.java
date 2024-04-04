@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -72,8 +73,7 @@ public class ProjetoService {
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null, usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
            projetoResponsaveis.add(usuarioProjeto);
         }));
 
@@ -148,6 +148,22 @@ public class ProjetoService {
             equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
         }
         projetoRepository.save(projeto);
+
+
+    public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(idProjeto);
+        Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);
+        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
+            for (Propriedade propriedadeFor : projeto.getPropriedades()) {
+                if (propriedade.equals(propriedadeFor)) {
+                    propriedadesParaRemover.add(propriedadeFor);
+                }
+            }
+            for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
+                projeto.getPropriedades().remove(propriedadeParaRemover);
+            }
+
+        propriedadeService.deletar(idPropriedade);
     }
 }
 

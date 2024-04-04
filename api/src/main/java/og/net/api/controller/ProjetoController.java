@@ -105,5 +105,10 @@ public class ProjetoController {
     public void adicionarUmaEquipe(@PathVariable Integer id, @RequestBody List<ProjetoEquipe> projetoEquipes) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
         projetoService.atualizarUmaEquipeNoProjeto(projetoEquipes,id);
     }
+
+    @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
+    public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
+        projetoService.deletarPropriedade(idPropriedade,idProjeto);
+    }
 }
 
