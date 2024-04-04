@@ -58,7 +58,6 @@ public class TarefaService {
 
     public void cadastrar(IDTO dto, Integer projetoId) {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
-        System.out.println(dto);
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();

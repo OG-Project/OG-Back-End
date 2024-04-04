@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VisualizacaoEmListaEdicaoDTO implements IDTO{
-    private Long id;
+    private Integer id;
     private List<Propriedade> propriedadeVisiveis;
     private Projeto projeto;
 }
