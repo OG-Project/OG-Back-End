@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,10 +111,10 @@ public class TarefaService {
 
     }
     public Tarefa editarValorPropriedadetarefa(Integer id,List<ValorPropriedadeTarefa> valorPropriedadeTarefas) throws DadosNaoEncontradoException {
-        Tarefa tarefa = tarefaRepository.findById(id).get();
-        if (tarefaRepository.existsById(tarefa.getId())){
-            tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
-            return tarefaRepository.save(tarefa);
+        Optional<Tarefa> tarefa = tarefaRepository.findById(id);
+        if (tarefa.isPresent()){
+            tarefa.get().setValorPropriedadeTarefas(valorPropriedadeTarefas);
+            return tarefaRepository.save(tarefa.get());
         }
         throw new DadosNaoEncontradoException();
 

@@ -97,7 +97,7 @@ public class TarefaController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/valorPropriedadeTarefa/{id}")
+    @PutMapping("/valorPropriedadeTarefa/{id}")
     public ResponseEntity<Tarefa> editarValorPropriedadeTarefa(@PathVariable Integer id, @RequestBody List<ValorPropriedadeTarefa> valorPropriedadeTarefas){
         try {
             tarefaService.editarValorPropriedadetarefa(id,valorPropriedadeTarefas);
