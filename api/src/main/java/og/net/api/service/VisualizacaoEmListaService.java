@@ -6,11 +6,12 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.dto.VisualizacaoEmListaEdicaoDTO;
-import og.net.api.model.entity.Usuario;
 import og.net.api.model.entity.VisualizacaoEmLista;
 import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +21,9 @@ public class VisualizacaoEmListaService {
     ProjetoService projetoService;
     public VisualizacaoEmLista buscarPorProjeto(Integer projetoId) throws ProjetoNaoEncontradoException {
         return visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoService.buscarUm(projetoId));
+    }
+    public List<VisualizacaoEmLista> buscarTodos(){
+        return visualizacaoEmListaRepository.findAll();
     }
 
     public VisualizacaoEmLista editar(IDTO dto) throws DadosNaoEncontradoException {

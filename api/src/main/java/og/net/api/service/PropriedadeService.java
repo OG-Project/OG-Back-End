@@ -42,10 +42,13 @@ public class PropriedadeService {
         Propriedade propriedade = new Propriedade();
         BeanUtils.copyProperties(propriedadeCadastroDTO,propriedade);
         criaValorPropriedadeTarefa(projeto,propriedade);
+        projeto.getPropriedades().add(propriedade);
+        projetoRepository.save(projeto);
         propriedadeRepository.save(propriedade);
+
     }
 
-    private void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
+    public void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         projeto.getTarefas().forEach(tarefa -> {
             if(propriedade.getId()==null){

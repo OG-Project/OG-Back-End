@@ -58,6 +58,15 @@ public class StatusController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    @PostMapping("/{id}")
+    public ResponseEntity<Status> cadastrarStatusPeloProjeto(@RequestBody StatusCadastroDTO statusCadastroDTO, @PathVariable Integer id){
+        try{
+            statusService.cadastrarStatusPeloProjeto(statusCadastroDTO,id);
+            return new ResponseEntity<>( HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 
     @PutMapping
     public ResponseEntity<Status> editar(@RequestBody StatusEdicaoDTO statusEdicaoDTO){
