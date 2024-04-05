@@ -4,17 +4,23 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.ProjetoCadastroDTO;
-import og.net.api.model.dto.ProjetoEdicaoDTO;
+import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
+import og.net.api.repository.VisualizacaoEmListaRepository;
+import og.net.api.webScoket.MeuWebSocketHandler;
+import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,51 +35,81 @@ public class ProjetoService {
     private UsuarioService usuarioService;
     private UsuarioProjetoRepository usuarioProjetoRepository;
     private UsuarioRepository usuarioRepository;
+    private PropriedadeService propriedadeService;
+    private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
-        if (projetoRepository.existsById(id)){
-           return projetoRepository.findById(id).get();
-
+        if (projetoRepository.existsById(id)) {
+            return projetoRepository.findById(id).get();
         }
         throw new ProjetoNaoEncontradoException();
     }
 
-    public List<Projeto> buscarProjetosNome(String nome){
+    public List<Projeto> buscarProjetosNome(String nome) {
         return projetoRepository.findByNome(nome);
     }
 
-    public List<Projeto> buscarTodos(){
+    public List<Projeto> buscarTodos() {
         return projetoRepository.findAll();
     }
 
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) {
+        VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
+        //Tirar o if depois de recomeçar o banco de dados
+        if (visualizacaoEmLista != null) {
+            visualizacaoEmListaRepository.delete(visualizacaoEmLista);
+        }
         projetoRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) {
+    public void cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
+        if (projetoCadastroDTO.getProjetoEquipes() != null) {
+            projetoCadastroDTO.setProjetoEquipes(criacaoProjetoEquipe(projetoCadastroDTO));
+        }
+        if(projetoCadastroDTO.getResponsaveis()!=null){
+            projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
+        }
+        BeanUtils.copyProperties(projetoCadastroDTO, projeto);
         projetoRepository.save(projeto);
+        VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
+        visualizacaoEmListaRepository.save(visualizacaoEmLista);
+
+
     }
 
-    public void cadastrarComListaDeEquipes(IDTO dto,List<ProjetoEquipe> equipes){
-        ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
-        Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoCadastroDTO,projeto);
-        projetoRepository.save(projeto);
+    private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
+        ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
+        projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+           projetoResponsaveis.add(usuarioProjeto);
+        }));
 
+        return projetoResponsaveis;
+    }
+
+    private ArrayList<ProjetoEquipe> criacaoProjetoEquipe(ProjetoCadastroDTO projetoCadastroDTO) {
+
+        ArrayList<ProjetoEquipe> projetoEquipeList = new ArrayList<>();
+        projetoCadastroDTO.getProjetoEquipes().forEach((projetoEquipe -> {
+            ProjetoEquipe projetoEquipe1 = new ProjetoEquipe(null, projetoEquipe.getEquipe());
+            projetoEquipeList.add(projetoEquipe1);
+        }));
+
+        return projetoEquipeList;
     }
 
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoEdicaoDTO,projeto);
-        if (projetoRepository.existsById(projeto.getId())){
+        BeanUtils.copyProperties(projetoEdicaoDTO, projeto);
+        if (projetoRepository.existsById(projeto.getId())) {
+            criaValorPorpiredadeTarefa(projeto);
             projetoRepository.save(projeto);
-             return projeto;
+            return projeto;
         }
         throw new DadosNaoEncontradoException();
     }
@@ -102,6 +138,21 @@ public class ProjetoService {
 //        projetoRepository.save(projeto);
 //    }
 
+    }
+
+    public void criaValorPorpiredadeTarefa(Projeto projeto) {
+        projeto.getPropriedades().forEach(propriedade -> {
+            if (propriedade.getId() == null) {
+                PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
+                try {
+                    propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                } catch (ProjetoNaoEncontradoException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
         return projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
@@ -120,40 +171,30 @@ public class ProjetoService {
         projetoRepository.save(projeto);
     }
 
-    public void adicionarProjetosUsuarios(Integer userId, Integer projetoId) throws ProjetoNaoEncontradoException {
-        System.out.println(userId + " | " + projetoId);
-        System.out.println(buscarUm(projetoId));
-        try {
-            Projeto projeto = buscarUm(projetoId);
-            Usuario user = usuarioService.buscarUm(userId);
-
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto();
-            usuarioProjeto.setProjeto(projeto);
-            user.getProjetos().add(usuarioProjeto);
-            usuarioRepository.save(user);
-
-        } catch (ProjetoNaoEncontradoException e) {
-            throw new RuntimeException(e);
+    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+        Projeto projeto = projetoRepository.findById(id).get();
+        projeto.setProjetoEquipes(projetoEquipes);
+        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
+        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
+            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
         }
-    }
+        projetoRepository.save(projeto);
 
-    public List<Projeto> buscarProjetosUsuario(Integer userId) {
-        Usuario usuario = usuarioService.buscarUm(userId);
 
-        // Encontra todos os registros de UsuarioProjeto associados ao usuário específico
-        List<UsuarioProjeto> usuarioProjetos = usuario.getProjetos();
+    public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(idProjeto);
+        Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);
+        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
+            for (Propriedade propriedadeFor : projeto.getPropriedades()) {
+                if (propriedade.equals(propriedadeFor)) {
+                    propriedadesParaRemover.add(propriedadeFor);
+                }
+            }
+            for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
+                projeto.getPropriedades().remove(propriedadeParaRemover);
+            }
 
-        // Extrai os projetos desses registros e os coleta em uma lista
-        return usuarioProjetos.stream()
-                .map(UsuarioProjeto::getProjeto)
-                .collect(Collectors.toList());
-    }
-
-    public void removerProjetoDoUsuario(Integer userId, Integer projetoId) throws ProjetoNaoEncontradoException {
-        Usuario usuario = usuarioService.buscarUm(userId);
-        Projeto projeto = buscarUm(projetoId);
-        if(usuario.getProjetos().contains(projeto)){
-            usuario.getProjetos().remove(projeto);
-        }
+        propriedadeService.deletar(idPropriedade);
     }
 }
+

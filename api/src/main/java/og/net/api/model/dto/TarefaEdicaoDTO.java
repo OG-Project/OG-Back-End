@@ -29,6 +29,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private Status status;
     private List<SubTarefa> subTarefas;
     private List<Arquivo> arquivos;
+    private List<SubTarefa> subTarefas;
 
 
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {

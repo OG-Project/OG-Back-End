@@ -5,6 +5,7 @@ import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.exception.TarefaJaExistenteException;
 import og.net.api.model.dto.IDTO;
+import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.*;
@@ -29,6 +30,7 @@ public class TarefaService {
 
     private TarefaRepository tarefaRepository;
     private ProjetoRepository projetoRepository;
+    private ProjetoService projetoService;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
         if (tarefaRepository.existsById(id)){
@@ -37,6 +39,9 @@ public class TarefaService {
         }
         throw new TarefaInesxistenteException();
     }
+     public List<Tarefa> buscarTarefasPorVisualizacao(String nome){
+        return tarefaRepository.findTarefasByValorPropriedadeTarefas_indice_visualizacaoOrderByValorPropriedadeTarefas_indice_indice(nome);
+     }
 
     public List<Tarefa> buscarTarefasNome(String nome){
         return tarefaRepository.findByNome(nome);
@@ -53,9 +58,8 @@ public class TarefaService {
         tarefaRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto, Integer projetoId) {
+    public void cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
-        System.out.println(dto);
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();
@@ -72,6 +76,8 @@ public class TarefaService {
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         tarefaRepository.save(tarefa);
+        projeto.getTarefas().add(tarefa);
+        projetoService.editar(new ProjetoEdicaoDTO(projeto));
     }
 
     private Valor gerarValor(Propriedade propriedade){

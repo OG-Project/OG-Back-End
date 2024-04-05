@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioProjeto {
 
     @Id
@@ -16,11 +18,14 @@ public class UsuarioProjeto {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
+    private Usuario responsavel;
 
-    @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
+
+
+    //    @Enumerated(EnumType.ORDINAL)
+//    @JoinColumn(name = "permissao_id")
+//    private Permissao permissao;
+
+
 
 }

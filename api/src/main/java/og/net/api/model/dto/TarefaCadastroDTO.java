@@ -26,6 +26,7 @@ public class TarefaCadastroDTO implements IDTO{
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
     private List<SubTarefa> subTarefas;
+
     public LocalDateTime getData_criacao() {
         return data_criacao = LocalDateTime.now();
     }
