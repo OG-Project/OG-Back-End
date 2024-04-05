@@ -49,7 +49,7 @@ public class PropriedadeService {
 
     }
 
-    private void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
+    public void criaValorPropriedadeTarefa(Projeto projeto,Propriedade propriedade){
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         projeto.getTarefas().forEach(tarefa -> {
             if(propriedade.getId()==null){

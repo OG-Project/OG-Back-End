@@ -11,6 +11,9 @@ import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
+import og.net.api.webScoket.MeuWebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -31,13 +34,11 @@ import java.util.NoSuchElementException;
 @RequestMapping("/projeto")
 public class ProjetoController {
 
-    @NonNull
-    private ProjetoService projetoService;
 
+    private ProjetoService projetoService;
     @GetMapping("/{id}")
     public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
         try {
-
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
         }catch (ProjetoNaoEncontradoException e){
             e.getMessage();
@@ -70,7 +71,7 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
+    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO) throws IOException {
             projetoService.cadastrar(projetoCadastroDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -100,13 +101,28 @@ public class ProjetoController {
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
+//
+//    @PatchMapping("/addUser/{projetoId}/{userId}")
+//    public void adicionarResponsaveisProjeto(@PathVariable Integer userId, @PathVariable Integer projetoId ) throws ProjetoNaoEncontradoException {
+//        projetoService.adicionarResponsavelProjeto(projetoId,userId);
+//
+//    }
+
+    @PatchMapping("/addProjeto/{userId}/{projetoId}")
+    public void adicionarProjetoUsuario(@PathVariable Integer userId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
+       projetoService.adicionarProjetosUsuarios(userId,projetoId);
+
+    }
+
+    @GetMapping("/buscarProjetosUsuario/{userId}")
+    public List<Projeto> buscarProjetosUsuario(@PathVariable Integer userId){
+        return projetoService.buscarProjetosUsuario(userId);
+
 
     @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
         projetoService.deletarPropriedade(idPropriedade,idProjeto);
+
     }
-
-
-
 }
 
