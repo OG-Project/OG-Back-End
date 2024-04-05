@@ -11,6 +11,9 @@ import og.net.api.model.entity.ProjetoEquipe;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
+import og.net.api.webScoket.MeuWebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,11 +36,9 @@ public class ProjetoController {
 
     @NonNull
     private ProjetoService projetoService;
-
     @GetMapping("/{id}")
     public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
         try {
-
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
         }catch (ProjetoNaoEncontradoException e){
             e.getMessage();
@@ -70,7 +71,7 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
+    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO) throws IOException {
             projetoService.cadastrar(projetoCadastroDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
     }
