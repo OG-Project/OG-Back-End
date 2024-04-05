@@ -9,10 +9,14 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
+import og.net.api.webScoket.MeuWebSocketHandler;
 import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +59,7 @@ public class ProjetoService {
         projetoRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) {
+    public void cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
@@ -68,6 +72,8 @@ public class ProjetoService {
         projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
+
+
     }
 
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
