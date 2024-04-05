@@ -33,8 +33,6 @@ public class ProjetoService {
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
     private UsuarioService usuarioService;
-    private UsuarioProjetoRepository usuarioProjetoRepository;
-    private UsuarioRepository usuarioRepository;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
@@ -130,27 +128,19 @@ public class ProjetoService {
             e.printStackTrace();
         }
     }
-
-//    public void adicionarResponsavelProjeto(Integer projetoId, Integer userId) throws ProjetoNaoEncontradoException {
-//        Projeto projeto = buscarUm(projetoId);
-//        Usuario usuario = usuarioService.buscarUm(userId);
-//        projeto.getResponsaveis().add(usuario);
-//        projetoRepository.save(projeto);
-//    }
-
-    }
-
     public void criaValorPorpiredadeTarefa(Projeto projeto) {
-        projeto.getPropriedades().forEach(propriedade -> {
-            if (propriedade.getId() == null) {
-                PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
-                try {
-                    propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
-                } catch (ProjetoNaoEncontradoException e) {
-                    throw new RuntimeException(e);
+        if(projeto.getPropriedades()!=null){
+            projeto.getPropriedades().forEach(propriedade -> {
+                if (propriedade.getId() == null) {
+                    PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
+                    try {
+                        propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                    } catch (ProjetoNaoEncontradoException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
@@ -169,17 +159,6 @@ public class ProjetoService {
             }
         }
         projetoRepository.save(projeto);
-    }
-
-    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
-        Projeto projeto = projetoRepository.findById(id).get();
-        projeto.setProjetoEquipes(projetoEquipes);
-        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
-        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
-            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
-        }
-        projetoRepository.save(projeto);
-
     }
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);

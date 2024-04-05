@@ -108,21 +108,9 @@ public class ProjetoController {
 //
 //    }
 
-    @PatchMapping("/addProjeto/{userId}/{projetoId}")
-    public void adicionarProjetoUsuario(@PathVariable Integer userId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
-       projetoService.adicionarProjetosUsuarios(userId,projetoId);
-
-    }
-
-    @GetMapping("/buscarProjetosUsuario/{userId}")
-    public List<Projeto> buscarProjetosUsuario(@PathVariable Integer userId){
-        return projetoService.buscarProjetosUsuario(userId);
-
-
     @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
         projetoService.deletarPropriedade(idPropriedade,idProjeto);
-
     }
 }
 
