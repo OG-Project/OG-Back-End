@@ -31,6 +31,8 @@ public class Tarefa {
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     @ManyToOne
     private Status status;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<SubTarefa> subTarefas;
     @OneToMany
     private List<Comentario> comentarios;
     @OneToMany(cascade = CascadeType.ALL)
