@@ -8,6 +8,8 @@ import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
+import og.net.api.repository.UsuarioProjetoRepository;
+import og.net.api.repository.UsuarioRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
 import og.net.api.webScoket.MeuWebSocketHandler;
 import org.apache.tomcat.util.buf.UDecoder;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +33,8 @@ public class ProjetoService {
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
     private UsuarioService usuarioService;
+    private UsuarioProjetoRepository usuarioProjetoRepository;
+    private UsuarioRepository usuarioRepository;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
 
@@ -111,6 +116,27 @@ public class ProjetoService {
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
         System.out.println(projetoId + " | " + equipeId);
+        System.out.println(buscarUm(projetoId));
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Projeto projeto = buscarUm(projetoId);
+
+            ProjetoEquipe projetoEquipe = new ProjetoEquipe();
+            projetoEquipe.setEquipe(equipe);
+            projeto.getProjetoEquipes().add(projetoEquipe);
+            projetoRepository.save(projeto);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void adicionarResponsavelProjeto(Integer projetoId, Integer userId) throws ProjetoNaoEncontradoException {
+//        Projeto projeto = buscarUm(projetoId);
+//        Usuario usuario = usuarioService.buscarUm(userId);
+//        projeto.getResponsaveis().add(usuario);
+//        projetoRepository.save(projeto);
+//    }
 
     }
 
@@ -127,18 +153,17 @@ public class ProjetoService {
         });
     }
 
-
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
         return projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
                 eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
     }
 
-    public void removerProjetoDaEquipe(Integer equipeId, Integer projetoId) throws ProjetoNaoEncontradoException {
+    public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(projetoId);
 
-        for (ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()) {
-            if (projetoEquipe.getEquipe().getId().equals(equipeId)) {
+        for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
+            if(projetoEquipe.getEquipe().getId().equals(equipeId)){
                 projeto.getProjetoEquipes().remove(projetoEquipe);
                 break;
             }
