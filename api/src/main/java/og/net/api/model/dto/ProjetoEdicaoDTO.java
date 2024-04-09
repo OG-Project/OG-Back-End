@@ -24,5 +24,15 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    public ProjetoEdicaoDTO(Projeto projeto) {
+        this.id = projeto.getId();
+        this.nome = projeto.getNome();
+        this.descricao = projeto.getDescricao();
+        this.statusList = projeto.getStatusList();
+        this.tarefas = projeto.getTarefas();
+        this.propriedades = projeto.getPropriedades();
+        this.projetoEquipes = projeto.getProjetoEquipes();
+        this.responsaveis = projeto.getResponsaveis();
+    }
     private LocalDate dataFinal;
 }
