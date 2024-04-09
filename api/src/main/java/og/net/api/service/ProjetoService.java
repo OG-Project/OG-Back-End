@@ -9,10 +9,10 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
-import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class ProjetoService {
         projetoRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) {
+    public void cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
@@ -67,13 +67,14 @@ public class ProjetoService {
         projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
+
+
     }
 
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null, usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
            projetoResponsaveis.add(usuarioProjeto);
         }));
 
@@ -105,22 +106,34 @@ public class ProjetoService {
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
         System.out.println(projetoId + " | " + equipeId);
+        System.out.println(buscarUm(projetoId));
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Projeto projeto = buscarUm(projetoId);
 
+            ProjetoEquipe projetoEquipe = new ProjetoEquipe();
+            projetoEquipe.setEquipe(equipe);
+            projeto.getProjetoEquipes().add(projetoEquipe);
+            projetoRepository.save(projeto);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
     }
-
     public void criaValorPorpiredadeTarefa(Projeto projeto) {
-        projeto.getPropriedades().forEach(propriedade -> {
-            if (propriedade.getId() == null) {
-                PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
-                try {
-                    propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
-                } catch (ProjetoNaoEncontradoException e) {
-                    throw new RuntimeException(e);
+        if(projeto.getPropriedades()!=null){
+            projeto.getPropriedades().forEach(propriedade -> {
+                if (propriedade.getId() == null) {
+                    PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
+                    try {
+                        propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                    } catch (ProjetoNaoEncontradoException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
@@ -128,16 +141,31 @@ public class ProjetoService {
                 eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
     }
 
-    public void removerProjetoDaEquipe(Integer equipeId, Integer projetoId) throws ProjetoNaoEncontradoException {
+    public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(projetoId);
 
-        for (ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()) {
-            if (projetoEquipe.getEquipe().getId().equals(equipeId)) {
+        for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
+            if(projetoEquipe.getEquipe().getId().equals(equipeId)){
                 projeto.getProjetoEquipes().remove(projetoEquipe);
                 break;
             }
         }
         projetoRepository.save(projeto);
+    }
+    public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
+        Projeto projeto = buscarUm(idProjeto);
+        Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);
+        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
+            for (Propriedade propriedadeFor : projeto.getPropriedades()) {
+                if (propriedade.equals(propriedadeFor)) {
+                    propriedadesParaRemover.add(propriedadeFor);
+                }
+            }
+            for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
+                projeto.getPropriedades().remove(propriedadeParaRemover);
+            }
+
+        propriedadeService.deletar(idPropriedade);
     }
 }
 

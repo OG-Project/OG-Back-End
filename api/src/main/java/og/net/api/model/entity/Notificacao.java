@@ -5,27 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioProjeto {
-
+@NoArgsConstructor
+public class Notificacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne
-    private Usuario responsavel;
-
-
-
-    //    @Enumerated(EnumType.ORDINAL)
-//    @JoinColumn(name = "permissao_id")
-//    private Permissao permissao;
-
-
-
+    private String mensagem;
+    @OneToOne
+    private Usuario criador;
+    @ManyToMany
+    private List<Usuario> receptores;
+    private LocalDateTime dataDeEnvio;
 }
