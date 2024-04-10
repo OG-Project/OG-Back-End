@@ -154,7 +154,7 @@ public class ProjetoService {
             equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
         }
         projetoRepository.save(projeto);
-
+    }
 
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);
