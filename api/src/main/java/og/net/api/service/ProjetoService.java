@@ -105,8 +105,6 @@ public class ProjetoService {
     }
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
-        System.out.println(projetoId + " | " + equipeId);
-        System.out.println(buscarUm(projetoId));
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Projeto projeto = buscarUm(projetoId);

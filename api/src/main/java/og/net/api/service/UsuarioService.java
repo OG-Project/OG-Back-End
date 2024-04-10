@@ -69,8 +69,6 @@ public class UsuarioService {
     }
 
     public void adicionarAEquipe(Integer userId, Integer equipeId) {
-        System.out.println(userId + " | " + equipeId);
-        System.out.println(buscarUm(userId));
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
@@ -92,7 +90,6 @@ public class UsuarioService {
     }
 
     public void adicionarmembros(List<Integer> ids, Integer equipeId) {
-        System.out.println(ids);
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
 
