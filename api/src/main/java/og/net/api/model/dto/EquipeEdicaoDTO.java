@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.ProjetoEquipe;
+import og.net.api.model.entity.Usuario;
 
 @Data
 @AllArgsConstructor

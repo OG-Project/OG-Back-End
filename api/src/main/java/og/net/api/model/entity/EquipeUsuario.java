@@ -21,5 +21,5 @@ public class EquipeUsuario {
     @Enumerated(EnumType.ORDINAL)
     @JoinColumn(name = "permissao_id")
     private Permissao permissao;
-
+    private Boolean criador = false;
 }

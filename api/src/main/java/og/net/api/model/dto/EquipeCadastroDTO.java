@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.Projeto;
+import og.net.api.model.entity.Usuario;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

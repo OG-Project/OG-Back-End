@@ -9,16 +9,11 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
-import og.net.api.webScoket.MeuWebSocketHandler;
-import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -111,22 +106,34 @@ public class ProjetoService {
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
         System.out.println(projetoId + " | " + equipeId);
+        System.out.println(buscarUm(projetoId));
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Projeto projeto = buscarUm(projetoId);
 
+            ProjetoEquipe projetoEquipe = new ProjetoEquipe();
+            projetoEquipe.setEquipe(equipe);
+            projeto.getProjetoEquipes().add(projetoEquipe);
+            projetoRepository.save(projeto);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
     }
-
     public void criaValorPorpiredadeTarefa(Projeto projeto) {
-        projeto.getPropriedades().forEach(propriedade -> {
-            if (propriedade.getId() == null) {
-                PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
-                try {
-                    propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
-                } catch (ProjetoNaoEncontradoException e) {
-                    throw new RuntimeException(e);
+        if(projeto.getPropriedades()!=null){
+            projeto.getPropriedades().forEach(propriedade -> {
+                if (propriedade.getId() == null) {
+                    PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
+                    try {
+                        propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                    } catch (ProjetoNaoEncontradoException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
@@ -134,28 +141,17 @@ public class ProjetoService {
                 eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
     }
 
-    public void removerProjetoDaEquipe(Integer equipeId, Integer projetoId) throws ProjetoNaoEncontradoException {
+    public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(projetoId);
 
-        for (ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()) {
-            if (projetoEquipe.getEquipe().getId().equals(equipeId)) {
+        for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
+            if(projetoEquipe.getEquipe().getId().equals(equipeId)){
                 projeto.getProjetoEquipes().remove(projetoEquipe);
                 break;
             }
         }
         projetoRepository.save(projeto);
     }
-
-    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
-        Projeto projeto = projetoRepository.findById(id).get();
-        projeto.setProjetoEquipes(projetoEquipes);
-        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
-        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
-            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
-        }
-        projetoRepository.save(projeto);
-
-
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);
         Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);

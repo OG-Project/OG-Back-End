@@ -38,5 +38,4 @@ public class Projeto {
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
     private LocalDate dataFinal;
-
 }

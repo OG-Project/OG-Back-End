@@ -18,68 +18,7 @@ public class MeuWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String mensagemRecebida = (String) message.getPayload();
-       if(requisicaoPost(mensagemRecebida)){
-           session.sendMessage(new TextMessage("post: "+ mensagemRecebida));
-       }else if (requisicaoPut(mensagemRecebida)){
-           session.sendMessage(new TextMessage("put: "+ mensagemRecebida));
-       }else if(requisicaoDelete(mensagemRecebida)){
-           session.sendMessage(new TextMessage("Delete: "+ mensagemRecebida));
-       }
-        session.sendMessage(new TextMessage(mensagemRecebida));
-    }
-
-    private boolean requisicaoPost(String mensagemRecebida){
-        return switch (mensagemRecebida) {
-            case "post-notificacao-projeto" ->
-                // cria uma notificacao de projeto
-                    true;
-            case "post-notificacao-tarefa" ->
-                // cria uma notificacao de tarefa
-                    true;
-            case "post-notificacao-equipe" ->
-                // cria uma notificacao de equipe
-                    true;
-            case "post-notificacao-convite" ->
-                // cria uma notificacao de convite
-                    true;
-            default -> false;
-        };
-    }
-
-    private boolean requisicaoPut(String mensagemRecebida){
-        return switch (mensagemRecebida) {
-            case "put-notificacao-projeto" ->
-                // cria uma notificacao de projeto editado
-                    true;
-            case "put-notificacao-tarefa" ->
-                // cria uma notificacao de tarefa editado
-                    true;
-            case "put-notificacao-equipe" ->
-                // cria uma notificacao de equipe editado
-                    true;
-            case "put-notificacao-convite" ->
-                // cria uma notificacao de convite editado
-                    true;
-            default -> false;
-        };
-    }
-
-    private boolean requisicaoDelete(String mensagemRecebida){
-        return switch (mensagemRecebida) {
-            case "delete-notificacao-projeto" ->
-                // cria uma notificacao de projeto deletado
-                    true;
-            case "delete-notificacao-tarefa" ->
-                // cria uma notificacao de tarefa deletado
-                    true;
-            case "delete-notificacao-equipe" ->
-                // cria uma notificacao de equipe deletado
-                    true;
-            case "delete-notificacao-convite" ->
-                // cria uma notificacao de convite deletado
-                    true;
-            default -> false;
-        };
+        session.sendMessage(new TextMessage("Deu certo: "+ mensagemRecebida));
     }
 
     @Override
