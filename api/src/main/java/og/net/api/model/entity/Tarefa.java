@@ -37,6 +37,4 @@ public class Tarefa {
     private List<Comentario> comentarios;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Arquivo> arquivos;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<SubTarefa> subTarefas;
 }
