@@ -21,6 +21,7 @@ public class MeuWebSocketHandler extends TextWebSocketHandler {
         System.out.println(session.getUri().toString());
         session.sendMessage(new TextMessage(mensagemRecebida));
     }
+
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         sessions.remove(session);

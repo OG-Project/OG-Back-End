@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/projeto")
 public class ProjetoController {
 
-    @NonNull
+
     private ProjetoService projetoService;
     @GetMapping("/{id}")
     public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
@@ -101,11 +101,12 @@ public class ProjetoController {
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
-
-    @PatchMapping("/adicionarUmaEquipe/{id}")
-    public void adicionarUmaEquipe(@PathVariable Integer id, @RequestBody List<ProjetoEquipe> projetoEquipes) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
-        projetoService.atualizarUmaEquipeNoProjeto(projetoEquipes,id);
-    }
+//
+//    @PatchMapping("/addUser/{projetoId}/{userId}")
+//    public void adicionarResponsaveisProjeto(@PathVariable Integer userId, @PathVariable Integer projetoId ) throws ProjetoNaoEncontradoException {
+//        projetoService.adicionarResponsavelProjeto(projetoId,userId);
+//
+//    }
 
     @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
