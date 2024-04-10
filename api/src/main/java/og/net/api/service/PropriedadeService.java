@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
+import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
@@ -64,6 +65,7 @@ public class PropriedadeService {
             tarefaRepository.save(tarefa);
         });
     }
+
 
     private Valor gerarValor(Propriedade propriedade) {
         Valor valor = null;

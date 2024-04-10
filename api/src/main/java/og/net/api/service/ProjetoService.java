@@ -60,7 +60,7 @@ public class ProjetoService {
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
             projetoCadastroDTO.setProjetoEquipes(criacaoProjetoEquipe(projetoCadastroDTO));
         }
-        if(projetoCadastroDTO.getResponsaveis()!=null){
+        if (projetoCadastroDTO.getResponsaveis() != null) {
             projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
         }
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
@@ -155,17 +155,18 @@ public class ProjetoService {
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);
         Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);
-        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
-            for (Propriedade propriedadeFor : projeto.getPropriedades()) {
-                if (propriedade.equals(propriedadeFor)) {
-                    propriedadesParaRemover.add(propriedadeFor);
-                }
-            }
-            for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
-                projeto.getPropriedades().remove(propriedadeParaRemover);
-            }
-
+        projeto.getPropriedades().remove(propriedade);
         propriedadeService.deletar(idPropriedade);
+
+//        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
+//        for (Propriedade propriedadeFor : projeto.getPropriedades()) {
+//            if (propriedade.equals(propriedadeFor)) {
+//                propriedadesParaRemover.add(propriedadeFor);
+//            }
+//        }
+//        for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
+//            projeto.getPropriedades().remove(propriedadeParaRemover);
+//        }
     }
 }
 

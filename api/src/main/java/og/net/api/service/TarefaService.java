@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.exception.TarefaJaExistenteException;
+import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +60,7 @@ public class TarefaService {
         tarefaRepository.deleteById(id);
     }
 
+
     public void cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
         Tarefa tarefa = new Tarefa();
@@ -81,20 +84,7 @@ public class TarefaService {
     }
 
     private Valor gerarValor(Propriedade propriedade){
-        Valor valor = null;
-        if(propriedade.getTipo().equals(Tipo.DATA)){
-            valor = new Data(null, LocalDateTime.now());
-        }
-        else if(propriedade.getTipo().equals(Tipo.NUMERO)){
-            valor = new Numero(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.SELECAO)){
-            valor = new Selecao(null, null);
-        }
-        else if(propriedade.getTipo().equals(Tipo.TEXTO)){
-            valor = new Texto(null, "");
-        }
-        return valor;
+        return ValorFactory.getValor(propriedade.getTipo());
     }
 
     public void atualizarFoto(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
@@ -120,6 +110,15 @@ public class TarefaService {
                 tarefaRepository.save(tarefa);
             System.out.println(tarefa);
             return tarefa;
+        }
+        throw new DadosNaoEncontradoException();
+
+    }
+    public Tarefa editarValorPropriedadetarefa(Integer id,List<ValorPropriedadeTarefa> valorPropriedadeTarefas) throws DadosNaoEncontradoException {
+        Optional<Tarefa> tarefa = tarefaRepository.findById(id);
+        if (tarefa.isPresent()){
+            tarefa.get().setValorPropriedadeTarefas(valorPropriedadeTarefas);
+            return tarefaRepository.save(tarefa.get());
         }
         throw new DadosNaoEncontradoException();
 
