@@ -18,7 +18,6 @@ public class EquipeCadastroDTO implements IDTO {
     private String nome;
     private String descricao;
     private Arquivo foto;
-    private Usuario criador;
 
     public void setFoto(MultipartFile foto) throws IOException {
         Arquivo a = new Arquivo();

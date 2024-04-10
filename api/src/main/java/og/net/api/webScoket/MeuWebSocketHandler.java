@@ -18,7 +18,7 @@ public class MeuWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         String mensagemRecebida = (String) message.getPayload();
-        session.sendMessage(new TextMessage("Deu certo porra: "+ mensagemRecebida));
+        session.sendMessage(new TextMessage("Deu certo: "+ mensagemRecebida));
     }
 
     @Override
