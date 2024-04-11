@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
    List<Projeto> findByNome(String nome);
-  
+
    Projeto findByProjetoEquipesContaining(ProjetoEquipe projetoEquipe);
 
 }
