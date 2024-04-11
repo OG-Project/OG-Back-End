@@ -2,8 +2,8 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.model.Notificacao.*;
 import og.net.api.model.dto.*;
+import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
 import og.net.api.service.NotificacaoService;
 import og.net.api.service.UsuarioService;
@@ -50,11 +50,20 @@ public class NoticacaoController {
         notificacaoService.deletar(notificacaoId);
     }
 
-    @PostMapping("/convite")
-    public ResponseEntity<Notificacao> cadastrarNotificacaoConvite(@RequestBody NotificacaoConvite notificacaoConvite){
+    @PostMapping("/convite/equipe")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaEquipe(@RequestBody NotificacaoConvite notificacaoConvite){
         try{
 
-            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConvite(notificacaoConvite), HttpStatus.CREATED);
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaEquipe(notificacaoConvite), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/convite/projeto")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaProjeto(@RequestBody NotificacaoConvite notificacaoConvite){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaProjeto(notificacaoConvite), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

@@ -2,8 +2,10 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.model.Notificacao.*;
 import og.net.api.model.dto.*;
+import og.net.api.model.entity.ConviteParaEquipe;
+import og.net.api.model.entity.ConviteParaProjeto;
+import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
 import og.net.api.repository.NotificacaoRepositorys.*;
 import org.springframework.beans.BeanUtils;
@@ -48,7 +50,10 @@ public class NotificacaoService {
         }
         throw new DadosNaoEncontradoException();
     }
-    public Notificacao cadastrarNotificacaoConvite(NotificacaoConvite notificacaoConvite) {
+    public Notificacao cadastrarNotificacaoConviteParaEquipe(NotificacaoConvite notificacaoConvite) {
+        return notificacaoConviteRepository.save(notificacaoConvite);
+    }
+    public Notificacao cadastrarNotificacaoConviteParaProjeto(NotificacaoConvite notificacaoConvite) {
         return notificacaoConviteRepository.save(notificacaoConvite);
     }
     public Notificacao cadastrarNotificacaoTarefa(NotificacaoTarefa notificacaoConvite) {

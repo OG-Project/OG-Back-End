@@ -1,4 +1,4 @@
-package og.net.api.model.Notificacao;
+package og.net.api.model.entity.Notificacao;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
