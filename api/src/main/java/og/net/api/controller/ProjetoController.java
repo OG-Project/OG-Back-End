@@ -106,7 +106,5 @@ public class ProjetoController {
         projetoService.deletarPropriedade(idPropriedade,idProjeto);
     }
 
-
-
 }
 

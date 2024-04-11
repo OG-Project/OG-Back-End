@@ -34,7 +34,7 @@ public class Projeto {
     @JoinColumn(name = "projeto_id")
     private List<ProjetoEquipe> projetoEquipes;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
 
 }

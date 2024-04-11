@@ -15,6 +15,7 @@ import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -76,8 +77,7 @@ public class ProjetoService {
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null, usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
            projetoResponsaveis.add(usuarioProjeto);
         }));
 
@@ -124,7 +124,6 @@ public class ProjetoService {
             }
         });
     }
-
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
