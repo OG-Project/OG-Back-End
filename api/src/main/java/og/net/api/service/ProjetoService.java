@@ -54,7 +54,7 @@ public class ProjetoService {
         projetoRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) throws IOException {
+    public Projeto cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
@@ -64,10 +64,10 @@ public class ProjetoService {
             projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
         }
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
-        projetoRepository.save(projeto);
+       Projeto projeto1= projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
-
+    return projeto1;
 
     }
 
