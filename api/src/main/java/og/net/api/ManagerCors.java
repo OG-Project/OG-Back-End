@@ -9,7 +9,7 @@ public class ManagerCors implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173/") // Troque para o seu domínio permitido
+                .allowedOrigins("http://localhost:5173") // Troque para o seu domínio permitido
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowCredentials(true)
                 .maxAge(3600);

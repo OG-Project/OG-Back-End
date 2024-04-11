@@ -77,13 +77,13 @@ public class TarefaController {
     }
 
     @PostMapping("/{projetoId}")
-    public Tarefa cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
+    public ResponseEntity<?> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
         try{
-            return tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
-
+             tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
+             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return null;
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
     }
 

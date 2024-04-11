@@ -54,7 +54,7 @@ public class ProjetoService {
         projetoRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) throws IOException {
+    public Projeto cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;
         Projeto projeto = new Projeto();
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
@@ -64,10 +64,10 @@ public class ProjetoService {
             projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
         }
         BeanUtils.copyProperties(projetoCadastroDTO, projeto);
-        projetoRepository.save(projeto);
+       Projeto projeto1= projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
-
+    return projeto1;
 
     }
 
@@ -105,8 +105,6 @@ public class ProjetoService {
     }
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
-        System.out.println(projetoId + " | " + equipeId);
-        System.out.println(buscarUm(projetoId));
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Projeto projeto = buscarUm(projetoId);
@@ -152,6 +150,18 @@ public class ProjetoService {
         }
         projetoRepository.save(projeto);
     }
+
+
+    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+        Projeto projeto = projetoRepository.findById(id).get();
+        projeto.setProjetoEquipes(projetoEquipes);
+        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
+        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
+            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
+        }
+        projetoRepository.save(projeto);
+    }
+
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);
         Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);

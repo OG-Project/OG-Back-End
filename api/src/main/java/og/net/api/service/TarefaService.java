@@ -106,9 +106,7 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
-            System.out.println(tarefaRepository);
                 tarefaRepository.save(tarefa);
-            System.out.println(tarefa);
             return tarefa;
         }
         throw new DadosNaoEncontradoException();
