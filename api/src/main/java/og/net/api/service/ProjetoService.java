@@ -17,9 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -127,8 +125,12 @@ public class ProjetoService {
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
-        return projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
-                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+        List<Projeto> ps = new ArrayList<>(projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
+                eu -> projetoRepository.findByProjetoEquipesContaining(eu))
+                .toList());
+
+        ps.sort(Comparator.comparing(Projeto::getIndexLista));
+        return ps;
     }
 
     public void removerProjetoDaEquipe(Integer equipeId, Integer projetoId) throws ProjetoNaoEncontradoException {

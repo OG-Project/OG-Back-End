@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "projeto")
 
 public class Projeto {
@@ -21,6 +20,9 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
+    private String categoria;
+    private Integer indexLista;
+
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
     @OneToMany
@@ -36,5 +38,9 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
+
+    public Projeto() {
+        this.categoria = "meus-projetos";
+    }
 
 }

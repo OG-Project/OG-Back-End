@@ -23,4 +23,7 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private Integer indexLista;
+    private String categoria;
+
 }
