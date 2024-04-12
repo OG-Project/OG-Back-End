@@ -5,18 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjetoEquipe {
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Convite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne()
-    private Equipe equipe;
-
-
+    private Long id;
+    private Boolean aceito = false;
 }

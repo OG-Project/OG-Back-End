@@ -10,7 +10,7 @@ public class ManagerCors implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173") // Troque para o seu domínio permitido
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowCredentials(true)
                 .maxAge(3600);
     }

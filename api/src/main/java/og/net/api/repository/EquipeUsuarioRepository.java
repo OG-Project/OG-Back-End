@@ -15,4 +15,6 @@ public interface EquipeUsuarioRepository extends JpaRepository<EquipeUsuario,Int
     List<EquipeUsuario> findAllByEquipe_id(Integer id);
 
     List<EquipeUsuario> findAllByEquipe(Equipe equipe);
+
+    EquipeUsuario findEquipeUsuarioByCriador(Boolean isCriador);
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,9 +38,8 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
-
     public Projeto() {
         this.categoria = "meus-projetos";
     }
-
+    private LocalDate dataFinal;
 }

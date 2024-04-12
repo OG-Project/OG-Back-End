@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private LocalDate dataFinal;
 
 
     //Define a data da criação!
