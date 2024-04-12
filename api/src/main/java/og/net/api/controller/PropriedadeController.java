@@ -24,7 +24,6 @@ public class PropriedadeController {
 
     @Autowired
     private PropriedadeService propriedadeService;
-    private ProjetoRepository projetoRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<Propriedade> buscarUm(@PathVariable Integer id){
@@ -55,7 +54,6 @@ public class PropriedadeController {
     public ResponseEntity<Propriedade> cadastrar(@RequestBody PropriedadeCadastroDTO propriedadeCadastroDTO, @PathVariable Integer projetoId){
         try{
             propriedadeService.cadastrar(propriedadeCadastroDTO,projetoId);
-            projetoRepository.save(projetoRepository.findById(projetoId).get());
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);

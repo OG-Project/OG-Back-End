@@ -1,29 +1,22 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.ProjetoEquipe;
-import og.net.api.model.entity.Tarefa;
-import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -31,13 +24,11 @@ import java.util.NoSuchElementException;
 @RequestMapping("/projeto")
 public class ProjetoController {
 
-    @NonNull
-    private ProjetoService projetoService;
 
+    private ProjetoService projetoService;
     @GetMapping("/{id}")
     public ResponseEntity<Projeto> buscarUm(@PathVariable Integer id){
         try {
-
             return new ResponseEntity<>(projetoService.buscarUm(id),HttpStatus.OK);
         }catch (ProjetoNaoEncontradoException e){
             e.getMessage();
@@ -70,16 +61,15 @@ public class ProjetoController {
     }
 
     @PostMapping
-    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO){
-            projetoService.cadastrar(projetoCadastroDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO) throws IOException {
+
+            return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO),HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<Projeto> editar(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO){
         try {
-            projetoService.editar(projetoEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -100,6 +90,12 @@ public class ProjetoController {
     public void removerUsuarioDaEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId) throws ProjetoNaoEncontradoException {
         projetoService.removerProjetoDaEquipe( equipeId, projetoId);
     }
+//
+//    @PatchMapping("/addUser/{projetoId}/{userId}")
+//    public void adicionarResponsaveisProjeto(@PathVariable Integer userId, @PathVariable Integer projetoId ) throws ProjetoNaoEncontradoException {
+//        projetoService.adicionarResponsavelProjeto(projetoId,userId);
+//
+//    }
 
     @DeleteMapping("/deletarPropriedade/{idPropriedade}/{idProjeto}")
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {

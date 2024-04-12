@@ -1,18 +1,13 @@
 package og.net.api.service;
 
 import lombok.AllArgsConstructor;
-import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.exception.EquipeNaoEncontradaException;
-import og.net.api.exception.UsuarioInesxistenteException;
-import og.net.api.exception.UsuarioJaExistenteException;
+import og.net.api.exception.*;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
-import og.net.api.model.entity.Arquivo;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.EquipeUsuario;
-import og.net.api.model.entity.Usuario;
+import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -28,6 +23,7 @@ public class UsuarioService {
      private UsuarioRepository usuarioRepository;
      private EquipeService equipeService;
      private EquipeUsuarioRepository equipeUsuarioRepository;
+
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -73,8 +69,6 @@ public class UsuarioService {
     }
 
     public void adicionarAEquipe(Integer userId, Integer equipeId) {
-        System.out.println(userId + " | " + equipeId);
-        System.out.println(buscarUm(userId));
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
@@ -96,7 +90,6 @@ public class UsuarioService {
     }
 
     public void adicionarmembros(List<Integer> ids, Integer equipeId) {
-        System.out.println(ids);
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
 
@@ -116,6 +109,8 @@ public class UsuarioService {
             e.printStackTrace();
         }
     }
+
+
 
     public List<Usuario> buscarMembrosEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);

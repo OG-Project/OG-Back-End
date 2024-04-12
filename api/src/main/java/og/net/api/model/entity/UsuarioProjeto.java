@@ -20,8 +20,6 @@ public class UsuarioProjeto {
     @ManyToOne
     private Usuario responsavel;
 
-
-
     //    @Enumerated(EnumType.ORDINAL)
 //    @JoinColumn(name = "permissao_id")
 //    private Permissao permissao;
