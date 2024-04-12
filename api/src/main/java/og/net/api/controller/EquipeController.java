@@ -25,13 +25,7 @@ import java.util.NoSuchElementException;
 @CrossOrigin(origins = "http://localhost:5173")
 public class EquipeController {
 
-
     private EquipeService equipeService;
-    //criar um metodo que retorna um novo modelMapper
-// ou usar a notação Bin, que mapea injeção de dependência
-// criar um contrutor com apenas um this.mapper= new ModelMappper(), já que o serviçe e outras dependencias são injetadas normalmente
-
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Equipe> buscarUm(@PathVariable Integer id){
@@ -43,11 +37,6 @@ public class EquipeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-//   @GetMapping("/projetos/{equipeId}")
-//   public ResponseEntity<Collection<Projeto>> buscarProjetos(@PathVariable Integer equipeId){
-//
-//   }
 
     @GetMapping("/nome")
     public ResponseEntity<Collection<Equipe>> buscarEquipesNome(@RequestParam String nome){
@@ -95,12 +84,7 @@ public class EquipeController {
         } catch (EquipeNaoEncontradaException e) {
             throw new RuntimeException(e);
         }
-//        catch (EquipeNaoEncontradaException e){
-//            e.getMessage();
-//            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
     }
-//    @PatchMapping
 
     @PatchMapping("/{id}")
     public void cadastrarFoto(@RequestParam MultipartFile foto, @PathVariable Integer id) throws IOException, EquipeNaoEncontradaException {

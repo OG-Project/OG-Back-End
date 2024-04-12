@@ -51,15 +51,14 @@ public class EquipeService {
 
     public void deletar(Integer id){
         Equipe equipe = equipeRepository.findById(id).get();
-        List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe_id(id);
-        List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe_Id(id);
+        List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe(equipe);
+        List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe(equipe);
         equipeUsuarios.forEach(eu -> {
            equipeUsuarioRepository.deleteById(eu.getId());
         });
         projetoEquipes.forEach(ep ->{
             projetoEquipeRepository.deleteById(ep.getId());
         });
-
 
         equipeRepository.delete(equipe);
     }
