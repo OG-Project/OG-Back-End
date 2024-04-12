@@ -22,7 +22,6 @@ public class Projeto {
     private String descricao;
     private String categoria;
     private Integer indexLista;
-
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
     @OneToMany
