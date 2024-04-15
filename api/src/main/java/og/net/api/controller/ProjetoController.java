@@ -1,25 +1,15 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.ProjetoEquipe;
-import og.net.api.model.entity.Tarefa;
-import og.net.api.model.entity.Usuario;
 import og.net.api.service.ProjetoService;
-import og.net.api.webScoket.MeuWebSocketHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -72,15 +62,14 @@ public class ProjetoController {
 
     @PostMapping
     public ResponseEntity<Projeto> cadastrar(@RequestBody ProjetoCadastroDTO projetoCadastroDTO) throws IOException {
-            projetoService.cadastrar(projetoCadastroDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+
+            return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO),HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<Projeto> editar(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO){
         try {
-            projetoService.editar(projetoEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);

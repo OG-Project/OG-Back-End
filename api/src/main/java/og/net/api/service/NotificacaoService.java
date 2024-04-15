@@ -2,13 +2,12 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
-import og.net.api.model.entity.Notificacao;
-import og.net.api.model.entity.Projeto;
-import og.net.api.model.entity.Status;
+import og.net.api.model.entity.ConviteParaEquipe;
+import og.net.api.model.entity.ConviteParaProjeto;
+import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
-import og.net.api.repository.NotificacaoRepository;
+import og.net.api.repository.NotificacaoRepositorys.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 public class NotificacaoService {
     private NotificacaoRepository notificacaoRepository;
+    private NotificacaoConviteRepository notificacaoConviteRepository;
+    private NotificacaoEquipeRepository notificacaoEquipeRepository;
+    private NotificacaoProjetoRepository notificacaoProjetoRepository;
+    private NotificacaoTarefaRepository notificacaoTarefaRepository;
 
     public Notificacao buscarUm(Integer id){
         return notificacaoRepository.findById(id).get();
@@ -46,6 +49,21 @@ public class NotificacaoService {
             return notificacao;
         }
         throw new DadosNaoEncontradoException();
+    }
+    public Notificacao cadastrarNotificacaoConviteParaEquipe(NotificacaoConvite notificacaoConvite) {
+        return notificacaoConviteRepository.save(notificacaoConvite);
+    }
+    public Notificacao cadastrarNotificacaoConviteParaProjeto(NotificacaoConvite notificacaoConvite) {
+        return notificacaoConviteRepository.save(notificacaoConvite);
+    }
+    public Notificacao cadastrarNotificacaoTarefa(NotificacaoTarefa notificacaoConvite) {
+        return notificacaoTarefaRepository.save(notificacaoConvite);
+    }
+    public Notificacao cadastrarNotificacaoProjeto(NotificacaoProjeto notificacaoProjeto) {
+        return notificacaoProjetoRepository.save(notificacaoProjeto);
+    }
+    public Notificacao cadastrarNotificacaoEquipe(NotificacaoEquipe notificacaoEquipe) {
+        return notificacaoEquipeRepository.save(notificacaoEquipe);
     }
     public List<Notificacao> buscarPorUsuario(Usuario receptor){
         return notificacaoRepository.findNotificacaosByReceptoresContaining(receptor);

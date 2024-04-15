@@ -5,6 +5,7 @@ import og.net.api.exception.*;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Tarefa;
+import og.net.api.model.entity.ValorPropriedadeTarefa;
 import og.net.api.service.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -76,13 +77,13 @@ public class TarefaController {
     }
 
     @PostMapping("/{projetoId}")
-    public ResponseEntity<Tarefa> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
+    public ResponseEntity<?> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
         try{
-            tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+             tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
+             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
     }
 
@@ -90,6 +91,16 @@ public class TarefaController {
     public ResponseEntity<Tarefa> editar(@RequestBody TarefaEdicaoDTO tarefaEdicaoDTO){
         try {
             tarefaService.editar(tarefaEdicaoDTO);
+            return new ResponseEntity<>( HttpStatus.CREATED);
+        }catch (DadosNaoEncontradoException e){
+            System.out.println(e.getMessage());
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/valorPropriedadeTarefa/{id}")
+    public ResponseEntity<Tarefa> editarValorPropriedadeTarefa(@PathVariable Integer id, @RequestBody List<ValorPropriedadeTarefa> valorPropriedadeTarefas){
+        try {
+            tarefaService.editarValorPropriedadetarefa(id,valorPropriedadeTarefas);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());

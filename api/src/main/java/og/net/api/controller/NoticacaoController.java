@@ -2,10 +2,8 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.dto.*;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.Notificacao;
+import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
 import og.net.api.service.NotificacaoService;
 import og.net.api.service.UsuarioService;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -53,6 +50,51 @@ public class NoticacaoController {
         notificacaoService.deletar(notificacaoId);
     }
 
+    @PostMapping("/convite/equipe")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaEquipe(@RequestBody NotificacaoConvite notificacaoConvite){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaEquipe(notificacaoConvite), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/convite/projeto")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaProjeto(@RequestBody NotificacaoConvite notificacaoConvite){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaProjeto(notificacaoConvite), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/tarefa")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoTarefa(@RequestBody NotificacaoTarefa notificacaoTarefa){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoTarefa(notificacaoTarefa), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/projeto")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoProjeto(@RequestBody NotificacaoProjeto notificacaoProjeto){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoProjeto(notificacaoProjeto), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/equipe")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoEquipe(@RequestBody NotificacaoEquipe notificacaoEquipe){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoEquipe(notificacaoEquipe), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
     @PostMapping
     public ResponseEntity<Notificacao> cadastrar(@RequestBody NotificacaoCadastroDTO notificacaoCadastroDTO){
         try{

@@ -50,9 +50,9 @@ public class EquipeService {
     }
 
     public void deletar(Integer id){
+        Equipe equipe = equipeRepository.findById(id).get();
         List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe_id(id);
         List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe_Id(id);
-        Equipe equipe = equipeRepository.findById(id).get();
         equipeUsuarios.forEach(eu -> {
            equipeUsuarioRepository.deleteById(eu.getId());
         });
@@ -61,7 +61,7 @@ public class EquipeService {
         });
 
 
-        equipeRepository.deleteById(id);
+        equipeRepository.delete(equipe);
     }
     public void atualizarFoto(Integer id, MultipartFile foto) throws IOException, EquipeNaoEncontradaException {
         Equipe equipe = buscarUm(id);
@@ -81,8 +81,7 @@ public class EquipeService {
         //      //serve para não copiar atributos nulos
 //              mapper.map(equipeEdicaoDTO,equipe);
         EquipeEdicaoDTO equipeEdicaoDTO = (EquipeEdicaoDTO) dto;
-        System.out.println(equipeEdicaoDTO);
-        Equipe equipe = buscarUm(((EquipeEdicaoDTO) dto).getId());  
+        Equipe equipe = buscarUm(((EquipeEdicaoDTO) dto).getId());
         BeanUtils.copyProperties(equipeEdicaoDTO,equipe);
         if (!equipeRepository.existsById(equipe.getId())){
             throw new DadosNaoEncontradoException();
