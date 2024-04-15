@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 @CrossOrigin(origins = "http://localhost:5173")
 public class EquipeController {
 
-
     private EquipeService equipeService;
 
     @GetMapping("/{id}")
@@ -36,6 +35,7 @@ public class EquipeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/nome")
     public ResponseEntity<Collection<Equipe>> buscarEquipesNome(@RequestParam String nome){
         try{
@@ -83,6 +83,7 @@ public class EquipeController {
             throw new RuntimeException(e);
         }
     }
+
     @PatchMapping("/{id}")
     public void cadastrarFoto(@RequestParam MultipartFile foto, @PathVariable Integer id) throws IOException, EquipeNaoEncontradaException {
         equipeService.atualizarFoto(id,foto);

@@ -24,6 +24,9 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private Integer indexLista;
+    private String categoria;
+
     public ProjetoEdicaoDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.nome = projeto.getNome();
@@ -35,4 +38,5 @@ public class ProjetoEdicaoDTO implements IDTO {
         this.responsaveis = projeto.getResponsaveis();
     }
     private LocalDate dataFinal;
+
 }
