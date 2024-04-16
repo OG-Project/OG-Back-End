@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comentario {
+public class UsuarioAceito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String conteudo;
+    private Integer id;
     @ManyToOne
-    private Usuario autor;
-
+    private Usuario usuario;
+    private Boolean aceito = false;
 }

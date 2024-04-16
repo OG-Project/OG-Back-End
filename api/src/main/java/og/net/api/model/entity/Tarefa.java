@@ -33,7 +33,7 @@ public class Tarefa {
     private Status status;
     @OneToMany(cascade = CascadeType.ALL)
     private List<SubTarefa> subTarefas;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Comentario> comentarios;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Arquivo> arquivos;

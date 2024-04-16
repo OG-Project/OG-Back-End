@@ -2,6 +2,8 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.EquipeNaoEncontradaException;
+import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
@@ -41,6 +43,22 @@ public class NoticacaoController {
         try{
             return new ResponseEntity<>(notificacaoService.buscarTodos(), HttpStatus.OK);
         }catch (NoSuchElementException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/conviteEquipe/{equipeId}")
+    public ResponseEntity<Collection<NotificacaoConvite>> buscarNotificaoConviteParaEquipePorEquipe(@PathVariable Integer equipeId){
+        try{
+            return new ResponseEntity<>(notificacaoService.buscarNotificaoConviteParaEquipePorEquipe(equipeId), HttpStatus.OK);
+        }catch (NoSuchElementException | EquipeNaoEncontradaException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/conviteProjeto/{projetoId}")
+    public ResponseEntity<Collection<NotificacaoConvite>> buscarNotificaoConviteParaProjetoPorProjeto(@PathVariable Integer projetoId){
+        try{
+            return new ResponseEntity<>(notificacaoService.buscarNotificaoConviteParaProjetoPorProjeto(projetoId), HttpStatus.OK);
+        }catch (NoSuchElementException | ProjetoNaoEncontradoException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -106,10 +124,10 @@ public class NoticacaoController {
     }
 
     @PutMapping
-    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoEdicaoDTO notificacaoEdicaoDTO){
+    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoConvite notificacaoConvite){
 
         try {
-            notificacaoService.editar( notificacaoEdicaoDTO);
+            notificacaoService.editar(notificacaoConvite);
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (DadosNaoEncontradoException e){
             e.getMessage();
