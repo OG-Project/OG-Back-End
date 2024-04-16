@@ -8,7 +8,7 @@ import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.*;
 import og.net.api.repository.NotificacaoRepositorys.*;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class NotificacaoService {
     private NotificacaoTarefaRepository notificacaoTarefaRepository;
     private EquipeService equipeService;
     private ProjetoService projetoService;
-
+    private ModelMapper modelMapper;
     public Notificacao buscarUm(Integer id){
         return notificacaoRepository.findById(id).get();
     }
@@ -49,7 +49,7 @@ public class NotificacaoService {
     public Notificacao cadastrar(IDTO dto) {
         NotificacaoCadastroDTO notificacaoCadastroDTO = (NotificacaoCadastroDTO) dto;
         Notificacao notificacao = new Notificacao();
-        BeanUtils.copyProperties(notificacaoCadastroDTO, notificacao);
+        modelMapper.map(notificacaoCadastroDTO, notificacao);
         return notificacaoRepository.save(notificacao);
     }
 
