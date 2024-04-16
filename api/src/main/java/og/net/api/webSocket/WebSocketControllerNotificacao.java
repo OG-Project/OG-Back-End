@@ -1,9 +1,5 @@
-package og.net.api.webScoket;
+package og.net.api.webSocket;
 
-import og.net.api.model.entity.Equipe;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -11,11 +7,10 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
-public class WebSocketControllerEquipe extends TextWebSocketHandler {
+public class WebSocketControllerNotificacao extends TextWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = new HashSet<>();
     @Override

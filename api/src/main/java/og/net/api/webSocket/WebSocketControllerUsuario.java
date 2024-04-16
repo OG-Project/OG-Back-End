@@ -1,6 +1,5 @@
-package og.net.api.webScoket;
+package og.net.api.webSocket;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -9,8 +8,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashSet;
 import java.util.Set;
 
-@Controller
-public class WebSocketControllerNotificacao extends TextWebSocketHandler {
+public class WebSocketControllerUsuario extends TextWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = new HashSet<>();
     @Override
@@ -20,23 +18,23 @@ public class WebSocketControllerNotificacao extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        int equipeIdDaSessao = obterIdEquipeDaSessao(session);
-        int equipeIdDaMensagem = obterIdEquipeDaMensagem(message);
-        if (equipeIdDaSessao == equipeIdDaMensagem) {
+        int usuarioIdDaSessao = obterIdUsuarioDaSessao(session);
+        int usuarioIdDaMensagem = obterIdUsuarioDaMensagem(message);
+        if (usuarioIdDaSessao == usuarioIdDaMensagem) {
             session.sendMessage(message);
         }
     }
 
-    private int obterIdEquipeDaSessao(WebSocketSession session) {
+    private int obterIdUsuarioDaSessao(WebSocketSession session) {
 
         String uri = session.getUri().toString();
         String[] parts = uri.split("/");
         return Integer.parseInt(parts[parts.length - 1]);
     }
 
-    private int obterIdEquipeDaMensagem(TextMessage message) {
-        String [] equipeIdDaMensagem = message.getPayload().split(":");
-        return Integer.parseInt(equipeIdDaMensagem[equipeIdDaMensagem.length-1]); // Extrai o ID da equipe da mensagem
+    private int obterIdUsuarioDaMensagem(TextMessage message) {
+        String [] usuarioIdDaMensagem = message.getPayload().split(":");
+        return Integer.parseInt(usuarioIdDaMensagem[usuarioIdDaMensagem.length-1]);
     }
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {

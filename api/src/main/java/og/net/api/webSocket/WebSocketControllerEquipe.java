@@ -1,4 +1,4 @@
-package og.net.api.webScoket;
+package og.net.api.webSocket;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Controller
-public class WebSocketControllerProjeto extends TextWebSocketHandler {
+public class WebSocketControllerEquipe extends TextWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = new HashSet<>();
     @Override
