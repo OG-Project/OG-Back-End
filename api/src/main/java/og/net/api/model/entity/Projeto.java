@@ -41,5 +41,6 @@ public class Projeto {
     public Projeto() {
         this.categoria = "meus-projetos";
     }
+
     private LocalDate dataFinal;
 }
