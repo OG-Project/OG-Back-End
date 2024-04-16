@@ -5,17 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Convite {
+public class UsuarioAceito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<UsuarioAceito> usuarioAceito;
+    private Integer id;
+    @ManyToOne
+    private Usuario usuario;
+    private Boolean aceito = false;
 }

@@ -124,10 +124,10 @@ public class NoticacaoController {
     }
 
     @PutMapping
-    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoEdicaoDTO notificacaoEdicaoDTO){
+    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoConvite notificacaoConvite){
 
         try {
-            notificacaoService.editar( notificacaoEdicaoDTO);
+            notificacaoService.editar(notificacaoConvite);
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (DadosNaoEncontradoException e){
             e.getMessage();

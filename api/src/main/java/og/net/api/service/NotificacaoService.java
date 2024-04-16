@@ -51,10 +51,7 @@ public class NotificacaoService {
         BeanUtils.copyProperties(notificacaoCadastroDTO, notificacao);
         return notificacaoRepository.save(notificacao);
     }
-    public Notificacao editar(IDTO dto) throws DadosNaoEncontradoException {
-        NotificacaoEdicaoDTO notificacaoEdicaoDTO = (NotificacaoEdicaoDTO) dto;
-        Notificacao notificacao = new Notificacao();
-        BeanUtils.copyProperties(notificacaoEdicaoDTO,notificacao);
+    public Notificacao editar(NotificacaoConvite notificacao) throws DadosNaoEncontradoException {
         if (notificacaoRepository.existsById(notificacao.getId())){
             notificacaoRepository.save(notificacao);
             return notificacao;
