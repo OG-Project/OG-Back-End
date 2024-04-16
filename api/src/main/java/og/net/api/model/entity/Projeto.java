@@ -21,8 +21,6 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
-    private String categoria;
-    private Integer indexLista;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
     @OneToMany
@@ -38,6 +36,8 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
+    private String categoria;
+    private Integer indexLista;
     public Projeto() {
         this.categoria = "meus-projetos";
     }
