@@ -15,7 +15,7 @@ public class EquipeUsuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="equipe_id")
     private Equipe equipe;
     @Enumerated(EnumType.ORDINAL)

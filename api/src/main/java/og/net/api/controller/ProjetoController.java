@@ -101,6 +101,5 @@ public class ProjetoController {
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
         projetoService.deletarPropriedade(idPropriedade,idProjeto);
     }
-
 }
 

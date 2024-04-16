@@ -2,6 +2,7 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
@@ -46,6 +47,7 @@ public class NoticacaoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/conviteEquipe/{equipeId}")
     public ResponseEntity<Collection<NotificacaoConvite>> buscarNotificaoConviteParaEquipePorEquipe(@PathVariable Integer equipeId){
         try{
@@ -124,10 +126,12 @@ public class NoticacaoController {
     }
 
     @PutMapping
+
     public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoConvite notificacaoConvite){
 
         try {
             notificacaoService.editar(notificacaoConvite);
+
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (DadosNaoEncontradoException e){
             e.getMessage();

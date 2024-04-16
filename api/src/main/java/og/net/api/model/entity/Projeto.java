@@ -38,11 +38,9 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
-
     public Projeto() {
         this.categoria = "meus-projetos";
     }
-
 
     private LocalDate dataFinal;
 }

@@ -32,6 +32,7 @@ public class NotificacaoService {
         return notificacaoRepository.findAll();
     }
 
+
     public List<NotificacaoConvite> buscarNotificaoConviteParaEquipePorEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
         return notificacaoConviteRepository.findNotificacaoConviteByConviteParaEquipe_Equipe(equipe);
@@ -51,6 +52,7 @@ public class NotificacaoService {
         BeanUtils.copyProperties(notificacaoCadastroDTO, notificacao);
         return notificacaoRepository.save(notificacao);
     }
+
     public Notificacao editar(NotificacaoConvite notificacao) throws DadosNaoEncontradoException {
         if (notificacaoRepository.existsById(notificacao.getId())){
             notificacaoRepository.save(notificacao);
