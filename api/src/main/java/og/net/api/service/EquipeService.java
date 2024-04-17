@@ -26,7 +26,9 @@ public class EquipeService {
     private ProjetoEquipeRepository projetoEquipeRepository;
     private ProjetoRepository projetoRepository;
     private UsuarioRepository usuarioRepository;
+
     private ModelMapper modelMapper;
+
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
         if (equipeRepository.existsById(id)){
@@ -63,10 +65,8 @@ public class EquipeService {
         List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe(equipe);
         for (ProjetoEquipe projetoEquipe : projetoEquipes) {
             Projeto projeto = projetoRepository.findByProjetoEquipesContaining(projetoEquipe);
-            removerProjetoDaEquipe(equipe,projeto); // Implemente um método para remover a equipe do projeto
-            projetoEquipeRepository.delete(projetoEquipe);
+            removerProjetoDaEquipe(id, projeto.getId()); // Implemente um método para remover a equipe do projeto
         }
-
         // Agora a equipe pode ser excluída
         equipeRepository.delete(equipe);
     }
@@ -81,10 +81,13 @@ public class EquipeService {
         usuarioRepository.save(usuario);
     }
 
-    public void removerProjetoDaEquipe(Equipe equipe,Projeto projeto){
+    public void removerProjetoDaEquipe(Integer idEquipe,Integer idProjeto){
+        Projeto projeto = projetoRepository.findById(idProjeto).get();
         for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
-            if(projetoEquipe.getEquipe().getId().equals(equipe.getId())){
+            if(projetoEquipe.getEquipe().getId().equals(idEquipe)){
                 projeto.getProjetoEquipes().remove(projetoEquipe);
+                projetoEquipeRepository.delete(projetoEquipe);
+
                 break;
             }
         }

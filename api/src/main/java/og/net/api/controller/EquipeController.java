@@ -59,6 +59,11 @@ public class EquipeController {
         equipeService.deletar(equipeId);
     }
 
+    @DeleteMapping("/{equipeId}/{projetoId}")
+    public void deletarProjetoEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId){
+        equipeService.removerProjetoDaEquipe(equipeId,projetoId);
+    }
+
     @PostMapping
     public ResponseEntity<Equipe> cadastrar(@RequestBody EquipeCadastroDTO equipeCadastroDTO){
         try{

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -36,11 +37,13 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
-    private String categoria;
-    private Integer indexLista;
+    private LocalTime tempoAtuacao;
+    private LocalDate dataFinal;
+    private String categoria = "meus-projetos";
+    private Integer indexLista = 1;
     public Projeto() {
         this.categoria = "meus-projetos";
     }
 
-    private LocalDate dataFinal;
+
 }
