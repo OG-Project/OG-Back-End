@@ -9,6 +9,7 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,7 @@ public class UsuarioService {
      private UsuarioRepository usuarioRepository;
      private EquipeService equipeService;
      private EquipeUsuarioRepository equipeUsuarioRepository;
-
+    private ModelMapper modelMapper;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -40,7 +41,7 @@ public class UsuarioService {
     public void cadastrar(IDTO dto) {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
-        BeanUtils.copyProperties(usuarioCadastroDTO, usuario);
+        modelMapper.map(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
     }
 
@@ -60,7 +61,7 @@ public class UsuarioService {
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
         Usuario usuario = new Usuario();
-        BeanUtils.copyProperties(ucdto,usuario);
+        modelMapper.map(ucdto,usuario);
        if (usuarioRepository.existsById(usuario.getId())){
            usuarioRepository.save(usuario);
            return usuario;

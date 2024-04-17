@@ -29,6 +29,7 @@ public class ProjetoEdicaoDTO implements IDTO {
     private LocalDate dataFinal;
     private String categoria;
     private Integer indexLista = 10;
+
     public ProjetoEdicaoDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.nome = projeto.getNome();
@@ -39,6 +40,7 @@ public class ProjetoEdicaoDTO implements IDTO {
         this.projetoEquipes = projeto.getProjetoEquipes();
         this.responsaveis = projeto.getResponsaveis();
     }
+
 
 
 }

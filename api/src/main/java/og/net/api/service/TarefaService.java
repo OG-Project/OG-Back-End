@@ -12,10 +12,11 @@ import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.TarefaRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class TarefaService {
     private TarefaRepository tarefaRepository;
     private ProjetoRepository projetoRepository;
     private ProjetoService projetoService;
+    private ModelMapper modelMapper;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
         if (tarefaRepository.existsById(id)){
@@ -64,7 +66,7 @@ public class TarefaService {
     public void cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
         Tarefa tarefa = new Tarefa();
-        BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
+        modelMapper.map(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         for (Propriedade propriedade : projeto.getPropriedades()){
@@ -104,7 +106,7 @@ public class TarefaService {
     public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
         TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
         Tarefa tarefa = new Tarefa();
-        BeanUtils.copyProperties(tarefaEdicaoDTO,tarefa);
+        modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
                 tarefaRepository.save(tarefa);
             return tarefa;

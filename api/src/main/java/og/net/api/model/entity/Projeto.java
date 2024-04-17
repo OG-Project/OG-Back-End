@@ -40,7 +40,7 @@ public class Projeto {
     private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
     private String categoria = "meus-projetos";
-    private Integer indexLista = 10;
+    private Integer indexLista = 1;
     public Projeto() {
         this.categoria = "meus-projetos";
     }
