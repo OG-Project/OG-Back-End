@@ -1,6 +1,7 @@
-package og.net.api.model.Notificacao;
+package og.net.api.model.entity.Notificacao;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,6 @@ import og.net.api.model.entity.Equipe;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificacaoEquipe extends Notificacao{
-    @OneToOne
+    @ManyToOne
     private Equipe equipe;
 }

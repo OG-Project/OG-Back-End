@@ -15,7 +15,7 @@ public class ProjetoEquipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
+    @ManyToOne()
     private Equipe equipe;
 
 

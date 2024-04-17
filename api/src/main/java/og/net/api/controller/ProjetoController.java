@@ -69,8 +69,7 @@ public class ProjetoController {
     @PutMapping
     public ResponseEntity<Projeto> editar(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO){
         try {
-            projetoService.editar(projetoEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);

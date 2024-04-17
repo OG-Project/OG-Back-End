@@ -7,6 +7,7 @@ import og.net.api.model.entity.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,10 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private LocalTime tempoAtuacao;
+    private LocalDate dataFinal;
+    private String categoria;
+    private Integer indexLista = 10;
     public ProjetoEdicaoDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.nome = projeto.getNome();
@@ -34,5 +39,6 @@ public class ProjetoEdicaoDTO implements IDTO {
         this.projetoEquipes = projeto.getProjetoEquipes();
         this.responsaveis = projeto.getResponsaveis();
     }
-    private LocalDate dataFinal;
+
+
 }

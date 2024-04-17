@@ -2,8 +2,11 @@ package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
-import og.net.api.model.Notificacao.*;
+
+import og.net.api.exception.EquipeNaoEncontradaException;
+import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
+import og.net.api.model.entity.Notificacao.*;
 import og.net.api.model.entity.Usuario;
 import og.net.api.service.NotificacaoService;
 import og.net.api.service.UsuarioService;
@@ -45,16 +48,42 @@ public class NoticacaoController {
         }
     }
 
+    @GetMapping("/conviteEquipe/{equipeId}")
+    public ResponseEntity<Collection<NotificacaoConvite>> buscarNotificaoConviteParaEquipePorEquipe(@PathVariable Integer equipeId){
+        try{
+            return new ResponseEntity<>(notificacaoService.buscarNotificaoConviteParaEquipePorEquipe(equipeId), HttpStatus.OK);
+        }catch (NoSuchElementException | EquipeNaoEncontradaException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/conviteProjeto/{projetoId}")
+    public ResponseEntity<Collection<NotificacaoConvite>> buscarNotificaoConviteParaProjetoPorProjeto(@PathVariable Integer projetoId){
+        try{
+            return new ResponseEntity<>(notificacaoService.buscarNotificaoConviteParaProjetoPorProjeto(projetoId), HttpStatus.OK);
+        }catch (NoSuchElementException | ProjetoNaoEncontradoException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/{notificacaoId}")
     public void deletar(@PathVariable Integer notificacaoId){
         notificacaoService.deletar(notificacaoId);
     }
 
-    @PostMapping("/convite")
-    public ResponseEntity<Notificacao> cadastrarNotificacaoConvite(@RequestBody NotificacaoConvite notificacaoConvite){
+    @PostMapping("/convite/equipe")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaEquipe(@RequestBody NotificacaoConvite notificacaoConvite){
         try{
 
-            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConvite(notificacaoConvite), HttpStatus.CREATED);
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaEquipe(notificacaoConvite), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+    @PostMapping("/convite/projeto")
+    public ResponseEntity<Notificacao> cadastrarNotificacaoConviteParaProjeto(@RequestBody NotificacaoConvite notificacaoConvite){
+        try{
+
+            return new ResponseEntity<>(notificacaoService.cadastrarNotificacaoConviteParaProjeto(notificacaoConvite), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
@@ -97,10 +126,12 @@ public class NoticacaoController {
     }
 
     @PutMapping
-    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoEdicaoDTO notificacaoEdicaoDTO){
+
+    public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoConvite notificacaoConvite){
 
         try {
-            notificacaoService.editar( notificacaoEdicaoDTO);
+            notificacaoService.editar(notificacaoConvite);
+
             return new ResponseEntity<>( HttpStatus.CREATED);
         } catch (DadosNaoEncontradoException e){
             e.getMessage();

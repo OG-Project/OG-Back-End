@@ -1,4 +1,4 @@
-package og.net.api.model.Notificacao;
+package og.net.api.model.entity.Notificacao;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class Notificacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String mensagem;
-    @OneToOne
+    @ManyToOne
     private Usuario criador;
     @ManyToMany
     private List<Usuario> receptores;
