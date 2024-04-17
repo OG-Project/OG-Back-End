@@ -68,6 +68,7 @@ public class EquipeService {
         }
 
         // Agora a equipe pode ser excluída
+
         equipeRepository.delete(equipe);
     }
 

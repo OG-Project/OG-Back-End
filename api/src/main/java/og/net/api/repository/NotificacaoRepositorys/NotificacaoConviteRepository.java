@@ -1,5 +1,6 @@
 package og.net.api.repository.NotificacaoRepositorys;
 
+
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.Notificacao.NotificacaoConvite;
 import og.net.api.model.entity.Projeto;

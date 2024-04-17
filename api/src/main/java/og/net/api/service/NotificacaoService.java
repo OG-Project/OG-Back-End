@@ -7,6 +7,7 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.*;
+import og.net.api.model.entity.Usuario;
 import og.net.api.repository.NotificacaoRepositorys.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
