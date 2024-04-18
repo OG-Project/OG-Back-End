@@ -63,7 +63,7 @@ public class TarefaService {
     }
 
 
-    public void cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
+    public Tarefa cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
         Tarefa tarefa = new Tarefa();
         modelMapper.map(tarefaCadastroDTO,tarefa);
@@ -80,27 +80,28 @@ public class TarefaService {
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
-        tarefaRepository.save(tarefa);
+        Tarefa tarefaReturn = tarefaRepository.save(tarefa);
         projeto.getTarefas().add(tarefa);
         projetoService.editar(new ProjetoEdicaoDTO(projeto));
+        return tarefaReturn;
     }
 
     private Valor gerarValor(Propriedade propriedade){
         return ValorFactory.getValor(propriedade.getTipo());
     }
 
-    public void atualizarFoto(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
+    public void atualizarFoto(Integer id, MultipartFile arquivo) throws IOException, TarefaInesxistenteException {
         Tarefa tarefa = buscarUm(id);
-        ArrayList<Arquivo> arquivosTeste = new ArrayList<>() ;
-        arquivos.stream().forEach(arquivo->{
-            try {
-                arquivosTeste.add(new Arquivo(arquivo));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tarefa.setArquivos(arquivosTeste);
+        Arquivo arquivo1 = new Arquivo(arquivo);
+        tarefa.getArquivos().add(arquivo1);
         tarefaRepository.save(tarefa);
+    }
+
+    public void deletaListaDeArquivos(Integer id)throws IOException, TarefaInesxistenteException{
+        Tarefa tarefa = buscarUm(id);
+        for(Arquivo arquivo: tarefa.getArquivos()){
+            tarefa.getArquivos().remove(arquivo);
+        }
     }
 
     public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
@@ -121,6 +122,5 @@ public class TarefaService {
             return tarefaRepository.save(tarefa.get());
         }
         throw new DadosNaoEncontradoException();
-
     }
 }
