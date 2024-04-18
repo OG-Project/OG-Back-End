@@ -94,8 +94,7 @@ public class TarefaController {
     @PostMapping("/{projetoId}")
     public ResponseEntity<?> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
         try{
-             tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
-             return new ResponseEntity<>( HttpStatus.CREATED);
+             return new ResponseEntity<>(tarefaService.cadastrar(tarefaCadastroDTO, projetoId), HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
@@ -123,10 +122,15 @@ public class TarefaController {
         }
     }
     @PatchMapping("/{id}")
-    public void cadastrarFoto(@RequestParam List<MultipartFile> arquivos, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
-        tarefaService.atualizarFoto(id,arquivos);
+    public void cadastrarFoto(@RequestParam MultipartFile arquivo, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        tarefaService.atualizarFoto(id,arquivo);
     }
 
+    @DeleteMapping("/arquivos/{id}")
+    public void deletarTodosOsArquivos(@PathVariable Integer id) throws TarefaInesxistenteException, IOException {
+        tarefaService.deletaListaDeArquivos(id);
+    }
+//aaaa
     private Tarefa atualizarComentario(Tarefa tarefa){
         ArrayList comentarios = new ArrayList();
         for(Comentario comentario:tarefa.getComentarios()){
