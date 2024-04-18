@@ -130,7 +130,7 @@ public class TarefaController {
     public void deletarTodosOsArquivos(@PathVariable Integer id) throws TarefaInesxistenteException, IOException {
         tarefaService.deletaListaDeArquivos(id);
     }
-
+//aaaa
     private Tarefa atualizarComentario(Tarefa tarefa){
         ArrayList comentarios = new ArrayList();
         for(Comentario comentario:tarefa.getComentarios()){
