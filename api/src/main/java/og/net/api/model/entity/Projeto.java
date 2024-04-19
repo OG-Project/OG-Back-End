@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,8 +40,10 @@ public class Projeto {
     private List<UsuarioProjeto>  responsaveis;
     private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
-    private String categoria = "meus-projetos";
-    private Integer indexLista = 10;
+    private String categoria;
+    private Integer indexLista = 1;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comentario> comentarios;
     public Projeto() {
         this.categoria = "meus-projetos";
     }

@@ -37,11 +37,11 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) {
+    public Usuario cadastrar(IDTO dto) {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioCadastroDTO, usuario);
-        usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     public List<Usuario> buscarUsuariosNome(String nome){
