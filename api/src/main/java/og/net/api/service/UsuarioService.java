@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -21,20 +22,20 @@ import java.util.List;
 @AllArgsConstructor
 public class UsuarioService {
 
-     private UsuarioRepository usuarioRepository;
-     private EquipeService equipeService;
-     private EquipeUsuarioRepository equipeUsuarioRepository;
+    private UsuarioRepository usuarioRepository;
+    private EquipeService equipeService;
+    private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
     }
 
-    public List<Usuario> buscarTodos(){
+    public List<Usuario> buscarTodos() {
         return usuarioRepository.findAll();
     }
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) {
         usuarioRepository.deleteById(id);
     }
 
@@ -45,15 +46,15 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
     }
 
-    public List<Usuario> buscarUsuariosNome(String nome){
+    public List<Usuario> buscarUsuariosNome(String nome) {
         return usuarioRepository.findByNome(nome);
     }
 
-    public List<Usuario> buscarUsuariosUsername(String username){
+    public List<Usuario> buscarUsuariosUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
 
-    public List<Usuario> buscarUsuariosEmail(String email){
+    public List<Usuario> buscarUsuariosEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
@@ -61,12 +62,12 @@ public class UsuarioService {
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
         Usuario usuario = new Usuario();
-        modelMapper.map(ucdto,usuario);
-       if (usuarioRepository.existsById(usuario.getId())){
-           usuarioRepository.save(usuario);
-           return usuario;
-       }
-       throw new DadosNaoEncontradoException();
+        modelMapper.map(ucdto, usuario);
+        if (usuarioRepository.existsById(usuario.getId())) {
+            usuarioRepository.save(usuario);
+            return usuario;
+        }
+        throw new DadosNaoEncontradoException();
     }
 
     public void adicionarAEquipe(Integer userId, Integer equipeId) {
@@ -102,7 +103,8 @@ public class UsuarioService {
                     //setar as permissões
                     user.getEquipes().add(equipeUsuario);
                     usuarioRepository.save(user);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             });
 
 
@@ -112,18 +114,17 @@ public class UsuarioService {
     }
 
 
-
     public List<Usuario> buscarMembrosEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
         return equipeUsuarioRepository.findAllByEquipe(equipe).stream().map(
                 eu -> usuarioRepository.findByEquipesContaining(eu)).toList();
     }
 
-    public void removerUsuarioDaEquipe(Integer equipeId,Integer userId){
+    public void removerUsuarioDaEquipe(Integer equipeId, Integer userId) {
         Usuario membroEquipe = buscarUm(userId);
 
-        for(EquipeUsuario equipeUsuario : membroEquipe.getEquipes()){
-            if(equipeUsuario.getEquipe().getId().equals(equipeId)){
+        for (EquipeUsuario equipeUsuario : membroEquipe.getEquipes()) {
+            if (equipeUsuario.getEquipe().getId().equals(equipeId)) {
                 membroEquipe.getEquipes().remove(equipeUsuario);
                 break;
             }

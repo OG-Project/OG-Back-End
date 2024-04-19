@@ -119,4 +119,11 @@ public class EquipeService {
         }
         equipeRepository.save(equipe);
     }
+    public Usuario criadorDaEquipe(Integer equipeId) {
+        Equipe equipe = equipeRepository.findById(equipeId).get();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+         return usuarios.stream().filter(usuario -> {
+             return usuario.getEquipes().stream().anyMatch(equipeUsuario -> equipeUsuario.getEquipe().getId().equals(equipe.getId()) && equipeUsuario.getCriador());
+        }).findFirst().get();
+    }
 }
