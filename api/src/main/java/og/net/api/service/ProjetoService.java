@@ -68,7 +68,6 @@ public class ProjetoService {
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
     return projeto1;
-
     }
 
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
