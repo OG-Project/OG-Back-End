@@ -19,7 +19,7 @@ public class Notificacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String mensagem;
-    @OneToOne
+    @ManyToOne
     private Usuario criador;
     @ManyToMany
     private List<Usuario> receptores;

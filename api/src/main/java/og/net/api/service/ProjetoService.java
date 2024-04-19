@@ -9,9 +9,10 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,13 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjetoService {
 
-
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
     private UsuarioService usuarioService;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
-
+    private ModelMapper modelMapper;
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
@@ -60,14 +60,14 @@ public class ProjetoService {
         if (projetoCadastroDTO.getProjetoEquipes() != null) {
             projetoCadastroDTO.setProjetoEquipes(criacaoProjetoEquipe(projetoCadastroDTO));
         }
-        if(projetoCadastroDTO.getResponsaveis()!=null){
+        if (projetoCadastroDTO.getResponsaveis() != null) {
             projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
         }
-        BeanUtils.copyProperties(projetoCadastroDTO, projeto);
-        Projeto projeto1 =  projetoRepository.save(projeto);
+        modelMapper.map(projetoCadastroDTO, projeto);
+       Projeto projeto1= projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
-        return projeto1;
+    return projeto1;
     }
 
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
@@ -94,7 +94,7 @@ public class ProjetoService {
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoEdicaoDTO, projeto);
+        modelMapper.map(projetoEdicaoDTO, projeto);
         if (projetoRepository.existsById(projeto.getId())) {
             criaValorPorpiredadeTarefa(projeto);
             projetoRepository.save(projeto);
@@ -104,8 +104,6 @@ public class ProjetoService {
     }
 
     public void adicionarAEquipeAProjeto(Integer projetoId, Integer equipeId) throws ProjetoNaoEncontradoException {
-        System.out.println(projetoId + " | " + equipeId);
-        System.out.println(buscarUm(projetoId));
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Projeto projeto = buscarUm(projetoId);
@@ -136,8 +134,12 @@ public class ProjetoService {
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeService.buscarUm(equipeId);
-        return projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
-                eu -> projetoRepository.findByProjetoEquipesContaining(eu)).toList();
+        List<Projeto> ps = new ArrayList<>(projetoEquipeRepository.findAllByEquipe(equipe).stream().map(
+                eu -> projetoRepository.findByProjetoEquipesContaining(eu))
+                .toList());
+
+        ps.sort(Comparator.comparing(Projeto::getIndexLista));
+        return ps;
     }
 
     public void removerProjetoDaEquipe(Integer equipeId,Integer projetoId) throws ProjetoNaoEncontradoException {
@@ -151,20 +153,33 @@ public class ProjetoService {
         }
         projetoRepository.save(projeto);
     }
+
+
+    public void atualizarUmaEquipeNoProjeto(List<ProjetoEquipe> projetoEquipes,Integer id) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+        Projeto projeto = projetoRepository.findById(id).get();
+        projeto.setProjetoEquipes(projetoEquipes);
+        List<ProjetoEquipe> projetoEquipesAuxiliar = projetoEquipes;
+        for (ProjetoEquipe equipe : projetoEquipesAuxiliar) {
+            equipeService.editar(new EquipeEdicaoDTO(equipe.getEquipe()));
+        }
+        projetoRepository.save(projeto);
+    }
+
     public void deletarPropriedade(Integer idPropriedade, Integer idProjeto) throws ProjetoNaoEncontradoException {
         Projeto projeto = buscarUm(idProjeto);
         Propriedade propriedade = propriedadeService.buscarUm(idPropriedade);
-        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
-            for (Propriedade propriedadeFor : projeto.getPropriedades()) {
-                if (propriedade.equals(propriedadeFor)) {
-                    propriedadesParaRemover.add(propriedadeFor);
-                }
-            }
-            for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
-                projeto.getPropriedades().remove(propriedadeParaRemover);
-            }
-
+        projeto.getPropriedades().remove(propriedade);
         propriedadeService.deletar(idPropriedade);
+
+//        List<Propriedade> propriedadesParaRemover = new ArrayList<>();
+//        for (Propriedade propriedadeFor : projeto.getPropriedades()) {
+//            if (propriedade.equals(propriedadeFor)) {
+//                propriedadesParaRemover.add(propriedadeFor);
+//            }
+//        }
+//        for (Propriedade propriedadeParaRemover : propriedadesParaRemover) {
+//            projeto.getPropriedades().remove(propriedadeParaRemover);
+//        }
     }
 }
 
