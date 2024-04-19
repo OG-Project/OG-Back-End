@@ -38,8 +38,10 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
+    private LocalDate dataFinal;
+
     public Projeto() {
         this.categoria = "meus-projetos";
+        this.indexLista = +1;
     }
-    private LocalDate dataFinal;
 }
