@@ -17,4 +17,5 @@ public class Convite {
     private Long id;
     @OneToMany(cascade = CascadeType.ALL)
     private List<UsuarioAceito> usuarioAceito;
+
 }

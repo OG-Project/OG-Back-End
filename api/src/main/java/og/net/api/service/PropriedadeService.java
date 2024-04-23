@@ -1,10 +1,8 @@
 package og.net.api.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
-import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.PropriedadeCadastroDTO;
 import og.net.api.model.dto.PropriedadeEdicaoDTO;
@@ -12,7 +10,7 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.PropriedadeRepository;
 import og.net.api.repository.TarefaRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +24,7 @@ public class PropriedadeService {
     private PropriedadeRepository propriedadeRepository;
     private ProjetoRepository projetoRepository;
     private TarefaRepository tarefaRepository;
-
+    private ModelMapper modelMapper;
     public Propriedade buscarUm(Integer id) {
         return propriedadeRepository.findById(id).get();
     }
@@ -43,7 +41,7 @@ public class PropriedadeService {
         PropriedadeCadastroDTO propriedadeCadastroDTO = (PropriedadeCadastroDTO) dto;
         Projeto projeto = projetoRepository.findById(projetoId).get();
         Propriedade propriedade = new Propriedade();
-        BeanUtils.copyProperties(propriedadeCadastroDTO, propriedade);
+        modelMapper.map(propriedadeCadastroDTO, propriedade);
         projeto.getPropriedades().add(propriedade);
         propriedadeRepository.save(propriedade);
         criaValorPropriedadeTarefa(projeto, propriedade);
@@ -84,7 +82,7 @@ public class PropriedadeService {
     public Propriedade editar(IDTO dto) throws DadosNaoEncontradoException {
         PropriedadeEdicaoDTO propriedadeEdicaoDTO = (PropriedadeEdicaoDTO) dto;
         Propriedade propriedade = new Propriedade();
-        BeanUtils.copyProperties(propriedadeEdicaoDTO, propriedade);
+        modelMapper.map(propriedadeEdicaoDTO, propriedade);
         if (propriedadeRepository.existsById(propriedade.getId())) {
             propriedadeRepository.save(propriedade);
             return propriedade;
