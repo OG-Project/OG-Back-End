@@ -9,12 +9,17 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
+import org.apache.tomcat.util.file.ConfigurationSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
@@ -39,11 +44,19 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) {
+    public void cadastrar(IDTO dto) throws IOException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
         modelMapper.map(usuarioCadastroDTO, usuario);
-        usuarioRepository.save(usuario);
+        fotoPadrao(usuario);
+    }
+
+    private Usuario fotoPadrao(Usuario usuario) throws IOException {
+        ClassPathResource resource = new ClassPathResource ("fotoPadraoDoUsuario.png");
+        byte[] content = Files.readAllBytes(resource.getFile().toPath());
+        Arquivo result = new Arquivo("fotoPadraoUsuario.png", content,"image/png");
+        usuario.setFoto(result);
+       return usuarioRepository.save(usuario);
     }
 
     public List<Usuario> buscarUsuariosNome(String nome) {
@@ -85,7 +98,7 @@ public class UsuarioService {
         }
     }
 
-    public void atualizarFoto(Integer id, MultipartFile foto) throws IOException {
+        public void atualizarFoto(Integer id, MultipartFile foto) throws IOException {
         Usuario usuario = buscarUm(id);
         usuario.setFoto(new Arquivo(foto));
         usuarioRepository.save(usuario);
