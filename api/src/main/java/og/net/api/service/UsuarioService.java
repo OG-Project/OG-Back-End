@@ -1,5 +1,6 @@
 package og.net.api.service;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
@@ -8,10 +9,7 @@ import og.net.api.exception.UsuarioJaExistenteException;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
-import og.net.api.model.entity.Arquivo;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.EquipeUsuario;
-import og.net.api.model.entity.Usuario;
+import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +42,21 @@ public class UsuarioService {
     public void cadastrar(IDTO dto) {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
+        Configuracao configuracao=new Configuracao();
+        configuracao.setFonteCorpo("Poppins");
+        configuracao.setFonteTitulo("Source Sans 3");
+        configuracao.setFonteCorpoTamanho(2.0);
+        configuracao.setFonteTituloTamanho(6);
+        configuracao.setIdioma("Portugues");
+        configuracao.setHueCor("273");
+        configuracao.setIsDigitarVoz(false);
+        configuracao.setIsLibras(false);
+        configuracao.setIsTecladoVirtual(false);
+        configuracao.setIsVisualizaEmail(true);
+        configuracao.setIsVisualizaEquipes(true);
+        configuracao.setIsVisualizaPerfil(true);
+        configuracao.setIsVisualizaProjetos(true);
+        usuarioCadastroDTO.setConfiguracao(configuracao);
         BeanUtils.copyProperties(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
     }
@@ -63,7 +76,7 @@ public class UsuarioService {
 
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
-        Usuario usuario = new Usuario();
+        Usuario usuario = buscarUm(((UsuarioEdicaoDTO)dto).getId());
         BeanUtils.copyProperties(ucdto,usuario);
        if (usuarioRepository.existsById(usuario.getId())){
            usuarioRepository.save(usuario);
