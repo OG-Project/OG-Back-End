@@ -80,8 +80,8 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
         try{
-
-            return new ResponseEntity<>( usuarioService.cadastrar(usuarioCadastroDTO),HttpStatus.CREATED);
+            usuarioService.cadastrar(usuarioCadastroDTO);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
