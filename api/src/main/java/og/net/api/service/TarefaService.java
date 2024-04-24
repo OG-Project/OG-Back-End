@@ -12,10 +12,11 @@ import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.TarefaRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class TarefaService {
     private TarefaRepository tarefaRepository;
     private ProjetoRepository projetoRepository;
     private ProjetoService projetoService;
+    private ModelMapper modelMapper;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
         if (tarefaRepository.existsById(id)){
@@ -61,10 +63,10 @@ public class TarefaService {
     }
 
 
-    public void cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
+    public Tarefa cadastrar(IDTO dto, Integer projetoId) throws DadosNaoEncontradoException {
         TarefaCadastroDTO tarefaCadastroDTO = (TarefaCadastroDTO) dto;
         Tarefa tarefa = new Tarefa();
-        BeanUtils.copyProperties(tarefaCadastroDTO,tarefa);
+        modelMapper.map(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         for (Propriedade propriedade : projeto.getPropriedades()){
@@ -78,33 +80,34 @@ public class TarefaService {
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
-        tarefaRepository.save(tarefa);
+        Tarefa tarefaReturn = tarefaRepository.save(tarefa);
         projeto.getTarefas().add(tarefa);
         projetoService.editar(new ProjetoEdicaoDTO(projeto));
+        return tarefaReturn;
     }
 
     private Valor gerarValor(Propriedade propriedade){
         return ValorFactory.getValor(propriedade.getTipo());
     }
 
-    public void atualizarFoto(Integer id, List<MultipartFile> arquivos) throws IOException, TarefaInesxistenteException {
+    public void atualizarFoto(Integer id, MultipartFile arquivo) throws IOException, TarefaInesxistenteException {
         Tarefa tarefa = buscarUm(id);
-        ArrayList<Arquivo> arquivosTeste = new ArrayList<>() ;
-        arquivos.stream().forEach(arquivo->{
-            try {
-                arquivosTeste.add(new Arquivo(arquivo));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        tarefa.setArquivos(arquivosTeste);
+        Arquivo arquivo1 = new Arquivo(arquivo);
+        tarefa.getArquivos().add(arquivo1);
         tarefaRepository.save(tarefa);
+    }
+
+    public void deletaListaDeArquivos(Integer id)throws IOException, TarefaInesxistenteException{
+        Tarefa tarefa = buscarUm(id);
+        for(Arquivo arquivo: tarefa.getArquivos()){
+            tarefa.getArquivos().remove(arquivo);
+        }
     }
 
     public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
         TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
         Tarefa tarefa = new Tarefa();
-        BeanUtils.copyProperties(tarefaEdicaoDTO,tarefa);
+        modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
                 tarefaRepository.save(tarefa);
             return tarefa;
@@ -119,6 +122,5 @@ public class TarefaService {
             return tarefaRepository.save(tarefa.get());
         }
         throw new DadosNaoEncontradoException();
-
     }
 }

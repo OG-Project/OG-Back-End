@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
+import og.net.api.model.entity.Comentario;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.ValorPropriedadeTarefa;
 import og.net.api.service.TarefaService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,8 +34,9 @@ public class TarefaController {
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> buscarUm(@PathVariable Integer id){
         try {
-
-            return new ResponseEntity<>(tarefaService.buscarUm(id),HttpStatus.OK);
+            Tarefa tarefa = tarefaService.buscarUm(id);
+            tarefa = atualizarComentario(tarefa);
+            return new ResponseEntity<>(tarefa,HttpStatus.OK);
         }catch (TarefaInesxistenteException e){
             e.getMessage();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,7 +46,11 @@ public class TarefaController {
     @GetMapping("/nome")
     public ResponseEntity<Collection<Tarefa>> buscarTarefasNome(@RequestParam String nome){
         try{
-            return new ResponseEntity<>(tarefaService.buscarTarefasNome(nome),HttpStatus.OK);
+            List<Tarefa> tarefas = tarefaService.buscarTarefasNome(nome);
+            for(Tarefa tarefa:tarefas){
+                atualizarComentario(tarefa);
+            }
+            return new ResponseEntity<>(tarefas,HttpStatus.OK);
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,7 +58,11 @@ public class TarefaController {
     @GetMapping("/visualizacao")
     public ResponseEntity<Collection<Tarefa>> buscarTarefasPorVisualizacao(@RequestParam String visualizacao){
         try{
-            return new ResponseEntity<>(tarefaService.buscarTarefasPorVisualizacao(visualizacao),HttpStatus.OK);
+            List<Tarefa> tarefas = tarefaService.buscarTarefasPorVisualizacao(visualizacao);
+            for(Tarefa tarefa:tarefas){
+                atualizarComentario(tarefa);
+            }
+            return new ResponseEntity<>(tarefas,HttpStatus.OK);
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,7 +73,11 @@ public class TarefaController {
     public ResponseEntity<?> buscarTodos(Pageable pageable){
         try{
             if (pageable.getSort()== Sort.unsorted()){
-                return new ResponseEntity<>(tarefaService.buscarTodos(), HttpStatus.OK);
+                List<Tarefa> tarefas = tarefaService.buscarTodos();
+                for(Tarefa tarefa:tarefas){
+                    atualizarComentario(tarefa);
+                }
+                return new ResponseEntity<>(tarefas, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(tarefaService.buscarTodos(pageable), HttpStatus.OK);
             }
@@ -79,8 +94,7 @@ public class TarefaController {
     @PostMapping("/{projetoId}")
     public ResponseEntity<?> cadastrar(@RequestBody TarefaCadastroDTO tarefaCadastroDTO, @PathVariable Integer projetoId){
         try{
-             tarefaService.cadastrar(tarefaCadastroDTO, projetoId);
-             return new ResponseEntity<>( HttpStatus.CREATED);
+             return new ResponseEntity<>(tarefaService.cadastrar(tarefaCadastroDTO, projetoId), HttpStatus.CREATED);
         }catch (Exception e){
             System.out.println(e.getMessage());
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
@@ -108,8 +122,21 @@ public class TarefaController {
         }
     }
     @PatchMapping("/{id}")
-    public void cadastrarFoto(@RequestParam List<MultipartFile> arquivos, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
-        tarefaService.atualizarFoto(id,arquivos);
+    public void cadastrarFoto(@RequestParam MultipartFile arquivo, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        tarefaService.atualizarFoto(id,arquivo);
+    }
+
+    @DeleteMapping("/arquivos/{id}")
+    public void deletarTodosOsArquivos(@PathVariable Integer id) throws TarefaInesxistenteException, IOException {
+        tarefaService.deletaListaDeArquivos(id);
+    }
+    private Tarefa atualizarComentario(Tarefa tarefa){
+        ArrayList comentarios = new ArrayList();
+        for(Comentario comentario:tarefa.getComentarios()){
+            comentarios.add(comentario.getId());
+        }
+        tarefa.setComentarios(comentarios);
+        return tarefa;
     }
 }
 

@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -21,8 +23,6 @@ public class Projeto {
     private Integer id;
     private String nome;
     private String descricao;
-    private String categoria;
-    private Integer indexLista;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
     @OneToMany
@@ -38,8 +38,12 @@ public class Projeto {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
+    private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
-
+    private String categoria;
+    private Integer indexLista = 1;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comentario> comentarios;
     public Projeto() {
         this.categoria = "meus-projetos";
         this.indexLista = +1;

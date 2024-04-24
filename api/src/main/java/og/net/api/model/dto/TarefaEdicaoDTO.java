@@ -27,6 +27,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
+    private List<Comentario> comentarios;
     private List<SubTarefa> subTarefas;
     private List<Arquivo> arquivos;
 

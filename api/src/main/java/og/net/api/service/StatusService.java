@@ -7,7 +7,7 @@ import og.net.api.model.dto.*;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.Status;
 import og.net.api.repository.StatusRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StatusService {
 
+    private ModelMapper modelMapper;
     private StatusRepository statusRepository;
     private ProjetoService projetoService;
     public Status buscarUm(Integer id){
@@ -33,14 +34,14 @@ public class StatusService {
     public void cadastrar(IDTO dto){
         StatusCadastroDTO statusCadastroDTO = (StatusCadastroDTO) dto;
         Status status = new Status();
-        BeanUtils.copyProperties(statusCadastroDTO,status);
+        modelMapper.map(statusCadastroDTO,status);
         statusRepository.save(status);
     }
     public void cadastrarStatusPeloProjeto(IDTO dto,Integer id) throws ProjetoNaoEncontradoException, DadosNaoEncontradoException {
         Projeto projeto = projetoService.buscarUm(id);
         StatusCadastroDTO statusCadastroDTO = (StatusCadastroDTO) dto;
         Status status = new Status();
-        BeanUtils.copyProperties(statusCadastroDTO,status);
+        modelMapper.map(statusCadastroDTO,status);
         statusRepository.save(status);
         projeto.getStatusList().add(status);
         projetoService.editar(new ProjetoEdicaoDTO(projeto));
@@ -49,7 +50,7 @@ public class StatusService {
     public Status editar(IDTO dto) throws DadosNaoEncontradoException {
         StatusEdicaoDTO statusEdicaoDTO = (StatusEdicaoDTO) dto;
         Status status = new Status();
-        BeanUtils.copyProperties(statusEdicaoDTO,status);
+        modelMapper.map(statusEdicaoDTO,status);
         if (statusRepository.existsById(status.getId())){
             statusRepository.save(status);
             return status;

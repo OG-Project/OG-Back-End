@@ -14,7 +14,7 @@ public class Comentario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String conteudo;
-    @OneToOne
+    @ManyToOne
     private Usuario autor;
 
 }

@@ -15,11 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Arquivo{
 
-    public Arquivo(MultipartFile arquivo) throws IOException {
-        this.nome = arquivo.getOriginalFilename();
-        this.dados = arquivo.getBytes();
-        this.tipo = arquivo.getContentType();
-    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,4 +24,15 @@ public class Arquivo{
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] dados;
+    public Arquivo(MultipartFile arquivo) throws IOException {
+        this.nome = arquivo.getOriginalFilename();
+        this.dados = arquivo.getBytes();
+        this.tipo = arquivo.getContentType();
+    }
+
+    public Arquivo(String nome,byte[] dados,String tipo) throws IOException{
+        this.nome = nome;
+        this.dados = dados;
+        this.tipo = tipo;
+    }
 }
