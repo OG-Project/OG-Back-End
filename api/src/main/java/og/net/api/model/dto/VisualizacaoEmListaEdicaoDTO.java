@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisualizacaoEmListaEdicaoDTO implements IDTO{
+public class  VisualizacaoEmListaEdicaoDTO implements IDTO{
     private Integer id;
     private List<Propriedade> propriedadeVisiveis;
     private Projeto projeto;
