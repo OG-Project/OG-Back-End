@@ -30,6 +30,7 @@ public class ProjetoEdicaoDTO implements IDTO {
     private String categoria ="meus-projetos";;
     private Integer indexLista = 1;
     private List<Comentario> comentarios;
+
     public ProjetoEdicaoDTO(Projeto projeto) {
         this.id = projeto.getId();
         this.nome = projeto.getNome();
@@ -40,6 +41,7 @@ public class ProjetoEdicaoDTO implements IDTO {
         this.projetoEquipes = projeto.getProjetoEquipes();
         this.responsaveis = projeto.getResponsaveis();
     }
+
 
 
 }

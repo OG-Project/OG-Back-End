@@ -11,7 +11,6 @@ import og.net.api.model.dto.IDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +27,8 @@ public class EquipeService {
     private ProjetoRepository projetoRepository;
     private UsuarioRepository usuarioRepository;
 
+    private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
+    private ModelMapper modelMapper;
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
         if (equipeRepository.existsById(id)){
@@ -52,21 +53,18 @@ public class EquipeService {
     public void deletar(Integer id){
         Equipe equipe = equipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada com o ID: " + id));
 
-        // Remover relacionamentos EquipeUsuario
         List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe(equipe);
         for (EquipeUsuario equipeUsuario : equipeUsuarios) {
             Usuario usuario = usuarioRepository.findByEquipesContaining(equipeUsuario);
-            removerEquipeUsuario(equipe,usuario); // Implemente um método para remover a equipe do usuário
-            equipeUsuarioRepository.delete(equipeUsuario);
+            removerEquipeUsuario(equipe,usuario);
+
         }
 
-        // Remover relacionamentos ProjetoEquipe
         List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe(equipe);
         for (ProjetoEquipe projetoEquipe : projetoEquipes) {
             Projeto projeto = projetoRepository.findByProjetoEquipesContaining(projetoEquipe);
-            removerProjetoDaEquipe(id,projeto.getId()); // Implemente um método para remover a equipe do projeto
+            removerProjetoDaEquipe(id, projeto.getId()); // Implemente um método para remover a equipe do projeto
         }
-
         // Agora a equipe pode ser excluída
         equipeRepository.delete(equipe);
     }
@@ -75,6 +73,7 @@ public class EquipeService {
         for(EquipeUsuario equipeUsuario : usuario.getEquipes()){
             if(equipeUsuario.getEquipe().getId().equals(equipe.getId())){
                 usuario.getEquipes().remove(equipeUsuario);
+                equipeUsuarioRepository.delete(equipeUsuario);
                 break;
             }
         }
@@ -90,7 +89,16 @@ public class EquipeService {
                 break;
             }
         }
-         projetoRepository.save(projeto);
+        projeto = projetoRepository.save(projeto);
+        if(projeto.getProjetoEquipes().isEmpty()){
+            System.out.println("qualquer coisa");
+            VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projeto);
+            //Tirar o if depois de recomeçar o banco de dados
+            if (visualizacaoEmLista != null) {
+                visualizacaoEmListaRepository.delete(visualizacaoEmLista);
+            }
+            projetoRepository.delete(projeto);
+        }
     }
 
     public void atualizarFoto(Integer id, MultipartFile foto) throws IOException, EquipeNaoEncontradaException {
@@ -102,7 +110,7 @@ public class EquipeService {
     public Equipe cadastrar(IDTO dto) throws EquipeJaExistenteException {
         EquipeCadastroDTO equipeCadastroDTO = (EquipeCadastroDTO) dto;
         Equipe equipe = new Equipe();
-        BeanUtils.copyProperties(equipeCadastroDTO,equipe);
+        modelMapper.map(equipeCadastroDTO,equipe);
         return  equipeRepository.save(equipe);
     }
 
@@ -112,10 +120,17 @@ public class EquipeService {
 //              mapper.map(equipeEdicaoDTO,equipe);
         EquipeEdicaoDTO equipeEdicaoDTO = (EquipeEdicaoDTO) dto;
         Equipe equipe = buscarUm(((EquipeEdicaoDTO) dto).getId());
-        BeanUtils.copyProperties(equipeEdicaoDTO,equipe);
+        modelMapper.map(equipeEdicaoDTO,equipe);
         if (!equipeRepository.existsById(equipe.getId())){
             throw new DadosNaoEncontradoException();
         }
         equipeRepository.save(equipe);
+    }
+    public Usuario criadorDaEquipe(Integer equipeId) {
+        Equipe equipe = equipeRepository.findById(equipeId).get();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+         return usuarios.stream().filter(usuario -> {
+             return usuario.getEquipes().stream().anyMatch(equipeUsuario -> equipeUsuario.getEquipe().getId().equals(equipe.getId()) && equipeUsuario.getCriador());
+        }).findFirst().get();
     }
 }

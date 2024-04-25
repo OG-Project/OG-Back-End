@@ -46,8 +46,6 @@ public class Projeto {
     private List<Comentario> comentarios;
     public Projeto() {
         this.categoria = "meus-projetos";
-        this.indexLista = 1;
+        this.indexLista = +1;
     }
-
-
 }

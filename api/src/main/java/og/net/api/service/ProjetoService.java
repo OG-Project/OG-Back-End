@@ -9,7 +9,7 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,14 +21,13 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjetoService {
 
-
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
     private UsuarioService usuarioService;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
-
+    private ModelMapper modelMapper;
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
@@ -64,12 +63,11 @@ public class ProjetoService {
         if (projetoCadastroDTO.getResponsaveis() != null) {
             projetoCadastroDTO.setResponsaveis(criacaoResponsaveisProjeto(projetoCadastroDTO));
         }
-        BeanUtils.copyProperties(projetoCadastroDTO, projeto);
+        modelMapper.map(projetoCadastroDTO, projeto);
        Projeto projeto1= projetoRepository.save(projeto);
         VisualizacaoEmLista visualizacaoEmLista = new VisualizacaoEmLista(null, new ArrayList<>(), projeto);
         visualizacaoEmListaRepository.save(visualizacaoEmLista);
     return projeto1;
-
     }
 
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
@@ -96,7 +94,7 @@ public class ProjetoService {
     public Projeto editar(IDTO dto) throws DadosNaoEncontradoException {
         ProjetoEdicaoDTO projetoEdicaoDTO = (ProjetoEdicaoDTO) dto;
         Projeto projeto = new Projeto();
-        BeanUtils.copyProperties(projetoEdicaoDTO, projeto);
+        modelMapper.map(projetoEdicaoDTO, projeto);
         if (projetoRepository.existsById(projeto.getId())) {
             criaValorPorpiredadeTarefa(projeto);
             projetoRepository.save(projeto);
