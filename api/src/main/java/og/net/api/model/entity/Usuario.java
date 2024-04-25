@@ -35,7 +35,5 @@ public class Usuario {
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
     @OneToOne(cascade = CascadeType.ALL)
-    private Configuracao configuracao;
-    @OneToOne(cascade = CascadeType.ALL)
     private Arquivo foto;
 }

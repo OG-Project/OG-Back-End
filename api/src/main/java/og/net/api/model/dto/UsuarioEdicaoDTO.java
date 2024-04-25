@@ -3,7 +3,6 @@ package og.net.api.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import og.net.api.model.entity.Configuracao;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.UsuarioProjeto;
 import og.net.api.model.entity.UsuarioTarefa;
@@ -27,5 +26,4 @@ public class UsuarioEdicaoDTO implements IDTO {
     private List<UsuarioTarefa> tarefas;
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
-    private Configuracao configuracao;
 }
