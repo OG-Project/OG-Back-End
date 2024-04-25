@@ -7,6 +7,7 @@ import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.entity.Equipe;
 import og.net.api.model.entity.Projeto;
 import og.net.api.model.entity.ProjetoEquipe;
+import og.net.api.model.entity.Usuario;
 import og.net.api.service.EquipeService;
 
 import org.springframework.http.HttpStatus;
@@ -53,10 +54,23 @@ public class EquipeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/criador/{equipeId}")
+    public ResponseEntity<Usuario> buscarCriador(@PathVariable Integer equipeId){
+        try{
+            return new ResponseEntity<>(equipeService.criadorDaEquipe(equipeId), HttpStatus.OK);
+        }catch (NoSuchElementException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @DeleteMapping("/{equipeId}")
     public void deletar(@PathVariable Integer equipeId){
         equipeService.deletar(equipeId);
+    }
+
+    @DeleteMapping("/{equipeId}/{projetoId}")
+    public void deletarProjetoEquipe(@PathVariable Integer equipeId, @PathVariable Integer projetoId){
+        equipeService.removerProjetoDaEquipe(equipeId,projetoId);
     }
 
     @PostMapping

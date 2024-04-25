@@ -1,5 +1,6 @@
-package og.net.api.webScoket;
+package og.net.api.webSocket;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
@@ -10,9 +11,12 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WebSocketControllerUsuario extends AbstractWebSocketHandler {
+@Controller
+public class
+WebSocketControllerNotificacao extends AbstractWebSocketHandler {
 
     private final Set<WebSocketSession> sessions = new HashSet<>();
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
@@ -27,17 +31,18 @@ public class WebSocketControllerUsuario extends AbstractWebSocketHandler {
 //        }
     }
 
-    private int obterIdUsuarioDaSessao(WebSocketSession session) {
+    private int obterIdEquipeDaSessao(WebSocketSession session) {
 
         String uri = session.getUri().toString();
         String[] parts = uri.split("/");
         return Integer.parseInt(parts[parts.length - 1]);
     }
 
-    private int obterIdUsuarioDaMensagem(TextMessage message) {
-        String [] usuarioIdDaMensagem = message.getPayload().split(":");
-        return Integer.parseInt(usuarioIdDaMensagem[usuarioIdDaMensagem.length-1]);
+    private int obterIdEquipeDaMensagem(TextMessage message) {
+        String[] equipeIdDaMensagem = message.getPayload().split(":");
+        return Integer.parseInt(equipeIdDaMensagem[equipeIdDaMensagem.length - 1]); // Extrai o ID da equipe da mensagem
     }
+
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         sessions.remove(session);

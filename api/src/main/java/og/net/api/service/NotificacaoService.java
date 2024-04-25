@@ -23,7 +23,9 @@ public class NotificacaoService {
     private NotificacaoTarefaRepository notificacaoTarefaRepository;
     private EquipeService equipeService;
     private ProjetoService projetoService;
+
     private ModelMapper modelMapper;
+
     public Notificacao buscarUm(Integer id){
         return notificacaoRepository.findById(id).get();
     }

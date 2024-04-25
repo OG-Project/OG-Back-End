@@ -7,6 +7,7 @@ import og.net.api.model.entity.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,10 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
+    private String categoria = "meus-projetos";
+    private Integer indexLista =1 ;
 
 
     //Define a data da criação!

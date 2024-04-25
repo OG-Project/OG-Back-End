@@ -26,6 +26,8 @@ public class EquipeService {
     private ProjetoEquipeRepository projetoEquipeRepository;
     private ProjetoRepository projetoRepository;
     private UsuarioRepository usuarioRepository;
+
+    private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
 
     public Equipe buscarUm(Integer id) throws EquipeNaoEncontradaException {
@@ -51,22 +53,18 @@ public class EquipeService {
     public void deletar(Integer id){
         Equipe equipe = equipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada com o ID: " + id));
 
-        // Remover relacionamentos EquipeUsuario
         List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe(equipe);
         for (EquipeUsuario equipeUsuario : equipeUsuarios) {
             Usuario usuario = usuarioRepository.findByEquipesContaining(equipeUsuario);
-            removerEquipeUsuario(equipe,usuario); // Implemente um método para remover a equipe do usuário
-            equipeUsuarioRepository.delete(equipeUsuario);
+            removerEquipeUsuario(equipe,usuario);
+
         }
 
-        // Remover relacionamentos ProjetoEquipe
         List<ProjetoEquipe> projetoEquipes = projetoEquipeRepository.findAllByEquipe(equipe);
         for (ProjetoEquipe projetoEquipe : projetoEquipes) {
             Projeto projeto = projetoRepository.findByProjetoEquipesContaining(projetoEquipe);
-            removerProjetoDaEquipe(equipe,projeto); // Implemente um método para remover a equipe do projeto
-            projetoEquipeRepository.delete(projetoEquipe);
+            removerProjetoDaEquipe(id, projeto.getId()); // Implemente um método para remover a equipe do projeto
         }
-
         // Agora a equipe pode ser excluída
         equipeRepository.delete(equipe);
     }
@@ -75,20 +73,32 @@ public class EquipeService {
         for(EquipeUsuario equipeUsuario : usuario.getEquipes()){
             if(equipeUsuario.getEquipe().getId().equals(equipe.getId())){
                 usuario.getEquipes().remove(equipeUsuario);
+                equipeUsuarioRepository.delete(equipeUsuario);
                 break;
             }
         }
         usuarioRepository.save(usuario);
     }
 
-    public void removerProjetoDaEquipe(Equipe equipe,Projeto projeto){
+    public void removerProjetoDaEquipe(Integer idEquipe,Integer idProjeto){
+        Projeto projeto = projetoRepository.findById(idProjeto).get();
         for(ProjetoEquipe projetoEquipe : projeto.getProjetoEquipes()){
-            if(projetoEquipe.getEquipe().getId().equals(equipe.getId())){
+            if(projetoEquipe.getEquipe().getId().equals(idEquipe)){
                 projeto.getProjetoEquipes().remove(projetoEquipe);
+                projetoEquipeRepository.delete(projetoEquipe);
                 break;
             }
         }
-         projetoRepository.save(projeto);
+        projeto = projetoRepository.save(projeto);
+        if(projeto.getProjetoEquipes().isEmpty()){
+            System.out.println("qualquer coisa");
+            VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projeto);
+            //Tirar o if depois de recomeçar o banco de dados
+            if (visualizacaoEmLista != null) {
+                visualizacaoEmListaRepository.delete(visualizacaoEmLista);
+            }
+            projetoRepository.delete(projeto);
+        }
     }
 
     public void atualizarFoto(Integer id, MultipartFile foto) throws IOException, EquipeNaoEncontradaException {
@@ -115,5 +125,12 @@ public class EquipeService {
             throw new DadosNaoEncontradoException();
         }
         equipeRepository.save(equipe);
+    }
+    public Usuario criadorDaEquipe(Integer equipeId) {
+        Equipe equipe = equipeRepository.findById(equipeId).get();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+         return usuarios.stream().filter(usuario -> {
+             return usuario.getEquipes().stream().anyMatch(equipeUsuario -> equipeUsuario.getEquipe().getId().equals(equipe.getId()) && equipeUsuario.getCriador());
+        }).findFirst().get();
     }
 }
