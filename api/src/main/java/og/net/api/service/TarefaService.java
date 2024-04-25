@@ -2,8 +2,8 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
-import og.net.api.exception.TarefaJaExistenteException;
 import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
@@ -16,16 +16,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -58,7 +54,9 @@ public class TarefaService {
         return tarefaRepository.findAll(pageable);
     }
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) throws ProjetoNaoEncontradoException, TarefaInesxistenteException {
+        Projeto projeto = projetoService.buscarPorTarefa(id);
+        projeto.getTarefas().remove(tarefaRepository.findById(id).get());
         tarefaRepository.deleteById(id);
     }
 
