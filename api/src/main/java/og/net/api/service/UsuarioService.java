@@ -1,5 +1,6 @@
 package og.net.api.service;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.IDTO;
@@ -47,8 +48,25 @@ public class UsuarioService {
     public void cadastrar(IDTO dto) throws IOException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
+        Configuracao configuracao=new Configuracao();
+        configuracao.setFonteCorpo("Poppins");
+        configuracao.setFonteTitulo("Source Sans 3");
+        configuracao.setFonteCorpoTamanho(2.0);
+        configuracao.setFonteTituloTamanho(6);
+        configuracao.setIdioma("Portugues");
+        configuracao.setHueCor("273");
+        configuracao.setIsDigitarVoz(false);
+        configuracao.setIsLibras(false);
+        configuracao.setIsTecladoVirtual(false);
+        configuracao.setIsVisualizaEmail(true);
+        configuracao.setIsVisualizaEquipes(true);
+        configuracao.setIsVisualizaPerfil(true);
+        configuracao.setIsVisualizaProjetos(true);
+        usuarioCadastroDTO.setConfiguracao(configuracao);
+        
         modelMapper.map(usuarioCadastroDTO, usuario);
         fotoPadrao(usuario);
+        usuarioRepository.save(usuario);
     }
 
     private Usuario fotoPadrao(Usuario usuario) throws IOException {
@@ -57,6 +75,7 @@ public class UsuarioService {
         Arquivo result = new Arquivo("fotoPadraoUsuario.png", content,"image/png");
         usuario.setFoto(result);
        return usuarioRepository.save(usuario);
+
     }
 
     public List<Usuario> buscarUsuariosNome(String nome) {
