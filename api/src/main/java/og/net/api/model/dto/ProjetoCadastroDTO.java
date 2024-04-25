@@ -27,8 +27,8 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<UsuarioProjeto> responsaveis;
     private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
-    private String categoria;
-    private Integer indexLista =10 ;
+    private String categoria = "meus-projetos";
+    private Integer indexLista =1 ;
 
 
     //Define a data da criação!

@@ -27,8 +27,9 @@ public class ProjetoEdicaoDTO implements IDTO {
     private List<UsuarioProjeto> responsaveis;
     private LocalTime tempoAtuacao;
     private LocalDate dataFinal;
-    private String categoria;
-    private Integer indexLista = 10;
+    private String categoria ="meus-projetos";;
+    private Integer indexLista = 1;
+    private List<Comentario> comentarios;
 
     public ProjetoEdicaoDTO(Projeto projeto) {
         this.id = projeto.getId();
