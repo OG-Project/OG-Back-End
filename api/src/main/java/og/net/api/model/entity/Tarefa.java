@@ -31,10 +31,10 @@ public class Tarefa {
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     @ManyToOne
     private Status status;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<SubTarefa> subTarefas;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Comentario> comentarios;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Arquivo> arquivos;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<SubTarefa> subTarefas;
 }

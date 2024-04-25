@@ -17,10 +17,8 @@ public class UsuarioProjeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Usuario responsavel;
-
-
 
     //    @Enumerated(EnumType.ORDINAL)
 //    @JoinColumn(name = "permissao_id")
