@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -46,7 +47,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/username")
-    public ResponseEntity<Collection<Usuario>> buscarUsuariosUsername(@RequestParam String username){
+    public ResponseEntity<List<Usuario>> buscarUsuariosUsername(@RequestParam String username){
         try{
             return new ResponseEntity<>(usuarioService.buscarUsuariosUsername(username),HttpStatus.OK);
         }catch (NoSuchElementException e){
@@ -55,7 +56,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Collection<Usuario>> buscarUsuariosEmail(@RequestParam String email){
+    public ResponseEntity<Optional<Usuario>> buscarUsuariosEmail(@RequestParam String email){
         try{
             return new ResponseEntity<>(usuarioService.buscarUsuariosEmail(email),HttpStatus.OK);
         }catch (NoSuchElementException e){

@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -86,7 +87,7 @@ public class UsuarioService {
         return usuarioRepository.findByUsername(username);
     }
 
-    public List<Usuario> buscarUsuariosEmail(String email) {
+    public Optional<Usuario> buscarUsuariosEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 

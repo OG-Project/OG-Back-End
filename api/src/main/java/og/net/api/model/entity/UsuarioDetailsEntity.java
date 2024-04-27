@@ -21,13 +21,41 @@ public class UsuarioDetailsEntity implements UserDetails {
     private Integer id;
     @OneToOne
     private  Usuario usuario;
-    private String password;
-    @Column(unique = true,nullable = false,updatable = false)
-    private String username;
-    private boolean enabled;
-    private boolean AccountNonExpired;
-    private boolean AccountNonLocked;
-    private boolean CredentialsNonExpired;
     private Collection<Permissao> authorities;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return usuario.getSenha();
+    }
+
+    @Override
+    public String getUsername() {
+        return usuario.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

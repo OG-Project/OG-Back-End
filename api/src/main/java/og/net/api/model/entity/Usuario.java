@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +15,6 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "usuario")
 public class Usuario {
     @Id
@@ -42,4 +43,23 @@ public class Usuario {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private UsuarioDetailsEntity usuarioDetailsEntity;
+
+    public Usuario(){
+        setUsuarioDetailsEntity();
+    }
+
+    public void setSenha(String senha) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.senha = encoder.encode(senha);
+    }
+
+    public void setUsuarioDetailsEntity() {
+        this.usuarioDetailsEntity = UsuarioDetailsEntity
+                .builder()
+                .authorities(List.of(Permissao.CRIAR, Permissao.VER, Permissao.DELETAR, Permissao.EDITAR))
+                .usuario(this)
+                .build();
+    }
+
+
 }

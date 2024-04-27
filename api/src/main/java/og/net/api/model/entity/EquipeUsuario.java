@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,6 +22,6 @@ public class EquipeUsuario {
     private Equipe equipe;
     @Enumerated(EnumType.ORDINAL)
     @JoinColumn(name = "permissao_id")
-    private Permissao permissao;
+    private List<Permissao> permissao;
     private Boolean criador = false;
 }

@@ -10,6 +10,7 @@ import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -73,7 +74,8 @@ public class ProjetoService {
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioService.buscarUm(responsaveis.getResponsavel().getId()));
+            Usuario usuarioAtual = usuarioService.buscarUm(responsaveis.getResponsavel().getId());
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioAtual,List.of(Permissao.CRIAR,Permissao.VER, Permissao.EDITAR, Permissao.DELETAR) );
            projetoResponsaveis.add(usuarioProjeto);
         }));
 
