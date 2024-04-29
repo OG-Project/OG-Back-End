@@ -62,6 +62,7 @@ public class UsuarioService {
         configuracao.setIsVisualizaEquipes(true);
         configuracao.setIsVisualizaPerfil(true);
         configuracao.setIsVisualizaProjetos(true);
+        configuracao.setIsDark(false);
         usuarioCadastroDTO.setConfiguracao(configuracao);
         
         modelMapper.map(usuarioCadastroDTO, usuario);

@@ -30,4 +30,5 @@ public class Configuracao {
     private Boolean isDigitarVoz;
     private Boolean isTecladoVirtual;
     private Boolean isLibras;
+    private Boolean isDark;
 }
