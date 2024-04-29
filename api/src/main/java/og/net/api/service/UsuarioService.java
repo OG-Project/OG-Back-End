@@ -56,6 +56,7 @@ public class UsuarioService {
         configuracao.setIsVisualizaEquipes(true);
         configuracao.setIsVisualizaPerfil(true);
         configuracao.setIsVisualizaProjetos(true);
+        configuracao.setIsDark(false);
         usuarioCadastroDTO.setConfiguracao(configuracao);
         BeanUtils.copyProperties(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
