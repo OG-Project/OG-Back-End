@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
-    private final SecurityContextRepository securityContextRepository;
-    private JwtUtil jwtUtil;
     private CookieUtil cookieUtil;
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(

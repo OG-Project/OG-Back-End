@@ -32,6 +32,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
                 .requestMatchers(HttpMethod.POST,"/usuario").permitAll()
+                .requestMatchers(HttpMethod.GET,"/usuario").permitAll()
                 .requestMatchers(HttpMethod.GET,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.PUT,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(eUsuario)
