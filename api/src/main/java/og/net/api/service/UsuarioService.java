@@ -83,7 +83,7 @@ public class UsuarioService {
         return usuarioRepository.findByNome(nome);
     }
 
-    public List<Usuario> buscarUsuariosUsername(String username) {
+    public Optional<Usuario> buscarUsuariosUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
 
@@ -97,6 +97,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         modelMapper.map(ucdto, usuario);
         if (usuarioRepository.existsById(usuario.getId())) {
+            usuario.setUsuarioDetailsEntity();
             usuarioRepository.save(usuario);
             return usuario;
         }

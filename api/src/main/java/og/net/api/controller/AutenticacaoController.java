@@ -26,7 +26,7 @@ public class AutenticacaoController {
     private final AuthenticationManager authenticationManager;
     private CookieUtil cookieUtil;
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(
+    public ResponseEntity<?> authenticate(
             @RequestBody UsuarioLoginDto usuarioLogin, HttpServletRequest request, HttpServletResponse response){
 
         try {
@@ -37,7 +37,7 @@ public class AutenticacaoController {
             Cookie cookie = cookieUtil.gerarCookieJwt(userDetails);
             response.addCookie(cookie);
 
-            return ResponseEntity.ok("Autenticação bem-sucedida");
+            return ResponseEntity.ok(cookie);
         }catch (AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");
         }

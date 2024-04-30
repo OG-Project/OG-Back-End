@@ -47,7 +47,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/username")
-    public ResponseEntity<List<Usuario>> buscarUsuariosUsername(@RequestParam String username){
+    public ResponseEntity<Optional<Usuario>> buscarUsuariosUsername(@RequestParam String username){
         try{
             return new ResponseEntity<>(usuarioService.buscarUsuariosUsername(username),HttpStatus.OK);
         }catch (NoSuchElementException e){

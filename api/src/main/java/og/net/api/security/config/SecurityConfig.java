@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 
 @Configuration
@@ -25,9 +26,15 @@ public class SecurityConfig {
     private final FiltroAutenticacao filtroAutenticacao;
     private final IsUser eUsuario;
     private final UsuarioDaEquipe usuarioDaEquipe;
+    private  final CorsConfigurationSource corsConfigurationSource;
+
+    // responsavel do projeto pode editar o projeto, criar tarefas, pode convidar mas não pode deletar o projeto
+    // só pode deletar o projeto se o projeto foi ele que criou
+    // quem criou o projeto pode fazer tudo
+    // e quem não é responsavel enem criador, só pode editar tarefas.
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
-        //Prevenção de ataque através de um token/ cria um token para poder identificar o usuario
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()

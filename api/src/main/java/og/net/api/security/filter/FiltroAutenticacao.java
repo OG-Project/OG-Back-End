@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @AllArgsConstructor
@@ -47,9 +48,8 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     }
 
     private boolean rotaPublica(HttpServletRequest request){
-        return (request.getRequestURI().equals("/login") &&
-                request.getMethod().equals("POST")) || (request.getRequestURI().equals("/usuario") &&
-                request.getMethod().equals("POST") )|| (request.getRequestURI().equals("/usuario") &&
-                request.getMethod().equals("GET") );
+        return ((request.getRequestURI().equals("/login") &&
+                request.getMethod().equals("POST") || (request.getRequestURI().equals("/usuario") &&
+                request.getMethod().equals("POST"))));
     };
 }
