@@ -20,4 +20,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario findByEquipesContaining(EquipeUsuario equipeUsuario);
 
 
+
 }

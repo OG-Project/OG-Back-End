@@ -42,6 +42,9 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
 
     private boolean contemAutorizacao (Usuario usuario, String request, Equipe equipe){
         if(usuarioPertenceEquipe(usuario,equipe) !=null) {
+            if(usuarioPertenceEquipe(usuario,equipe).getCriador()){
+                return true;
+            }
             for (Permissao permissao : usuarioPertenceEquipe(usuario, equipe).getPermissao()) {
                 if (permissao.getAuthority().equals(request)) {
                     return true;

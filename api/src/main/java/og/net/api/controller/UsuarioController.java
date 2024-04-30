@@ -88,7 +88,7 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Usuario> editar(@RequestBody UsuarioEdicaoDTO usuarioEdicaoDTO){
         try {
             usuarioService.editar(usuarioEdicaoDTO);

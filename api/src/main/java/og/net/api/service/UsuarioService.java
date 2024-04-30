@@ -8,6 +8,7 @@ import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.UsuarioDetailsEntityRepository;
 import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.apache.tomcat.util.file.ConfigurationSource;
@@ -33,6 +34,7 @@ public class UsuarioService {
     private EquipeService equipeService;
     private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
+    private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -94,10 +96,11 @@ public class UsuarioService {
 
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
-        Usuario usuario = new Usuario();
+        Usuario usuarioBusca = usuarioRepository.findById(ucdto.getId()).get();
+        UsuarioDetailsEntity usuarioDetailsEntity = usuarioDetailsEntityRepository.findByUsuario(usuarioBusca);
+        Usuario usuario = new Usuario(usuarioDetailsEntity);
         modelMapper.map(ucdto, usuario);
         if (usuarioRepository.existsById(usuario.getId())) {
-            usuario.setUsuarioDetailsEntity();
             usuarioRepository.save(usuario);
             return usuario;
         }

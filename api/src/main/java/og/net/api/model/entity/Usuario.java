@@ -44,6 +44,10 @@ public class Usuario {
     @JsonIgnore
     private UsuarioDetailsEntity usuarioDetailsEntity;
 
+    public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
+            setUsuarioDetailsEntity(usuarioDetailsEntity);
+    }
+
     public Usuario(){
         setUsuarioDetailsEntity();
     }

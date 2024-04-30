@@ -32,17 +32,27 @@ public class SecurityConfig {
     // só pode deletar o projeto se o projeto foi ele que criou
     // quem criou o projeto pode fazer tudo
     // e quem não é responsavel enem criador, só pode editar tarefas.
+
+    /*  @PatchMapping("/add/{userId}/{equipeId}") */
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                // LOGIN
+
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
+
+                //USUARIO
+
                 .requestMatchers(HttpMethod.POST,"/usuario").permitAll()
                 .requestMatchers(HttpMethod.GET,"/usuario").permitAll()
                 .requestMatchers(HttpMethod.GET,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.PUT,"/usuario/{id}").access(eUsuario)
+                .requestMatchers(HttpMethod.PATCH,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(eUsuario)
+                .requestMatchers(HttpMethod.PATCH, "/usuario/add/{userId}/{equipeId}").access(usuarioDaEquipe)
+                //EQUIPE
                 .requestMatchers(HttpMethod.POST, "/equipe").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.PUT, "/equipe/{id}").access(usuarioDaEquipe)
