@@ -104,8 +104,11 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         modelMapper.map(projetoEdicaoDTO, projeto);
         if (projetoRepository.existsById(projeto.getId())) {
-            criaValorPorpiredadeTarefa(projeto);
-            projetoRepository.save(projeto);
+            System.out.println(projeto);
+
+            if(criaValorPorpiredadeTarefa(projeto)){
+                projetoRepository.save(projeto);
+            }
             return projeto;
         }
         throw new DadosNaoEncontradoException();
@@ -125,19 +128,24 @@ public class ProjetoService {
             e.printStackTrace();
         }
     }
-    public void criaValorPorpiredadeTarefa(Projeto projeto) {
+    public Boolean criaValorPorpiredadeTarefa(Projeto projeto) {
+        ArrayList<Propriedade> propriedade2 = new ArrayList<>();
         if(projeto.getPropriedades()!=null){
-            projeto.getPropriedades().forEach(propriedade -> {
+             projeto.getPropriedades().forEach(propriedade -> {
                 if (propriedade.getId() == null) {
                     PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
                     try {
-                        propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                        propriedade2.add(propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId()));
                     } catch (ProjetoNaoEncontradoException e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
         }
+        if(propriedade2.isEmpty()){
+            return true;
+        }
+        return false;
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {

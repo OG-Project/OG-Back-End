@@ -24,7 +24,7 @@ public class Tarefa {
     private Integer id;
     private String nome;
     private String descricao;
-    private LocalDateTime dataCriacao;
+    private LocalDateTime dataCriacao = LocalDateTime.now();
     private String cor;
     @JoinColumn(name = "tarefa_id")
     @OneToMany(cascade = CascadeType.ALL)
