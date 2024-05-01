@@ -38,7 +38,6 @@ public class PropriedadeService {
     }
 
     public Propriedade cadastrar(IDTO dto, Integer projetoId) throws ProjetoNaoEncontradoException {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         PropriedadeCadastroDTO propriedadeCadastroDTO = (PropriedadeCadastroDTO) dto;
         Projeto projeto = projetoRepository.findById(projetoId).get();
         Propriedade propriedade = new Propriedade();
@@ -53,13 +52,7 @@ public class PropriedadeService {
 
     public void criaValorPropriedadeTarefa(Projeto projeto, Propriedade propriedade) {
         projeto.getTarefas().forEach(tarefa -> {
-            List<Indice> lista = List.of(
-                    new Indice(null, 0L, Visualizacao.CALENDARIO),
-                    new Indice(null, 0L, Visualizacao.LISTA),
-                    new Indice(null, 0L, Visualizacao.TIMELINE),
-                    new Indice(null, 0L, Visualizacao.KANBAN));
-
-            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false, lista);
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false);
             tarefa.getValorPropriedadeTarefas().add(valorPropriedadeTarefa);
             tarefaRepository.save(tarefa);
         });

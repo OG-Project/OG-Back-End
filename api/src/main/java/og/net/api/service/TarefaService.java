@@ -33,16 +33,12 @@ public class TarefaService {
     private ModelMapper modelMapper;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
-        if (tarefaRepository.existsById(id)){
+        if (tarefaRepository.existsById(id)) {
             return tarefaRepository.findById(id).get();
 
         }
         throw new TarefaInesxistenteException();
     }
-     public List<Tarefa> buscarTarefasPorVisualizacao(String nome){
-        return tarefaRepository.findTarefasByValorPropriedadeTarefas_indice_visualizacaoOrderByValorPropriedadeTarefas_indice_indice(nome);
-     }
-
     public List<Tarefa> buscarTarefasNome(String nome){
         return tarefaRepository.findByNome(nome);
     }
@@ -74,8 +70,9 @@ public class TarefaService {
                     new Indice(null, 0L, Visualizacao.TIMELINE),
                     new Indice(null, 0L, Visualizacao.KANBAN));
 
-            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false, lista);
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false);
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+            tarefa.setIndice(lista);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         Tarefa tarefaReturn = tarefaRepository.save(tarefa);

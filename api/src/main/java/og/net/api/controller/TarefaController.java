@@ -56,18 +56,6 @@ public class TarefaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("/visualizacao")
-    public ResponseEntity<Collection<Tarefa>> buscarTarefasPorVisualizacao(@RequestParam String visualizacao){
-        try{
-            List<Tarefa> tarefas = tarefaService.buscarTarefasPorVisualizacao(visualizacao);
-            for(Tarefa tarefa:tarefas){
-                atualizarComentario(tarefa);
-            }
-            return new ResponseEntity<>(tarefas,HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
 
     @GetMapping
