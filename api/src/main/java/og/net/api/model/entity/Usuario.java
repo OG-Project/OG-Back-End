@@ -60,7 +60,7 @@ public class Usuario {
     public void setUsuarioDetailsEntity() {
         this.usuarioDetailsEntity = UsuarioDetailsEntity
                 .builder()
-                .authorities(List.of(Permissao.CRIAR, Permissao.VER, Permissao.DELETAR, Permissao.EDITAR))
+                .authorities(List.of(Permissao.CRIAR, Permissao.VER, Permissao.DELETAR, Permissao.EDITAR, Permissao.PATCH))
                 .usuario(this)
                 .build();
     }

@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 @AllArgsConstructor
 public enum Permissao implements GrantedAuthority {
-    VER ("Get"),
-    EDITAR ("Put"),
-    DELETAR ("Delete"),
-    CRIAR ("Post"),
+    VER ("GET"),
+    EDITAR ("PUT"),
+    DELETAR ("DELETE"),
+    CRIAR ("POST"),
+
+    PATCH ("PATCH")
     ;
     private final String nome;
     @Override

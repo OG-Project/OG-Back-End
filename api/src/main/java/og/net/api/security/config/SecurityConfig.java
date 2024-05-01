@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import og.net.api.model.entity.Permissao;
 import og.net.api.security.acess.IsUser;
 import og.net.api.security.acess.UsuarioDaEquipe;
+import og.net.api.security.acess.UsuarioTemPermissaoEquipe;
+import og.net.api.security.acess.UsuarioTemPermissaoProjeto;
 import og.net.api.security.filter.FiltroAutenticacao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +29,8 @@ public class SecurityConfig {
     private final IsUser eUsuario;
     private final UsuarioDaEquipe usuarioDaEquipe;
     private  final CorsConfigurationSource corsConfigurationSource;
-
+    private final UsuarioTemPermissaoEquipe usuarioTemPermissaoEquipe;
+    private final UsuarioTemPermissaoProjeto usuarioTemPermissaoProjeto;
     // responsavel do projeto pode editar o projeto, criar tarefas, pode convidar mas não pode deletar o projeto
     // só pode deletar o projeto se o projeto foi ele que criou
     // quem criou o projeto pode fazer tudo
@@ -51,13 +54,24 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.PATCH,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(eUsuario)
-                .requestMatchers(HttpMethod.PATCH, "/usuario/add/{userId}/{equipeId}").access(usuarioDaEquipe)
+                .requestMatchers(HttpMethod.PATCH, "/usuario/add/{equipeId}").access(usuarioTemPermissaoEquipe)
+                .requestMatchers(HttpMethod.GET, "/usuario/buscarMembros/{equipeId}").access(usuarioTemPermissaoEquipe)
+
                 //EQUIPE
                 .requestMatchers(HttpMethod.POST, "/equipe").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.PUT, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.DELETE, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.PATCH, "/equipe/{id}").access(usuarioDaEquipe)
+
+                //PROJETO
+                .requestMatchers(HttpMethod.GET,"/projeto").hasAuthority(Permissao.VER.name())
+                .requestMatchers(HttpMethod.GET,"/projeto/{id}").hasAuthority(Permissao.VER.name())
+                .requestMatchers(HttpMethod.POST, "/projeto").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.PUT, "/projeto").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.DELETE, "/projeto/removerProjetoEquipe/{equipeId}/{projetoId}").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.DELETE, "/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}").access(usuarioTemPermissaoProjeto)
                 .anyRequest().authenticated());
 
         http.securityContext((context)-> context.securityContextRepository(securityContextRepository));

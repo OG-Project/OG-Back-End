@@ -22,7 +22,7 @@ public class UsuarioProjeto {
 
     @Enumerated(EnumType.ORDINAL)
     @JoinColumn(name = "permissao_id")
-    private List<Permissao> permissao;
+    private List<Permissao> permissao = List.of(Permissao.CRIAR,Permissao.EDITAR,Permissao.PATCH, Permissao.VER);
 
 
 

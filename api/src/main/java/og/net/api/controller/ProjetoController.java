@@ -75,11 +75,6 @@ public class ProjetoController {
         }
     }
 
-    @PatchMapping("/add/{projetoId}/{equipeId}")
-    public void adicionarAEquipeProjeto(@PathVariable Integer projetoId, @PathVariable Integer equipeId) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarAEquipeAProjeto(projetoId,equipeId);
-    }
-
     @GetMapping("/buscarProjetos/{equipeId}")
     public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return projetoService.buscarProjetosEquipes(equipeId);
