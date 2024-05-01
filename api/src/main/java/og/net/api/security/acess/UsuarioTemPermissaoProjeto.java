@@ -32,7 +32,7 @@ public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestA
             projetoId= setProjetoId(object.getRequest(), variables);
             projeto = projetoRepository.findById(projetoId).get();
         }
-        return new AuthorizationDecision(verificaAutorizacaoDentroEquipe(projeto.getProjetoEquipes(),usuarioDetailsEntity.getUsuario(), request));
+        return new AuthorizationDecision(verificaAutorizacaoDentroEquipe(projeto,usuarioDetailsEntity.getUsuario(), request));
     }
 
     private Projeto transformaBodyEmProjeto(HttpServletRequest httpRequest){
@@ -50,9 +50,9 @@ public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestA
         }
     }
 
-    private boolean verificaAutorizacaoDentroEquipe(List<ProjetoEquipe> equipes, Usuario usuario , String request){
-        boolean verificacao = false;
-       for(ProjetoEquipe projetoEquipe:equipes){
+    private boolean verificaAutorizacaoDentroEquipe(Projeto projeto, Usuario usuario , String request){
+        boolean verificacao = projeto.getResponsaveis().stream().anyMatch(usuarioProjeto -> usuarioProjeto.getResponsavel().equals(usuario));;
+       for(ProjetoEquipe projetoEquipe:projeto.getProjetoEquipes()){
            for (EquipeUsuario equipeUsuario:usuario.getEquipes()){
                if(equipeUsuario.getEquipe().equals(projetoEquipe.getEquipe())){
                    verificacao= equipeUsuario.getPermissao().stream().anyMatch(permissao -> permissao.getAuthority().equals(request));

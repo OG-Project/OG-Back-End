@@ -4,46 +4,68 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.entity.*;
 import og.net.api.service.EquipeService;
+import og.net.api.service.UsuarioService;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Component
 @AllArgsConstructor
 public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAuthorizationContext> {
     private EquipeService equipeService;
+    private  final UsuarioService usuarioService;
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         Map<String, String> variables = object.getVariables();
         String request = object.getRequest().getMethod();
         Equipe equipe;
         Integer equipeId = Integer.parseInt(variables.get("equipeId"));
+
         boolean autorizado = false;
         try {
             equipe = equipeService.buscarUm(equipeId);
         } catch (EquipeNaoEncontradaException e) {
             throw new RuntimeException(e);
         }
+
+
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
+        Optional<Usuario> usuario = usuarioService.buscarUsuariosUsername(usuarioDetailsEntity.getUsername());
+        System.out.println(object.getRequest().getRequestURI());
+        if(object.getRequest().getRequestURI().equals("/usuario/add/"+equipeId)){
 
-        return new AuthorizationDecision(contemAutorizacao(usuarioDetailsEntity.getUsuario(),request,equipe));
+            if(!verificaSeEquipeTemUsuario(equipe, usuario.get().getEquipes())){
+
+               return new AuthorizationDecision(usuario.get().getUsuarioDetailsEntity().getAuthorities().contains(Permissao.PATCH));
+            }
+        }
+        return new AuthorizationDecision(contemAutorizacao(usuario.get().getEquipes(),request,equipe));
     }
 
-    private EquipeUsuario usuarioPertenceEquipe(Usuario usuario, Equipe equipe){
-        return (EquipeUsuario) usuario.getEquipes().stream().filter(equipeUsuario -> equipeUsuario.getEquipe().equals(equipe));
+    private EquipeUsuario usuarioPertenceEquipe(List<EquipeUsuario> equipeUsuarios, Equipe equipe){
+        System.out.println(equipeUsuarios);
+        System.out.println(equipe);
+        for (EquipeUsuario equipeUsuario : equipeUsuarios){
+            if(equipeUsuario.getEquipe().equals(equipe)){
+                return equipeUsuario;
+            }
+        }
+        return null;
     }
 
-    private boolean contemAutorizacao (Usuario usuario, String request, Equipe equipe){
-        if(usuarioPertenceEquipe(usuario,equipe) !=null) {
-            if(usuarioPertenceEquipe(usuario,equipe).getCriador()){
+    private boolean contemAutorizacao (List<EquipeUsuario> equipeUsuarios, String request, Equipe equipe){
+        if(usuarioPertenceEquipe(equipeUsuarios,equipe) !=null) {
+            if (usuarioPertenceEquipe(equipeUsuarios, equipe).getCriador()) {
                 return true;
             }
-            for (Permissao permissao : usuarioPertenceEquipe(usuario, equipe).getPermissao()) {
+            for (Permissao permissao : usuarioPertenceEquipe(equipeUsuarios, equipe).getPermissao()) {
                 if (permissao.getAuthority().equals(request)) {
                     return true;
                 }
@@ -51,4 +73,15 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
         }
         return false;
     }
+
+    private boolean verificaSeEquipeTemUsuario(Equipe equipe, List<EquipeUsuario> equipeUsuarios){
+        for(EquipeUsuario equipeUsuario: equipeUsuarios){
+            if(equipeUsuario.getEquipe().equals(equipe)){
+
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
