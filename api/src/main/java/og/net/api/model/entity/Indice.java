@@ -15,7 +15,7 @@ public class Indice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long indice = 0L;
+    private Long indice;
     @Enumerated(EnumType.STRING)
     private Visualizacao visualizacao;
 
