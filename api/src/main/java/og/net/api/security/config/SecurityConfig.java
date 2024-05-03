@@ -31,12 +31,6 @@ public class SecurityConfig {
     private  final CorsConfigurationSource corsConfigurationSource;
     private final UsuarioTemPermissaoEquipe usuarioTemPermissaoEquipe;
     private final UsuarioTemPermissaoProjeto usuarioTemPermissaoProjeto;
-    // responsavel do projeto pode editar o projeto, criar tarefas, pode convidar mas não pode deletar o projeto
-    // só pode deletar o projeto se o projeto foi ele que criou
-    // quem criou o projeto pode fazer tudo
-    // e quem não é responsavel enem criador, só pode editar tarefas.
-
-    /*  @PatchMapping("/add/{userId}/{equipeId}") */
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
@@ -69,11 +63,16 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/projeto/{id}").hasAuthority(Permissao.VER.getAuthority())
                 .requestMatchers(HttpMethod.POST, "/projeto").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.POST, "/projeto/{equipeId}").access(usuarioTemPermissaoEquipe)
-                .requestMatchers(HttpMethod.PUT, "/projeto").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.PUT, "/projeto").hasAuthority(Permissao.EDITAR.getAuthority())
+                .requestMatchers(HttpMethod.PUT, "/projeto/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/removerProjetoEquipe/{equipeId}/{projetoId}").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}").access(usuarioTemPermissaoProjeto)
                 .anyRequest().authenticated());
+
+
+
+
 
         http.securityContext((context)-> context.securityContextRepository(securityContextRepository));
         http.formLogin(AbstractHttpConfigurer::disable);

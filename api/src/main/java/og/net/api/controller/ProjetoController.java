@@ -80,6 +80,16 @@ public class ProjetoController {
         }
     }
 
+    @PutMapping("/{equipeId}")
+    public ResponseEntity<Projeto> editarPelaEquipe(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO, Integer equipeId){
+        try {
+            return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
+        }catch (DadosNaoEncontradoException e){
+            System.out.println(e.getMessage());
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/buscarProjetos/{equipeId}")
     public List<Projeto> buscarProjetosEquipe(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         return projetoService.buscarProjetosEquipes(equipeId);
