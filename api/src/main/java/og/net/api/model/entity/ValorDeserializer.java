@@ -34,9 +34,12 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
             return new Texto(id,valorJson);
 
         }else if(isPresent("data")){
-
-            String valorJson = jsonNode.get("data").asText();
-            LocalDateTime data= LocalDateTime.parse(valorJson);
+            System.out.println("É DATA");
+            LocalDateTime data = null;
+            if(!jsonNode.get("data").isNull()){
+                String valorJson = jsonNode.get("data").asText();
+                data = LocalDateTime.parse(valorJson);
+            }
             return new Data(id,data);
 
         }else if(isPresent("numero")){
