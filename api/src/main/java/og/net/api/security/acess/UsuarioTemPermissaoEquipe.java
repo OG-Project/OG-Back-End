@@ -47,10 +47,9 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
 
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
         Optional<Usuario> usuario = usuarioService.buscarUsuariosUsername(usuarioDetailsEntity.getUsername());
-
         if(object.getRequest().getRequestURI().equals("/usuario/add/"+userId+"/"+equipeId+"/"+permissaoId)){
             if(!verificaSeEquipeTemUsuario(equipe, usuario.get().getEquipes())){
-               return new AuthorizationDecision(usuario.get().getUsuarioDetailsEntity().getAuthorities().contains(Permissao.PATCH));
+               return new AuthorizationDecision(usuarioDetailsEntity.getAuthorities().contains(Permissao.PATCH));
             }
         }
 
@@ -67,7 +66,6 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
     }
 
     private boolean contemAutorizacao (List<EquipeUsuario> equipeUsuarios, String request, Equipe equipe){
-        System.out.println(request);
         if(usuarioPertenceEquipe(equipeUsuarios,equipe) !=null) {
             if (usuarioPertenceEquipe(equipeUsuarios, equipe).getCriador()) {
                 return true;

@@ -19,8 +19,8 @@ public class UsuarioDetailsEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne
-    @ToString.Exclude
-    private  Usuario usuario;
+    @JsonIgnore
+    private Usuario usuario;
     private Collection<Permissao> authorities;
 
     @Override
@@ -37,6 +37,7 @@ public class UsuarioDetailsEntity implements UserDetails {
     public String getUsername() {
         return usuario.getUsername();
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

@@ -18,7 +18,7 @@ public class JwtUtil {
                 .sign(algorithm);
     }
 
-    public String getEmail(String token) {
+    public String getUsername(String token) {
         return JWT.decode(token).getSubject();
     }
 }

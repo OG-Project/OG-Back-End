@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.entity.*;
+import og.net.api.repository.UsuarioRepository;
 import og.net.api.security.utils.ContemAutorizacaoUtil;
 import og.net.api.service.EquipeService;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -25,6 +26,7 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
 
     private EquipeService equipeService;
     private final ObjectMapper objectMapper;
+    private final UsuarioRepository usuarioRepository;
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         Map<String, String> variables = object.getVariables();
@@ -43,7 +45,8 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
             equipe= transformaBodyEmEquipe(object.getRequest());
         }
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
-        return new AuthorizationDecision(contemAutorizacao(usuarioDetailsEntity.getUsuario(),request,equipe));
+        Usuario usuario = usuarioRepository.findByUsername(usuarioDetailsEntity.getUsername()).get();
+        return new AuthorizationDecision(contemAutorizacao(usuario,request,equipe));
     }
 
     private EquipeUsuario usuarioPertenceEquipe(List<EquipeUsuario> equipeUsuarios, Equipe equipe){

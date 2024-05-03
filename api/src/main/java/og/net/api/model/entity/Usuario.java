@@ -1,11 +1,10 @@
 package og.net.api.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import og.net.api.model.dto.UsuarioCadastroDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -41,8 +40,8 @@ public class Usuario {
     private Configuracao configuracao;
     @OneToOne(cascade = CascadeType.ALL)
     private Arquivo foto;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
     private UsuarioDetailsEntity usuarioDetailsEntity;
 
     public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
@@ -50,7 +49,7 @@ public class Usuario {
     }
 
     public Usuario(){
-        setUsuarioDetailsEntity();
+        setUsuarioDetailsEntityCadastro();
     }
 
     public void setSenha(String senha) {
@@ -58,13 +57,13 @@ public class Usuario {
         this.senha = encoder.encode(senha);
     }
 
-    public void setUsuarioDetailsEntity() {
+    public void setUsuarioDetailsEntityCadastro() {
         this.usuarioDetailsEntity = UsuarioDetailsEntity
                 .builder()
                 .authorities(List.of(Permissao.CRIAR, Permissao.VER, Permissao.DELETAR, Permissao.EDITAR, Permissao.PATCH))
                 .usuario(this)
                 .build();
-    }
 
+    }
 
 }

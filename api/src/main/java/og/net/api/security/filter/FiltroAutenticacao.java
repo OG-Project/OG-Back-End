@@ -33,8 +33,8 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
         if(!rotaPublica(request)) {
             Cookie cookie = cookieUtil.getCookie(request, "JWT");
             String token = cookie.getValue();
-            String email = jwtUtil.getEmail(token);
-            UserDetails user = autenticacaoService.loadUserByUsername(email);
+            String username = jwtUtil.getUsername(token);
+            UserDetails user = autenticacaoService.loadUserByUsername(username);
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
                             user, user.getPassword(), user.getAuthorities()

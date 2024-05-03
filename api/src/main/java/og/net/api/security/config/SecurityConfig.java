@@ -67,9 +67,10 @@ public class SecurityConfig {
                 //PROJETO
                 .requestMatchers(HttpMethod.GET,"/projeto").hasAuthority(Permissao.VER.getAuthority())
                 .requestMatchers(HttpMethod.GET,"/projeto/{id}").hasAuthority(Permissao.VER.getAuthority())
-                .requestMatchers(HttpMethod.POST, "/projeto").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.POST, "/projeto").hasAuthority(Permissao.CRIAR.getAuthority())
+                .requestMatchers(HttpMethod.POST, "/projeto/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.PUT, "/projeto").access(usuarioTemPermissaoProjeto)
-                .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoProjeto)
+                .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/removerProjetoEquipe/{equipeId}/{projetoId}").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}").access(usuarioTemPermissaoProjeto)
                 .anyRequest().authenticated());

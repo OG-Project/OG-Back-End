@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoRepository;
+import og.net.api.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -31,18 +32,25 @@ public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestA
     private final ObjectMapper objectMapper;
     private final ProjetoRepository projetoRepository;
     private final ModelMapper modelMapper;
+    private final UsuarioRepository usuarioRepository;
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         // passar como parametro o id da equipe quando o usuario estiver criando um projeto por uma equipe.
-        Projeto projeto =transformaBodyEmProjeto(object.getRequest());
+        Projeto projeto;
         Map<String, String> variables = object.getVariables();
-        if(projeto ==null){
-            Integer projetoId= setProjetoId(variables);
+        Integer projetoId= setProjetoId(variables);
+        if(projetoId ==-1){
+             projeto =transformaBodyEmProjeto(object.getRequest());
+
+        }else{
             projeto = projetoRepository.findById(projetoId).get();
+
         }
+
         String request = object.getRequest().getMethod();
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
-        return new AuthorizationDecision(verificaAutorizacaoDentroEquipe(projeto,usuarioDetailsEntity.getUsuario(), request));
+        Usuario usuario = usuarioRepository.findByUsername(usuarioDetailsEntity.getUsername()).get();
+        return new AuthorizationDecision(verificaAutorizacaoDentroEquipe(projeto,usuario, request));
     }
 
     private Projeto transformaBodyEmProjeto(HttpServletRequest httpRequest){
@@ -79,7 +87,7 @@ public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestA
 
     private  boolean verificaUsuarioResponsavelProjeto(Projeto projeto, Usuario usuario){
         for(UsuarioProjeto usuarioProjeto : projeto.getResponsaveis()){
-            if(usuarioProjeto.getResponsavel().getId() == usuario.getId()){
+            if(usuarioProjeto.getIdResponsavel() == usuario.getId()){
                 return  true;
             }
         }

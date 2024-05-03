@@ -74,8 +74,8 @@ public class ProjetoService {
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-            Usuario usuarioAtual = usuarioService.buscarUm(responsaveis.getResponsavel().getId());
-            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,usuarioAtual,List.of(Permissao.CRIAR,Permissao.VER, Permissao.EDITAR, Permissao.DELETAR) );
+            Usuario usuarioAtual = usuarioService.buscarUm(responsaveis.getIdResponsavel());
+            UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,responsaveis.getIdResponsavel(),List.of(Permissao.CRIAR,Permissao.VER, Permissao.EDITAR, Permissao.DELETAR) );
            projetoResponsaveis.add(usuarioProjeto);
         }));
 

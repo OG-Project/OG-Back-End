@@ -29,8 +29,8 @@ public class IsUser implements AuthorizationManager<RequestAuthorizationContext>
         Integer userID = Integer.parseInt(variables.get("id"));
 
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
-
-        Usuario usuarioFezRequest = usuarioDetailsEntity.getUsuario();
+        Usuario usuario = usuarioService.buscarUsuariosUsername(usuarioDetailsEntity.getUsername()).get();
+        Usuario usuarioFezRequest = usuario;
 
         Usuario usuarioConfiguracao = usuarioService.buscarUm(userID);
 
