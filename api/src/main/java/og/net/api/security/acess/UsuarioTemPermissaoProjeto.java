@@ -2,9 +2,13 @@ package og.net.api.security.acess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.AllArgsConstructor;
+import og.net.api.model.dto.ProjetoCadastroDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -13,46 +17,46 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
 @Component
 @AllArgsConstructor
 public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestAuthorizationContext> {
     private final ObjectMapper objectMapper;
     private final ProjetoRepository projetoRepository;
+    private final ModelMapper modelMapper;
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
-        Projeto projeto= transformaBodyEmProjeto(object.getRequest());
+        // passar como parametro o id da equipe quando o usuario estiver criando um projeto por uma equipe.
+        Projeto projeto =transformaBodyEmProjeto(object.getRequest());
         Map<String, String> variables = object.getVariables();
-        String request = object.getRequest().getMethod();
-        Integer projetoId;
-        UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
-        if(request.equals("DELETE")){
-            projetoId= setProjetoId(object.getRequest(), variables);
+        if(projeto ==null){
+            Integer projetoId= setProjetoId(variables);
             projeto = projetoRepository.findById(projetoId).get();
         }
+        String request = object.getRequest().getMethod();
+        UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
         return new AuthorizationDecision(verificaAutorizacaoDentroEquipe(projeto,usuarioDetailsEntity.getUsuario(), request));
     }
 
     private Projeto transformaBodyEmProjeto(HttpServletRequest httpRequest){
-        String requestBody = null;
-        try (BufferedReader reader = httpRequest.getReader()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            requestBody = stringBuilder.toString();
-             return objectMapper.readValue(requestBody, Projeto.class);
+        try {
+            InputStream inputStream = httpRequest.getInputStream();
+            return  objectMapper.readValue(inputStream, Projeto.class);
         } catch (IOException e) {
             return null;
         }
     }
 
     private boolean verificaAutorizacaoDentroEquipe(Projeto projeto, Usuario usuario , String request){
-        boolean verificacao = projeto.getResponsaveis().stream().anyMatch(usuarioProjeto -> usuarioProjeto.getResponsavel().equals(usuario));;
-       for(ProjetoEquipe projetoEquipe:projeto.getProjetoEquipes()){
+        boolean verificacao = verificaUsuarioResponsavelProjeto(projeto, usuario);
+        for(ProjetoEquipe projetoEquipe:projeto.getProjetoEquipes()){
            for (EquipeUsuario equipeUsuario:usuario.getEquipes()){
                if(equipeUsuario.getEquipe().equals(projetoEquipe.getEquipe())){
                    verificacao= equipeUsuario.getPermissao().stream().anyMatch(permissao -> permissao.getAuthority().equals(request));
@@ -62,13 +66,23 @@ public class UsuarioTemPermissaoProjeto implements AuthorizationManager<RequestA
        return verificacao;
     }
 
-    private Integer setProjetoId(HttpServletRequest request, Map<String, String> variables){
-       Integer projetoId = Integer.parseInt(variables.get("projetoId"));
-        if(request.getRequestURI().equals("/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}")){
-            projetoId = Integer.parseInt(variables.get("idProjeto"));
-        }else if(request.getRequestURI().equals("/projeto/{id}")){
-            projetoId = Integer.parseInt(variables.get("id"));
+    private Integer setProjetoId( Map<String, String> variables){
+       if(variables.get("projetoId") != null){
+          return Integer.parseInt(variables.get("projetoId"));
+       }else if(variables.get("idProjeto") != null){
+           return  Integer.parseInt(variables.get("idProjeto"));
+       }else if(variables.get("id") !=null) {
+           return Integer.parseInt(variables.get("id"));
+       }
+       return -1;
+    }
+
+    private  boolean verificaUsuarioResponsavelProjeto(Projeto projeto, Usuario usuario){
+        for(UsuarioProjeto usuarioProjeto : projeto.getResponsaveis()){
+            if(usuarioProjeto.getResponsavel().getId() == usuario.getId()){
+                return  true;
+            }
         }
-        return projetoId;
+        return false;
     }
 }

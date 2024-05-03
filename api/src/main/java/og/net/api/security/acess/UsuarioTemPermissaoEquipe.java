@@ -27,6 +27,15 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
         String request = object.getRequest().getMethod();
         Equipe equipe;
         Integer equipeId = Integer.parseInt(variables.get("equipeId"));
+        Integer userId =0;
+        Integer permissaoId =0;
+
+        if(variables.get("usuarioId") != null){
+            userId = Integer.parseInt(variables.get("usuarioId"));
+        }
+        if (variables.get("permissaoId") != null){
+            permissaoId = Integer.parseInt(variables.get("permissaoId"));
+        }
 
         boolean autorizado = false;
         try {
@@ -38,20 +47,17 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
 
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
         Optional<Usuario> usuario = usuarioService.buscarUsuariosUsername(usuarioDetailsEntity.getUsername());
-        System.out.println(object.getRequest().getRequestURI());
-        if(object.getRequest().getRequestURI().equals("/usuario/add/"+equipeId)){
 
+        if(object.getRequest().getRequestURI().equals("/usuario/add/"+userId+"/"+equipeId+"/"+permissaoId)){
             if(!verificaSeEquipeTemUsuario(equipe, usuario.get().getEquipes())){
-
                return new AuthorizationDecision(usuario.get().getUsuarioDetailsEntity().getAuthorities().contains(Permissao.PATCH));
             }
         }
+
         return new AuthorizationDecision(contemAutorizacao(usuario.get().getEquipes(),request,equipe));
     }
 
     private EquipeUsuario usuarioPertenceEquipe(List<EquipeUsuario> equipeUsuarios, Equipe equipe){
-        System.out.println(equipeUsuarios);
-        System.out.println(equipe);
         for (EquipeUsuario equipeUsuario : equipeUsuarios){
             if(equipeUsuario.getEquipe().equals(equipe)){
                 return equipeUsuario;
@@ -61,6 +67,7 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
     }
 
     private boolean contemAutorizacao (List<EquipeUsuario> equipeUsuarios, String request, Equipe equipe){
+        System.out.println(request);
         if(usuarioPertenceEquipe(equipeUsuarios,equipe) !=null) {
             if (usuarioPertenceEquipe(equipeUsuarios, equipe).getCriador()) {
                 return true;

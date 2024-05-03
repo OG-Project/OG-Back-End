@@ -54,19 +54,19 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.PATCH,"/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(eUsuario)
-                .requestMatchers(HttpMethod.PATCH, "/usuario/add/{equipeId}").access(usuarioTemPermissaoEquipe)
+                .requestMatchers(HttpMethod.PATCH, "/usuario/add/{usuarioId}/{equipeId}/{permissaoId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.GET, "/usuario/buscarMembros/{equipeId}").access(usuarioTemPermissaoEquipe)
 
                 //EQUIPE
                 .requestMatchers(HttpMethod.POST, "/equipe").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/equipe/{id}").access(usuarioDaEquipe)
-                .requestMatchers(HttpMethod.PUT, "/equipe/{id}").access(usuarioDaEquipe)
+                .requestMatchers(HttpMethod.PUT, "/equipe").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.DELETE, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.PATCH, "/equipe/{id}").access(usuarioDaEquipe)
 
                 //PROJETO
-                .requestMatchers(HttpMethod.GET,"/projeto").hasAuthority(Permissao.VER.name())
-                .requestMatchers(HttpMethod.GET,"/projeto/{id}").hasAuthority(Permissao.VER.name())
+                .requestMatchers(HttpMethod.GET,"/projeto").hasAuthority(Permissao.VER.getAuthority())
+                .requestMatchers(HttpMethod.GET,"/projeto/{id}").hasAuthority(Permissao.VER.getAuthority())
                 .requestMatchers(HttpMethod.POST, "/projeto").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.PUT, "/projeto").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoProjeto)

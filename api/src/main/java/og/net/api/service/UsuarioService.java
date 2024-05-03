@@ -107,13 +107,18 @@ public class UsuarioService {
         throw new DadosNaoEncontradoException();
     }
 
-    public void adicionarAEquipe(Integer userId, Integer equipeId) {
+    public void adicionarAEquipe(Integer userId, Integer equipeId,Integer permissaoId) {
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
 
             EquipeUsuario equipeUsuario = new EquipeUsuario();
             equipeUsuario.setEquipe(equipe);
+            if(permissaoId == 1){
+                equipeUsuario.setPermissao(List.of(Permissao.CRIAR, Permissao.EDITAR, Permissao.PATCH, Permissao.VER));
+            } else if (permissaoId == 2) {
+                equipeUsuario.setPermissao(List.of(Permissao.VER));
+            }
             user.getEquipes().add(equipeUsuario);
             usuarioRepository.save(user);
 
@@ -136,6 +141,7 @@ public class UsuarioService {
                 try {
                     Usuario user = buscarUm(id);
                     EquipeUsuario equipeUsuario = new EquipeUsuario();
+
                     equipeUsuario.setEquipe(equipe);
                     //setar as permissões
                     user.getEquipes().add(equipeUsuario);

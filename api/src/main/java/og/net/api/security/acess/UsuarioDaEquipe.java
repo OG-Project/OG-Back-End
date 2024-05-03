@@ -1,5 +1,7 @@
 package og.net.api.security.acess;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.entity.*;
@@ -11,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -19,38 +24,63 @@ import java.util.function.Supplier;
 public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizationContext> {
 
     private EquipeService equipeService;
+    private final ObjectMapper objectMapper;
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         Map<String, String> variables = object.getVariables();
         String request = object.getRequest().getMethod();
         Equipe equipe;
-        Integer equipeId = Integer.parseInt(variables.get("id"));
-        boolean autorizado = false;
-        try {
-            equipe = equipeService.buscarUm(equipeId);
-        } catch (EquipeNaoEncontradaException e) {
-            throw new RuntimeException(e);
+        if(variables.get("id")!=null) {
+            Integer equipeId = Integer.parseInt(variables.get("id"));
+            boolean autorizado = false;
+            try {
+                equipe = equipeService.buscarUm(equipeId);
+            } catch (EquipeNaoEncontradaException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else {
+            equipe= transformaBodyEmEquipe(object.getRequest());
         }
         UsuarioDetailsEntity usuarioDetailsEntity = (UsuarioDetailsEntity) authentication.get().getPrincipal();
-
         return new AuthorizationDecision(contemAutorizacao(usuarioDetailsEntity.getUsuario(),request,equipe));
     }
 
-    private EquipeUsuario usuarioPertenceEquipe(Usuario usuario, Equipe equipe){
-        return (EquipeUsuario) usuario.getEquipes().stream().filter(equipeUsuario -> equipeUsuario.getEquipe().equals(equipe));
+    private EquipeUsuario usuarioPertenceEquipe(List<EquipeUsuario> equipeUsuarios, Equipe equipe){
+        for (EquipeUsuario equipeUsuario : equipeUsuarios){
+            if(equipeUsuario.getEquipe().equals(equipe)){
+                return equipeUsuario;
+            }
+        }
+        return null;
     }
 
     private boolean contemAutorizacao (Usuario usuario, String request, Equipe equipe){
-        if(usuarioPertenceEquipe(usuario,equipe) !=null) {
-            if(usuarioPertenceEquipe(usuario,equipe).getCriador()){
+        if(usuarioPertenceEquipe(usuario.getEquipes(),equipe) !=null) {
+            if(usuarioPertenceEquipe(usuario.getEquipes(),equipe).getCriador()){
                 return true;
             }
-            for (Permissao permissao : usuarioPertenceEquipe(usuario, equipe).getPermissao()) {
+            for (Permissao permissao : usuarioPertenceEquipe(usuario.getEquipes(), equipe).getPermissao()) {
                 if (permissao.getAuthority().equals(request)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private Equipe transformaBodyEmEquipe(HttpServletRequest httpRequest){
+        String requestBody = null;
+        try (BufferedReader reader = httpRequest.getReader()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            requestBody = stringBuilder.toString();
+            return objectMapper.readValue(requestBody, Equipe.class);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

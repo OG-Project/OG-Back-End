@@ -65,6 +65,11 @@ public class ProjetoController {
             return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{equipeId}")
+    public ResponseEntity<Projeto> cadastrarPelaEquipe(@RequestBody ProjetoCadastroDTO projetoCadastroDTO, Integer equipeId) throws IOException {
+        return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO), HttpStatus.CREATED);
+    }
+
     @PutMapping
     public ResponseEntity<Projeto> editar(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO){
         try {

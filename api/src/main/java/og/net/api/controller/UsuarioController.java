@@ -99,11 +99,11 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping("/add/{userId}/{equipeId}")
+    @PatchMapping("/add/{userId}/{equipeId}/{permissaoId}")
     public void adicionarAEquipe(
             @PathVariable Integer userId,
-            @PathVariable Integer equipeId) {
-        usuarioService.adicionarAEquipe(userId, equipeId);
+            @PathVariable Integer equipeId, @PathVariable Integer permissaoId) {
+        usuarioService.adicionarAEquipe(userId, equipeId, permissaoId);
     }
 
     @PatchMapping("/add/{equipeId}")
