@@ -118,6 +118,22 @@ public class UsuarioService {
         }
     }
 
+    public void adicionaCriador(Integer userId, Integer equipeId){
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Usuario user = buscarUm(userId);
+
+            EquipeUsuario equipeUsuario = new EquipeUsuario();
+            equipeUsuario.setEquipe(equipe);
+            equipeUsuario.setCriador(true);
+            user.getEquipes().add(equipeUsuario);
+            usuarioRepository.save(user);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
+    }
+
         public void atualizarFoto(Integer id, MultipartFile foto) throws IOException {
         Usuario usuario = buscarUm(id);
         usuario.setFoto(new Arquivo(foto));
