@@ -95,8 +95,7 @@ public class TarefaController {
     @PutMapping
     public ResponseEntity<Tarefa> editar(@RequestBody TarefaEdicaoDTO tarefaEdicaoDTO){
         try {
-            tarefaService.editar(tarefaEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(tarefaService.editar(tarefaEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);

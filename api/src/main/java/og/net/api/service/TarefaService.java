@@ -104,8 +104,7 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
-                tarefaRepository.save(tarefa);
-            return tarefa;
+            return  tarefaRepository.save(tarefa);
         }
         throw new DadosNaoEncontradoException();
 
