@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Component
@@ -51,7 +52,7 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
 
     private EquipeUsuario usuarioPertenceEquipe(List<EquipeUsuario> equipeUsuarios, Equipe equipe){
         for (EquipeUsuario equipeUsuario : equipeUsuarios){
-            if(equipeUsuario.getEquipe().equals(equipe)){
+            if(Objects.equals(equipeUsuario.getEquipe().getId(), equipe.getId())){
                 return equipeUsuario;
             }
         }
@@ -68,6 +69,7 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
                     return true;
                 }
             }
+
         }
         return false;
     }

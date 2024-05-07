@@ -68,6 +68,17 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/removerProjetoEquipe/{equipeId}/{projetoId}").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}").access(usuarioTemPermissaoProjeto)
+
+                // Notificação
+
+                .requestMatchers(HttpMethod.GET, "/notificacao/buscar/{recptorId}").permitAll()
+                .requestMatchers(HttpMethod.POST, "/notificacao/projeto").permitAll()
+                .requestMatchers(HttpMethod.POST, "/notificacao/equipe").permitAll()
+                .requestMatchers(HttpMethod.POST, "/notificacao/convite/equipe").permitAll()
+                .requestMatchers(HttpMethod.POST, "/notificacao/convite/projeto").permitAll()
+                .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
                 .anyRequest().authenticated());
 
 
