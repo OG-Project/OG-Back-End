@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import og.net.api.security.httpRequest.CustomHttpServletRequestWrapper;
 import og.net.api.security.utils.CookieUtil;
 import og.net.api.security.utils.JwtUtil;
 import og.net.api.service.AutenticacaoService;
@@ -44,7 +45,9 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
             context.setAuthentication(authentication);
             securityContextRepository.saveContext(context, request, response);
         }
-        filterChain.doFilter(request,response);
+            CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
+            filterChain.doFilter(wrappedRequest, response);
+
     }
 
     private boolean rotaPublica(HttpServletRequest request){

@@ -42,6 +42,7 @@ public class Usuario {
     private Arquivo foto;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private UsuarioDetailsEntity usuarioDetailsEntity;
 
     public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){

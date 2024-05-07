@@ -2,12 +2,15 @@ package og.net.api.security.acess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.entity.*;
 import og.net.api.repository.UsuarioRepository;
+import og.net.api.security.httpRequest.CustomHttpServletRequestWrapper;
 import og.net.api.security.utils.ContemAutorizacaoUtil;
 import og.net.api.service.EquipeService;
+import org.apache.catalina.connector.Request;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -74,17 +77,25 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
         return false;
     }
 
-    private Equipe transformaBodyEmEquipe(HttpServletRequest httpRequest){
-        String requestBody = null;
-        try (BufferedReader reader = httpRequest.getReader()) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
+    private Equipe transformaBodyEmEquipe(HttpServletRequest httpRequest) {
+        try {
+            HttpServletRequest wrappedRequest = new CustomHttpServletRequestWrapper(httpRequest);
+            System.out.println("teste entra");
+            try (BufferedReader reader = wrappedRequest.getReader()) {
+                System.out.println("teste entra 2");
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                String requestBody = stringBuilder.toString();
+                return objectMapper.readValue(requestBody, Equipe.class);
+            } catch (IOException e) {
+                e.printStackTrace(); // Tratar o erro de forma adequada
+                return null;
             }
-            requestBody = stringBuilder.toString();
-            return objectMapper.readValue(requestBody, Equipe.class);
         } catch (IOException e) {
+            e.printStackTrace(); // Tratar o erro de forma adequada
             return null;
         }
     }
