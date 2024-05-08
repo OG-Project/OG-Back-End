@@ -37,28 +37,22 @@ public class PropriedadeService {
         propriedadeRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto, Integer projetoId) throws ProjetoNaoEncontradoException {
+    public Propriedade cadastrar(IDTO dto, Integer projetoId) throws ProjetoNaoEncontradoException {
         PropriedadeCadastroDTO propriedadeCadastroDTO = (PropriedadeCadastroDTO) dto;
         Projeto projeto = projetoRepository.findById(projetoId).get();
         Propriedade propriedade = new Propriedade();
         modelMapper.map(propriedadeCadastroDTO, propriedade);
-        projeto.getPropriedades().add(propriedade);
-        propriedadeRepository.save(propriedade);
-        criaValorPropriedadeTarefa(projeto, propriedade);
+        Propriedade propriedade2 = propriedadeRepository.save(propriedade);
+        projeto.getPropriedades().add(propriedade2);
+        criaValorPropriedadeTarefa(projeto, propriedade2);
         projetoRepository.save(projeto);
+        return propriedade2;
 
     }
 
     public void criaValorPropriedadeTarefa(Projeto projeto, Propriedade propriedade) {
-        List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
         projeto.getTarefas().forEach(tarefa -> {
-            List<Indice> lista = List.of(
-                    new Indice(null, 0L, Visualizacao.CALENDARIO),
-                    new Indice(null, 0L, Visualizacao.LISTA),
-                    new Indice(null, 0L, Visualizacao.TIMELINE),
-                    new Indice(null, 0L, Visualizacao.KANBAN));
-
-            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false, lista);
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false);
             tarefa.getValorPropriedadeTarefas().add(valorPropriedadeTarefa);
             tarefaRepository.save(tarefa);
         });

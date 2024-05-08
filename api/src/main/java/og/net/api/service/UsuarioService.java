@@ -65,6 +65,7 @@ public class UsuarioService {
         configuracao.setIsVisualizaEquipes(true);
         configuracao.setIsVisualizaPerfil(true);
         configuracao.setIsVisualizaProjetos(true);
+        configuracao.setIsDark(false);
         usuarioCadastroDTO.setConfiguracao(configuracao);
         
         modelMapper.map(usuarioCadastroDTO, usuario);
@@ -119,6 +120,22 @@ public class UsuarioService {
             } else if (permissaoId == 2) {
                 equipeUsuario.setPermissao(List.of(Permissao.VER));
             }
+            user.getEquipes().add(equipeUsuario);
+            usuarioRepository.save(user);
+
+        } catch (EquipeNaoEncontradaException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void adicionaCriador(Integer userId, Integer equipeId){
+        try {
+            Equipe equipe = equipeService.buscarUm(equipeId);
+            Usuario user = buscarUm(userId);
+
+            EquipeUsuario equipeUsuario = new EquipeUsuario();
+            equipeUsuario.setEquipe(equipe);
+            equipeUsuario.setCriador(true);
             user.getEquipes().add(equipeUsuario);
             usuarioRepository.save(user);
 

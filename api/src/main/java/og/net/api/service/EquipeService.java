@@ -91,7 +91,6 @@ public class EquipeService {
         }
         projeto = projetoRepository.save(projeto);
         if(projeto.getProjetoEquipes().isEmpty()){
-            System.out.println("qualquer coisa");
             VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projeto);
             //Tirar o if depois de recomeçar o banco de dados
             if (visualizacaoEmLista != null) {
