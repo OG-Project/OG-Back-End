@@ -2,15 +2,12 @@ package og.net.api.security.acess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.model.entity.*;
 import og.net.api.repository.UsuarioRepository;
-import og.net.api.security.httpRequest.CustomHttpServletRequestWrapper;
-import og.net.api.security.utils.ContemAutorizacaoUtil;
+import og.net.api.security.HttpRequestConfig.CustomHttpServletRequestWrapper;
 import og.net.api.service.EquipeService;
-import org.apache.catalina.connector.Request;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
