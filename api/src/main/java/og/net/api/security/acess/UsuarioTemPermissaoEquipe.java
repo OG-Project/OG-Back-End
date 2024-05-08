@@ -52,7 +52,6 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
                return new AuthorizationDecision(usuarioDetailsEntity.getAuthorities().contains(Permissao.PATCH));
             }
         }
-
         return new AuthorizationDecision(contemAutorizacao(usuario.get().getEquipes(),request,equipe));
     }
 

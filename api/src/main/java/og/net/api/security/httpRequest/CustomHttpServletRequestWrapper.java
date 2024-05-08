@@ -26,6 +26,11 @@ public class CustomHttpServletRequestWrapper extends HttpServletRequestWrapper {
         body = stringBuilder.toString();
     }
 
+    public CustomHttpServletRequestWrapper(HttpServletRequest request,String body1) throws IOException {
+        super(request);
+        this.body = body1;
+    }
+
     @Override
     public ServletInputStream getInputStream() throws IOException {
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body.getBytes());
