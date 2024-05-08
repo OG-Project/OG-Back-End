@@ -19,8 +19,10 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Component
 @AllArgsConstructor
@@ -31,23 +33,28 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private final AutenticacaoService autenticacaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(!rotaPublica(request)) {
+        HttpServletRequest requestCopy = request;
+
+        if (!rotaPublica(request)) {
             Cookie cookie = cookieUtil.getCookie(request, "JWT");
             String token = cookie.getValue();
             String username = jwtUtil.getUsername(token);
             UserDetails user = autenticacaoService.loadUserByUsername(username);
-            Authentication authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            user, user.getPassword(), user.getAuthorities()
-                    );
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    user, user.getPassword(), user.getAuthorities()
+            );
 
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             context.setAuthentication(authentication);
             securityContextRepository.saveContext(context, request, response);
         }
-        CustomHttpServletRequestWrapper wrappedRequest = new CustomHttpServletRequestWrapper(request);
-        filterChain.doFilter(wrappedRequest, response);
 
+        if(Objects.equals(requestCopy.getRequestURI(), "/equipe") && requestCopy.getMethod().equals("PUT")){
+            CustomHttpServletRequestWrapper customHttpServletRequestWrapper = new CustomHttpServletRequestWrapper(request);
+            filterChain.doFilter(customHttpServletRequestWrapper, response);
+        }else{
+            filterChain.doFilter(requestCopy, response);
+        }
     }
 
     private boolean rotaPublica(HttpServletRequest request){

@@ -77,9 +77,7 @@ public class UsuarioDaEquipe implements AuthorizationManager<RequestAuthorizatio
     private Equipe transformaBodyEmEquipe(HttpServletRequest httpRequest) {
         try {
             HttpServletRequest wrappedRequest = new CustomHttpServletRequestWrapper(httpRequest);
-            System.out.println("teste entra");
             try (BufferedReader reader = wrappedRequest.getReader()) {
-                System.out.println("teste entra 2");
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
