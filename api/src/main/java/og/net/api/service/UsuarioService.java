@@ -8,6 +8,7 @@ import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.UsuarioDetailsEntityRepository;
 import og.net.api.repository.UsuarioProjetoRepository;
 import og.net.api.repository.UsuarioRepository;
 import org.apache.tomcat.util.file.ConfigurationSource;
@@ -23,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +34,7 @@ public class UsuarioService {
     private EquipeService equipeService;
     private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
+    private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -83,18 +86,20 @@ public class UsuarioService {
         return usuarioRepository.findByNome(nome);
     }
 
-    public List<Usuario> buscarUsuariosUsername(String username) {
+    public Optional<Usuario> buscarUsuariosUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
 
-    public List<Usuario> buscarUsuariosEmail(String email) {
+    public Optional<Usuario> buscarUsuariosEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
 
 
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
-        Usuario usuario = new Usuario();
+        Usuario usuarioBusca = usuarioRepository.findById(ucdto.getId()).get();
+        UsuarioDetailsEntity usuarioDetailsEntity = usuarioDetailsEntityRepository.findByUsuario(usuarioBusca);
+        Usuario usuario = new Usuario(usuarioDetailsEntity);
         modelMapper.map(ucdto, usuario);
         if (usuarioRepository.existsById(usuario.getId())) {
             usuarioRepository.save(usuario);
@@ -103,13 +108,18 @@ public class UsuarioService {
         throw new DadosNaoEncontradoException();
     }
 
-    public void adicionarAEquipe(Integer userId, Integer equipeId) {
+    public void adicionarAEquipe(Integer userId, Integer equipeId,Integer permissaoId) {
         try {
             Equipe equipe = equipeService.buscarUm(equipeId);
             Usuario user = buscarUm(userId);
 
             EquipeUsuario equipeUsuario = new EquipeUsuario();
             equipeUsuario.setEquipe(equipe);
+            if(permissaoId == 1){
+                equipeUsuario.setPermissao(List.of(Permissao.CRIAR, Permissao.EDITAR, Permissao.PATCH, Permissao.VER));
+            } else if (permissaoId == 2) {
+                equipeUsuario.setPermissao(List.of(Permissao.VER));
+            }
             user.getEquipes().add(equipeUsuario);
             usuarioRepository.save(user);
 
@@ -148,6 +158,7 @@ public class UsuarioService {
                 try {
                     Usuario user = buscarUm(id);
                     EquipeUsuario equipeUsuario = new EquipeUsuario();
+
                     equipeUsuario.setEquipe(equipe);
                     //setar as permissões
                     user.getEquipes().add(equipeUsuario);

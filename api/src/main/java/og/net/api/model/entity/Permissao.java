@@ -1,7 +1,19 @@
 package og.net.api.model.entity;
 
-public enum Permissao{
-    EDITAR,
-    DELETAR,
-    CRIAR,
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+@AllArgsConstructor
+public enum Permissao implements GrantedAuthority {
+    VER ("GET"),
+    EDITAR ("PUT"),
+    DELETAR ("DELETE"),
+    CRIAR ("POST"),
+
+    PATCH ("PATCH")
+    ;
+    private final String nome;
+    @Override
+    public String getAuthority() {
+        return this.nome;
+    }
 }
