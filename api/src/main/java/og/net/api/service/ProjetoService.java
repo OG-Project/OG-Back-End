@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
+import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
+import og.net.api.repository.TarefaRepository;
 import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.method.P;
@@ -29,12 +31,18 @@ public class ProjetoService {
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
+    private TarefaRepository tarefaRepository;
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
             return projetoRepository.findById(id).get();
         }
         throw new ProjetoNaoEncontradoException();
+    }
+
+    public Projeto buscarPorTarefa(Integer id) throws ProjetoNaoEncontradoException, TarefaInesxistenteException {
+            Tarefa tarefa = tarefaRepository.findById(id).get();
+            return projetoRepository.findProjetoByTarefasContaining(tarefa);
     }
 
     public List<Projeto> buscarProjetosNome(String nome) {
@@ -98,8 +106,11 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         modelMapper.map(projetoEdicaoDTO, projeto);
         if (projetoRepository.existsById(projeto.getId())) {
-            criaValorPorpiredadeTarefa(projeto);
-            projetoRepository.save(projeto);
+            System.out.println(projeto);
+
+            if(criaValorPorpiredadeTarefa(projeto)){
+                projetoRepository.save(projeto);
+            }
             return projeto;
         }
         throw new DadosNaoEncontradoException();
@@ -119,19 +130,24 @@ public class ProjetoService {
             e.printStackTrace();
         }
     }
-    public void criaValorPorpiredadeTarefa(Projeto projeto) {
+    public Boolean criaValorPorpiredadeTarefa(Projeto projeto) {
+        ArrayList<Propriedade> propriedade2 = new ArrayList<>();
         if(projeto.getPropriedades()!=null){
-            projeto.getPropriedades().forEach(propriedade -> {
+             projeto.getPropriedades().forEach(propriedade -> {
                 if (propriedade.getId() == null) {
                     PropriedadeCadastroDTO propriedadeCadastroDTO = new PropriedadeCadastroDTO(propriedade);
                     try {
-                        propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId());
+                        propriedade2.add(propriedadeService.cadastrar(propriedadeCadastroDTO, projeto.getId()));
                     } catch (ProjetoNaoEncontradoException e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
         }
+        if(propriedade2.isEmpty()){
+            return true;
+        }
+        return false;
     }
 
     public List<Projeto> buscarProjetosEquipes(Integer equipeId) throws EquipeNaoEncontradaException {

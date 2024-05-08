@@ -24,12 +24,12 @@ public class TarefaEdicaoDTO implements IDTO {
     private Boolean ativo;
     private LocalDateTime dataCriacao;
     private String cor;
-    private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
     private List<Comentario> comentarios;
     private List<SubTarefa> subTarefas;
     private List<Arquivo> arquivos;
+    private List<Indice> indice;
 
 
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {

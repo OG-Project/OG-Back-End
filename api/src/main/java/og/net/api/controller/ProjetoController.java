@@ -35,7 +35,6 @@ public class ProjetoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
     @GetMapping("/nome/{nome}")
     public ResponseEntity<Collection<Projeto>> buscarProjetoNome(@PathVariable String nome){
         try{

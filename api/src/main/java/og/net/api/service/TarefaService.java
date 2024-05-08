@@ -2,8 +2,8 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.DadosNaoEncontradoException;
+import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
-import og.net.api.exception.TarefaJaExistenteException;
 import og.net.api.model.Factory.ValorFactory;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.ProjetoEdicaoDTO;
@@ -16,16 +16,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,16 +33,12 @@ public class TarefaService {
     private ModelMapper modelMapper;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
-        if (tarefaRepository.existsById(id)){
+        if (tarefaRepository.existsById(id)) {
             return tarefaRepository.findById(id).get();
 
         }
         throw new TarefaInesxistenteException();
     }
-     public List<Tarefa> buscarTarefasPorVisualizacao(String nome){
-        return tarefaRepository.findTarefasByValorPropriedadeTarefas_indice_visualizacaoOrderByValorPropriedadeTarefas_indice_indice(nome);
-     }
-
     public List<Tarefa> buscarTarefasNome(String nome){
         return tarefaRepository.findByNome(nome);
     }
@@ -58,7 +50,9 @@ public class TarefaService {
         return tarefaRepository.findAll(pageable);
     }
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) throws ProjetoNaoEncontradoException, TarefaInesxistenteException {
+        Projeto projeto = projetoService.buscarPorTarefa(id);
+        projeto.getTarefas().remove(tarefaRepository.findById(id).get());
         tarefaRepository.deleteById(id);
     }
 
@@ -76,8 +70,9 @@ public class TarefaService {
                     new Indice(null, 0L, Visualizacao.TIMELINE),
                     new Indice(null, 0L, Visualizacao.KANBAN));
 
-            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false, lista);
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false);
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+            tarefa.setIndice(lista);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         Tarefa tarefaReturn = tarefaRepository.save(tarefa);
@@ -109,8 +104,7 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
-                tarefaRepository.save(tarefa);
-            return tarefa;
+            return  tarefaRepository.save(tarefa);
         }
         throw new DadosNaoEncontradoException();
 

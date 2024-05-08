@@ -126,4 +126,8 @@ public class UsuarioController {
         usuarioService.removerUsuarioDaEquipe( equipeId, userId);
     }
 
+    @PatchMapping("/criador/{userId}/{equipeId}")
+    public void adicionarCriador(@PathVariable Integer userId, @PathVariable Integer equipeId){
+        usuarioService.adicionaCriador(userId,equipeId);
+    }
 }

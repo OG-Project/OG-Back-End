@@ -27,4 +27,5 @@ public class UsuarioEdicaoDTO implements IDTO {
     private Configuracao configuracao;
     private Arquivo foto;
     private UsuarioDetailsEntity usuarioDetailsEntity;
+
 }
