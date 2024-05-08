@@ -95,6 +95,7 @@ public class UsuarioService {
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
         Usuario usuario = new Usuario();
+        System.out.println();
         modelMapper.map(ucdto, usuario);
         if (usuarioRepository.existsById(usuario.getId())) {
             usuarioRepository.save(usuario);
