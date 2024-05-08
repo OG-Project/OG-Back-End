@@ -22,7 +22,6 @@ public class TarefaCadastroDTO implements IDTO{
     private Boolean ativo;
     private LocalDateTime data_criacao;
     private String cor;
-    private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
     private List<SubTarefa> subTarefas;
