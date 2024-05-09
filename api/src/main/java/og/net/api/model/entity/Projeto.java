@@ -44,6 +44,7 @@ public class Projeto {
     private Integer indexLista = 1;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comentario> comentarios;
+
     public Projeto() {
         this.categoria = "meus-projetos";
         this.indexLista = +1;

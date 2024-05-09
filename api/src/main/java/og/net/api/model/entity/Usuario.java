@@ -1,10 +1,12 @@
 package og.net.api.model.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import og.net.api.model.dto.UsuarioCadastroDTO;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +14,6 @@ import java.util.List;
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "usuario")
 public class Usuario {
     @Id
@@ -31,11 +32,40 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private List<UsuarioTarefa> tarefas;
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
     @OneToOne(cascade = CascadeType.ALL)
     private Configuracao configuracao;
     @OneToOne(cascade = CascadeType.ALL)
     private Arquivo foto;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
+    private UsuarioDetailsEntity usuarioDetailsEntity;
+
+    public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
+            setUsuarioDetailsEntity(usuarioDetailsEntity);
+    }
+
+    public Usuario(){
+        setUsuarioDetailsEntityCadastro();
+    }
+
+    public void setSenha(String senha) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.senha = encoder.encode(senha);
+    }
+
+    public void setUsuarioDetailsEntityCadastro() {
+        this.usuarioDetailsEntity = UsuarioDetailsEntity
+                .builder()
+                .authorities(List.of(Permissao.CRIAR, Permissao.VER, Permissao.DELETAR, Permissao.EDITAR, Permissao.PATCH))
+                .usuario(this)
+                .build();
+
+    }
+
 }

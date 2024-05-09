@@ -64,6 +64,11 @@ public class ProjetoController {
             return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{equipeId}")
+    public ResponseEntity<Projeto> cadastrarPelaEquipe(@RequestBody ProjetoCadastroDTO projetoCadastroDTO, Integer equipeId) throws IOException {
+        return new ResponseEntity<>(projetoService.cadastrar(projetoCadastroDTO), HttpStatus.CREATED);
+    }
+
     @PutMapping
     public ResponseEntity<Projeto> editar(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO){
         try {
@@ -74,9 +79,14 @@ public class ProjetoController {
         }
     }
 
-    @PatchMapping("/add/{projetoId}/{equipeId}")
-    public void adicionarAEquipeProjeto(@PathVariable Integer projetoId, @PathVariable Integer equipeId) throws ProjetoNaoEncontradoException {
-        projetoService.adicionarAEquipeAProjeto(projetoId,equipeId);
+    @PutMapping("/{equipeId}")
+    public ResponseEntity<Projeto> editarPelaEquipe(@RequestBody ProjetoEdicaoDTO projetoEdicaoDTO, Integer equipeId){
+        try {
+            return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
+        }catch (DadosNaoEncontradoException e){
+            System.out.println(e.getMessage());
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/buscarProjetos/{equipeId}")

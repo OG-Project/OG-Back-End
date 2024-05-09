@@ -1,5 +1,8 @@
 package og.net.api.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +20,12 @@ public class UsuarioProjeto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    private Usuario responsavel;
 
-    //    @Enumerated(EnumType.ORDINAL)
-//    @JoinColumn(name = "permissao_id")
-//    private Permissao permissao;
+    private Integer idResponsavel;
+
+    @Enumerated(EnumType.ORDINAL)
+    @JoinColumn(name = "permissao_id")
+    private List<Permissao> permissao = List.of(Permissao.CRIAR,Permissao.EDITAR,Permissao.PATCH, Permissao.VER);
 
 
 
