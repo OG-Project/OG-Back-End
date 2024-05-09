@@ -24,9 +24,9 @@ public class Historico {
     private String mensagem;
     @ManyToOne
     private Usuario criador;
-    @OneToOne
+    @ManyToOne
     private Projeto projeto;
-    @OneToOne
+    @ManyToOne
     private Tarefa tarefa;
     private LocalDateTime dataDeEnvio = LocalDateTime.now();
 }
