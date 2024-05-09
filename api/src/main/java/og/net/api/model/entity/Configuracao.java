@@ -33,4 +33,5 @@ public class Configuracao {
     private Boolean isDark;
     private String ultimoPassoId;
     private Boolean isTutorial;
+//    private Boolean isTutorialAtivo;
 }
