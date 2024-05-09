@@ -104,7 +104,6 @@ public class ProjetoService {
         Projeto projeto = new Projeto();
         modelMapper.map(projetoEdicaoDTO, projeto);
         if (projetoRepository.existsById(projeto.getId())) {
-            System.out.println(projeto);
 
             if(criaValorPorpiredadeTarefa(projeto)){
                 projetoRepository.save(projeto);

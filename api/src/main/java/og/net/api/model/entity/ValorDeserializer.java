@@ -28,7 +28,6 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
         try {
              id = jsonNode.get("id").asLong();
         }catch (Exception e){
-            System.out.println(e.getMessage());
         }
 
         if(isPresent("texto")){
@@ -36,7 +35,6 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
             return new Texto(id,valorJson);
 
         }else if(isPresent("data")){
-            System.out.println("É DATA");
             LocalDateTime data = null;
             if(!jsonNode.get("data").isNull()){
                 String valorJson = jsonNode.get("data").asText();
