@@ -39,4 +39,5 @@ public class Tarefa {
     private List<Arquivo> arquivos;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Indice> indice;
+
 }
