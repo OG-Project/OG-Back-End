@@ -66,6 +66,7 @@ public class UsuarioService {
         configuracao.setIsVisualizaPerfil(true);
         configuracao.setIsVisualizaProjetos(true);
         configuracao.setIsDark(false);
+        configuracao.setIsTutorial(true);
         usuarioCadastroDTO.setConfiguracao(configuracao);
         
         modelMapper.map(usuarioCadastroDTO, usuario);
@@ -97,14 +98,9 @@ public class UsuarioService {
 
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
-<<<<<<< HEAD
-        Usuario usuario = new Usuario();
-        System.out.println();
-=======
         Usuario usuarioBusca = usuarioRepository.findById(ucdto.getId()).get();
         UsuarioDetailsEntity usuarioDetailsEntity = usuarioDetailsEntityRepository.findByUsuario(usuarioBusca);
         Usuario usuario = new Usuario(usuarioDetailsEntity);
->>>>>>> d549ccba0af71d01bf0553d8aebdabaf89a89dc9
         modelMapper.map(ucdto, usuario);
         if (usuarioRepository.existsById(usuario.getId())) {
             usuarioRepository.save(usuario);
