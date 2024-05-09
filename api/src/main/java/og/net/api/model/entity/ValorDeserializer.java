@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Formatter;
 import java.util.List;
 
 public class ValorDeserializer extends StdDeserializer<Valor> {
@@ -38,6 +40,7 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
             LocalDateTime data = null;
             if(!jsonNode.get("data").isNull()){
                 String valorJson = jsonNode.get("data").asText();
+
                 data = LocalDateTime.parse(valorJson);
             }
             return new Data(id,data);
