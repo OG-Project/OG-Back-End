@@ -33,5 +33,6 @@ public class Configuracao {
     private Boolean isDark;
     private String ultimoPassoId;
     private Boolean isTutorial;
+    private String rotaDoPasso;
 //    private Boolean isTutorialAtivo;
 }
