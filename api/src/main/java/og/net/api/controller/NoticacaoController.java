@@ -126,7 +126,6 @@ public class NoticacaoController {
     }
 
     @PutMapping
-
     public ResponseEntity<Notificacao> editar(@RequestBody NotificacaoConvite notificacaoConvite){
 
         try {

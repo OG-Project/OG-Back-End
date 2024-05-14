@@ -63,16 +63,16 @@ public class TarefaService {
         modelMapper.map(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
+        List<Indice> lista = List.of(
+                new Indice(null, 0L, Visualizacao.CALENDARIO),
+                new Indice(null, 0L, Visualizacao.LISTA),
+                new Indice(null, 0L, Visualizacao.TIMELINE),
+                new Indice(null, 0L, Visualizacao.KANBAN));
+        tarefa.setIndice(lista);
         for (Propriedade propriedade : projeto.getPropriedades()){
-            List<Indice> lista = List.of(
-                    new Indice(null, 0L, Visualizacao.CALENDARIO),
-                    new Indice(null, 0L, Visualizacao.LISTA),
-                    new Indice(null, 0L, Visualizacao.TIMELINE),
-                    new Indice(null, 0L, Visualizacao.KANBAN));
 
             ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false);
             valorPropriedadeTarefas.add(valorPropriedadeTarefa);
-            tarefa.setIndice(lista);
         }
         tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         Tarefa tarefaReturn = tarefaRepository.save(tarefa);
@@ -104,6 +104,7 @@ public class TarefaService {
         Tarefa tarefa = new Tarefa();
         modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
+            System.out.println(tarefa.getValorPropriedadeTarefas());
             return  tarefaRepository.save(tarefa);
         }
         throw new DadosNaoEncontradoException();
