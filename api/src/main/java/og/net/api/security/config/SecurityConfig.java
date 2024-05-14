@@ -75,6 +75,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/notificacao/projeto").permitAll()
                 .requestMatchers(HttpMethod.POST, "/notificacao/equipe").permitAll()
                 .requestMatchers(HttpMethod.POST, "/notificacao/convite/equipe").permitAll()
+                .requestMatchers(HttpMethod.PUT,"/notificacao").permitAll()
                 .requestMatchers(HttpMethod.POST, "/notificacao/convite/projeto").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
