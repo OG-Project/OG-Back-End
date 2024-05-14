@@ -1,6 +1,7 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
+import og.net.api.exception.DadosIncompletosException;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.UsuarioJaExistenteException;
@@ -83,7 +84,9 @@ public class UsuarioController {
         try{
             usuarioService.cadastrar(usuarioCadastroDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        }catch (Exception e){
+        } catch (DadosIncompletosException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

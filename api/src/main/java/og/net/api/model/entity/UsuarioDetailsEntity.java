@@ -20,6 +20,7 @@ public class UsuarioDetailsEntity implements UserDetails {
     private Integer id;
     @OneToOne
     @JsonIgnore
+    @ToString.Exclude
     private Usuario usuario;
     private Collection<Permissao> authorities;
 

@@ -6,7 +6,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import og.net.api.security.httpRequest.CustomHttpServletRequestWrapper;
+import og.net.api.security.HttpRequestConfig.CustomHttpServletRequestWrapper;
 import og.net.api.security.utils.CookieUtil;
 import og.net.api.security.utils.JwtUtil;
 import og.net.api.service.AutenticacaoService;
@@ -48,6 +48,7 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
             context.setAuthentication(authentication);
             securityContextRepository.saveContext(context, request, response);
         }
+
         if(Objects.equals(requestCopy.getRequestURI(), "/equipe") && requestCopy.getMethod().equals("PUT")){
             CustomHttpServletRequestWrapper customHttpServletRequestWrapper = new CustomHttpServletRequestWrapper(request);
             filterChain.doFilter(customHttpServletRequestWrapper, response);

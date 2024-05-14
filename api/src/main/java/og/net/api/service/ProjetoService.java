@@ -56,12 +56,29 @@ public class ProjetoService {
 
     public void deletar(Integer id) {
         VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
-        //Tirar o if depois de recomeçar o banco de dados
+        Projeto projeto = projetoRepository.findById(id).get();
+
+        List<Tarefa> tarefas = projeto.getTarefas();
+        projeto.getTarefas().removeAll(tarefas);
+
+        List<Propriedade> propriedades = projeto.getPropriedades();
+        projeto.getProjetoEquipes().removeAll(propriedades);
+
+        projeto.getTarefas().stream().forEach(tarefa -> {
+            tarefaRepository.deleteById(tarefa.getId());
+        });
+
+        projeto.getPropriedades().stream().forEach(propriedade -> {
+            propriedadeService.deletar(propriedade.getId());
+        });
+
         if (visualizacaoEmLista != null) {
             visualizacaoEmListaRepository.delete(visualizacaoEmLista);
         }
         projetoRepository.deleteById(id);
     }
+
+
 
     public Projeto cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;

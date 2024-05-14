@@ -13,6 +13,7 @@ public class ContemAutorizacaoUtil {
         Map<String, Boolean> allRequest = new HashMap<>();
         allRequest.put("GET", usuarioDetailsEntity.getAuthorities().contains(Permissao.VER));
         allRequest.put("PUT", usuarioDetailsEntity.getAuthorities().contains(Permissao.EDITAR));
+        allRequest.put("PATCH", usuarioDetailsEntity.getAuthorities().contains(Permissao.PATCH));
         allRequest.put("DELETE", usuarioDetailsEntity.getAuthorities().contains(Permissao.DELETAR));
 
         return allRequest.get(request);

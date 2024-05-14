@@ -48,7 +48,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) throws IOException {
+    public void cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
         Configuracao configuracao=new Configuracao();
@@ -72,7 +72,12 @@ public class UsuarioService {
         
         modelMapper.map(usuarioCadastroDTO, usuario);
         fotoPadrao(usuario);
-        usuarioRepository.save(usuario);
+        try {
+            usuarioRepository.save(usuario);
+        } catch (Exception e) {
+            throw new DadosIncompletosException();
+        }
+
     }
 
     private Usuario fotoPadrao(Usuario usuario) throws IOException {

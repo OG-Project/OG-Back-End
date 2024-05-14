@@ -43,6 +43,7 @@ public class Usuario {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private UsuarioDetailsEntity usuarioDetailsEntity;
 
     public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
