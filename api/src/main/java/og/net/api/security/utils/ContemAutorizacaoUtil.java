@@ -15,6 +15,7 @@ public class ContemAutorizacaoUtil {
         allRequest.put("PUT", usuarioDetailsEntity.getAuthorities().contains(Permissao.EDITAR));
         allRequest.put("PATCH", usuarioDetailsEntity.getAuthorities().contains(Permissao.PATCH));
         allRequest.put("DELETE", usuarioDetailsEntity.getAuthorities().contains(Permissao.DELETAR));
+
         return allRequest.get(request);
     }
 }
