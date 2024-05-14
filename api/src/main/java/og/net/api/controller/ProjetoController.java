@@ -56,7 +56,11 @@ public class ProjetoController {
 
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Integer id){
-        projetoService.deletar(id);
+        try {
+            projetoService.deletar(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping

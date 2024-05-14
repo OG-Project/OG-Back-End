@@ -37,7 +37,6 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
             permissaoId = Integer.parseInt(variables.get("permissaoId"));
         }
 
-        boolean autorizado = false;
         try {
             equipe = equipeService.buscarUm(equipeId);
         } catch (EquipeNaoEncontradaException e) {

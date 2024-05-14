@@ -113,7 +113,7 @@ public class EquipeService {
         return  equipeRepository.save(equipe);
     }
 
-    public void editar(IDTO dto) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
+    public Equipe editar(IDTO dto) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {
         //      Equipe equipe= equipeService.buscarUm(equipeEdicaoDTO.getId());
         //      //serve para não copiar atributos nulos
 //              mapper.map(equipeEdicaoDTO,equipe);
@@ -123,7 +123,7 @@ public class EquipeService {
         if (!equipeRepository.existsById(equipe.getId())){
             throw new DadosNaoEncontradoException();
         }
-        equipeRepository.save(equipe);
+        return equipeRepository.save(equipe);
     }
     public Usuario criadorDaEquipe(Integer equipeId) {
         Equipe equipe = equipeRepository.findById(equipeId).get();

@@ -24,6 +24,7 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<Propriedade> propriedades;
     private List<ProjetoEquipe> projetoEquipes;
     private List<UsuarioProjeto> responsaveis;
+    private LocalDate dataFinal;
     private String categoria = "meus-projetos";
     private Integer indexLista =1 ;
 
