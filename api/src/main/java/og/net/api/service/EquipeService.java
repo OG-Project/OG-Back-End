@@ -9,6 +9,9 @@ import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.entity.*;
+import og.net.api.model.entity.Notificacao.Notificacao;
+import og.net.api.model.entity.Notificacao.NotificacaoConvite;
+import og.net.api.model.entity.Notificacao.NotificacaoEquipe;
 import og.net.api.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ public class EquipeService {
     private ProjetoEquipeRepository projetoEquipeRepository;
     private ProjetoRepository projetoRepository;
     private UsuarioRepository usuarioRepository;
+    private NotificacaoService notificacaoService;
 
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
@@ -50,8 +54,20 @@ public class EquipeService {
         return equipeRepository.findAll();
     }
 
-    public void deletar(Integer id){
+    public void deletar(Integer id) throws EquipeNaoEncontradaException {
         Equipe equipe = equipeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada com o ID: " + id));
+
+        List<NotificacaoEquipe> lista = notificacaoService.buscarNotificaoEquipePorEquipe(equipe.getId());
+
+        List<NotificacaoConvite>lista2 = (notificacaoService.buscarNotificaoConviteParaEquipePorEquipe(equipe.getId()));
+
+        lista.forEach((notificacaoEquipe)->{
+            notificacaoService.deletar(notificacaoEquipe.getId());
+        });
+
+        lista2.forEach((notificacaoConvite)->{
+            notificacaoService.deletar(notificacaoConvite.getId());
+        });
 
         List<EquipeUsuario> equipeUsuarios = equipeUsuarioRepository.findAllByEquipe(equipe);
         for (EquipeUsuario equipeUsuario : equipeUsuarios) {
