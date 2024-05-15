@@ -45,6 +45,10 @@ public class UsuarioService {
     }
 
     public void deletar(Integer id) {
+        Usuario usuario=usuarioRepository.findById(id).get();
+        for (EquipeUsuario equipe:usuario.getEquipes()){
+
+        }
         usuarioRepository.deleteById(id);
     }
 
