@@ -26,7 +26,10 @@ public class UsuarioTemPermissaoEquipe implements AuthorizationManager<RequestAu
         Map<String, String> variables = object.getVariables();
         String request = object.getRequest().getMethod();
         Equipe equipe;
-        Integer equipeId = Integer.parseInt(variables.get("equipeId"));
+        Integer equipeId=0;
+        if(variables.get("equipeId") != null){
+             equipeId = Integer.parseInt(variables.get("equipeId"));
+        }
         Integer userId =0;
         Integer permissaoId =0;
 
