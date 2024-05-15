@@ -7,6 +7,9 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
+import og.net.api.model.entity.Notificacao.NotificacaoProjeto;
+import og.net.api.repository.NotificacaoRepositorys.NotificacaoProjetoRepository;
+import og.net.api.repository.NotificacaoRepositorys.NotificacaoRepository;
 import og.net.api.repository.ProjetoEquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.TarefaRepository;
@@ -32,6 +35,7 @@ public class ProjetoService {
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
     private TarefaRepository tarefaRepository;
+    private final NotificacaoProjetoRepository notificacaoRepository;
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
@@ -54,7 +58,7 @@ public class ProjetoService {
     }
 
 
-    public void deletar(Integer id) {
+    public void deletar(Integer id) throws Exception {
         VisualizacaoEmLista visualizacaoEmLista = visualizacaoEmListaRepository.findVisualizacaoEmListaByProjeto(projetoRepository.findById(id).get());
         Projeto projeto = projetoRepository.findById(id).get();
 
@@ -72,6 +76,13 @@ public class ProjetoService {
             propriedadeService.deletar(propriedade.getId());
         });
 
+        List<NotificacaoProjeto> notificacaoProjeto= null;
+        try {
+            notificacaoProjeto = notificacaoRepository.findNotificacaoProjetoByProjeto(projeto);
+        } catch (Exception e) {
+         e.printStackTrace();
+        }
+        notificacaoRepository.deleteAll(notificacaoProjeto);
         if (visualizacaoEmLista != null) {
             visualizacaoEmListaRepository.delete(visualizacaoEmLista);
         }
