@@ -64,7 +64,7 @@ public class EquipeController {
     }
 
     @DeleteMapping("/{equipeId}")
-    public void deletar(@PathVariable Integer equipeId){
+    public void deletar(@PathVariable Integer equipeId) throws EquipeNaoEncontradaException {
         equipeService.deletar(equipeId);
     }
 
