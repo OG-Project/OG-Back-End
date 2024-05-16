@@ -86,10 +86,8 @@ public class EquipeController {
 
     @PutMapping
     public ResponseEntity<Equipe> editar(@RequestBody EquipeEdicaoDTO equipeEdicaoDTO){
-
         try {
-            equipeService.editar(equipeEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>( equipeService.editar(equipeEdicaoDTO),HttpStatus.CREATED);
         } catch (DadosNaoEncontradoException e){
             e.getMessage();
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
