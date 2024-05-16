@@ -13,7 +13,7 @@ public class JwtUtil {
         Algorithm algorithm = Algorithm.HMAC256("senha123");
         return JWT.create().withIssuer("WEG")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(new Date().getTime() + 300000))
+                .withExpiresAt(new Date(new Date().getTime() + 300000000))
                 .withSubject(userDetails.getUsername())
                 .sign(algorithm);
     }
