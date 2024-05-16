@@ -3,6 +3,7 @@ package og.net.api.service;
 import com.sun.tools.jconsole.JConsoleContext;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
+import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Optional;
@@ -69,8 +71,9 @@ public class UsuarioService {
         configuracao.setIsTutorial(true);
 //        configuracao.setIsTutorialAtivo();
         usuarioCadastroDTO.setConfiguracao(configuracao);
-        
+
         modelMapper.map(usuarioCadastroDTO, usuario);
+        usuario.setEquipes(equipePadrao(usuario));
         fotoPadrao(usuario);
         try {
             usuarioRepository.save(usuario);
@@ -78,6 +81,23 @@ public class UsuarioService {
             throw new DadosIncompletosException();
         }
 
+    }
+
+    private List<EquipeUsuario> equipePadrao(Usuario usuario)  {
+        EquipeCadastroDTO equipeCadastroDTO = new EquipeCadastroDTO(("Equipe do "+usuario.getUsername()), "Está é sua equipe para organização pessoal",null);
+        List<EquipeUsuario> equipeUsuarios = new ArrayList<>();
+        EquipeUsuario equipeUsuario = new EquipeUsuario();
+        Equipe equipe = null;
+        try {
+            equipe = equipeService.cadastrar(equipeCadastroDTO);
+        } catch (EquipeJaExistenteException e) {
+            throw new RuntimeException(e);
+        }
+        equipeUsuario.setEquipe(equipe);
+        equipeUsuario.setCriador(true);
+        equipeUsuario.setPermissao(List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.PATCH));
+        equipeUsuarios.add(equipeUsuario);
+        return equipeUsuarios;
     }
 
     private Usuario fotoPadrao(Usuario usuario) throws IOException {
