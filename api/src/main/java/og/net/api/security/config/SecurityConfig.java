@@ -54,7 +54,7 @@ public class SecurityConfig {
                 //EQUIPE
                 .requestMatchers(HttpMethod.POST, "/equipe").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/equipe/{id}").access(usuarioDaEquipe)
-                .requestMatchers(HttpMethod.PUT, "/equipe").access(usuarioDaEquipe)
+                .requestMatchers(HttpMethod.PUT, "/equipe").hasAuthority(Permissao.EDITAR.getAuthority())
                 .requestMatchers(HttpMethod.DELETE, "/equipe/{id}").access(usuarioDaEquipe)
                 .requestMatchers(HttpMethod.PATCH, "/equipe/{id}").access(usuarioDaEquipe)
 

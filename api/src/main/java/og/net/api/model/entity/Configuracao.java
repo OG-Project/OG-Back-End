@@ -31,4 +31,8 @@ public class Configuracao {
     private Boolean isTecladoVirtual;
     private Boolean isLibras;
     private Boolean isDark;
+    private String ultimoPassoId;
+    private Boolean isTutorial;
+    private String rotaDoPasso;
+//    private Boolean isTutorialAtivo;
 }
