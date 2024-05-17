@@ -46,8 +46,7 @@ public class UsuarioCadastroDTO implements IDTO{
         this.sobrenome = sobrenome;
         this.senha = auth2User.getAttribute("email");
         this.email = auth2User.getAttribute("email");
-        this.username = primeiroNome;
-
+        this.username = email.substring(0,email.indexOf("@"));
     }
 
 }

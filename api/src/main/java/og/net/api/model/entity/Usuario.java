@@ -73,11 +73,12 @@ public class Usuario {
         String primeiroNome = auth2User.getAttribute("name");
         String sobrenome = auth2User.getAttribute("family_name");
         primeiroNome = primeiroNome.substring(0, primeiroNome.indexOf(" "));
+        String email= auth2User.getAttribute("email");
         this.nome = primeiroNome;
         this.sobrenome = sobrenome;
         this.senha = auth2User.getAttribute("email");
         this.email = auth2User.getAttribute("email");
-        this.username = primeiroNome+sobrenome;
-
+        System.out.println(email.substring(0,email.indexOf("@")));
+        this.username = email.substring(0,email.indexOf("@"));
     }
 }
