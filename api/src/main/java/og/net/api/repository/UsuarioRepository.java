@@ -4,6 +4,7 @@ import og.net.api.model.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Optional<Usuario> findByUsername(String username);
 
     Optional<Usuario> findByEmail(String email);
+
+    void deleteByEquipesEquals(Equipe equipe);
 
     Usuario findByEquipesContaining(EquipeUsuario equipeUsuario);
 

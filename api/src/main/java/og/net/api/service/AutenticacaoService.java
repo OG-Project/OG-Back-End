@@ -33,4 +33,12 @@ public class AutenticacaoService implements UserDetailsService {
             throw e;
         }
     }
+
+    public UserDetails loadUserByEmail(String email) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if (usuarioOptional.isPresent()){
+            return usuarioOptional.get().getUsuarioDetailsEntity();
+        }
+        throw new UsernameNotFoundException("Dados invalidos");
+    }
 }
