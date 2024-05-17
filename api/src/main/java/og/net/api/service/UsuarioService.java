@@ -13,6 +13,7 @@ import og.net.api.repository.UsuarioRepository;
 import og.net.api.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,7 +36,7 @@ public class UsuarioService {
     private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
     private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
-
+    private final PasswordEncoder passwordEncoder;
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
     }
@@ -86,6 +87,7 @@ public class UsuarioService {
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuario.setEquipes(equipePadrao(usuario));
         fotoPadrao(usuario);
+        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
         try {
             usuarioRepository.save(usuario);
         } catch (Exception e) {

@@ -113,5 +113,10 @@ public class ProjetoController {
     public void deletarPropriedade( @PathVariable Integer idPropriedade, @PathVariable Integer idProjeto) throws ProjetoNaoEncontradoException {
         projetoService.deletarPropriedade(idPropriedade,idProjeto);
     }
+
+    @PatchMapping("/add/{projetoId}/{equipeId}")
+    public void adicionarProjetoAEquipe(@PathVariable Integer projetoId, @PathVariable Integer equipeId) throws ProjetoNaoEncontradoException {
+        projetoService.adicionarAEquipeAProjeto(projetoId,equipeId);
+    }
 }
 

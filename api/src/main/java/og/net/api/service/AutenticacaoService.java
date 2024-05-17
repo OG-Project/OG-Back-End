@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,10 +23,15 @@ public class AutenticacaoService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
-        if (usuarioOptional.isPresent()){
+
+        try{
+            System.out.println("LoadUser");
+            System.out.println(usuarioOptional.get().getSenha());
             return usuarioOptional.get().getUsuarioDetailsEntity();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
         }
-        throw new UsernameNotFoundException("Dados invalidos");
     }
 
     public UserDetails loadUserByEmail(String email) {

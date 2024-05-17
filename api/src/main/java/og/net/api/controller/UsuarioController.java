@@ -11,6 +11,7 @@ import og.net.api.model.entity.Usuario;
 import og.net.api.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -82,7 +83,9 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
         try{
+            System.out.println("Cadastro");
             usuarioService.cadastrar(usuarioCadastroDTO);
+            System.out.println(new BCryptPasswordEncoder().encode(usuarioCadastroDTO.getSenha()));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DadosIncompletosException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
