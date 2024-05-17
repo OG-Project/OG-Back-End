@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,8 +29,11 @@ public class AutenticacaoController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(
             @RequestBody UsuarioLoginDto usuarioLogin, HttpServletRequest request, HttpServletResponse response){
-
+        System.out.println("Login");
+        System.out.println(new BCryptPasswordEncoder().encode(usuarioLogin.getPassword()));
         try {
+            System.out.println(usuarioLogin.getUsername());
+            System.out.println( usuarioLogin.getPassword());
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(usuarioLogin.getUsername(), usuarioLogin.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
@@ -38,7 +42,8 @@ public class AutenticacaoController {
             response.addCookie(cookie);
 
             return ResponseEntity.ok(cookie);
-        }catch (AuthenticationException e){
+        }catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");
         }
     }

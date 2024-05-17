@@ -18,7 +18,7 @@ public class UsuarioDetailsEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+    @OneToOne(mappedBy = "usuarioDetailsEntity")
     @JsonIgnore
     @ToString.Exclude
     private Usuario usuario;
