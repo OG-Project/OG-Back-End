@@ -7,7 +7,10 @@ import og.net.api.exception.ProjetoNaoEncontradoException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.*;
+import og.net.api.repository.EquipeRepository;
+import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.NotificacaoRepositorys.*;
+import og.net.api.repository.ProjetoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,11 @@ public class NotificacaoService {
     private NotificacaoEquipeRepository notificacaoEquipeRepository;
     private NotificacaoProjetoRepository notificacaoProjetoRepository;
     private NotificacaoTarefaRepository notificacaoTarefaRepository;
-    private EquipeService equipeService;
-    private ProjetoService projetoService;
+    private EquipeRepository equipeRepository;
+    private ProjetoRepository projetoRepository;
+
     private ModelMapper modelMapper;
+
     public Notificacao buscarUm(Integer id){
         return notificacaoRepository.findById(id).get();
     }
@@ -33,12 +38,16 @@ public class NotificacaoService {
     }
 
 
+    public List<NotificacaoEquipe> buscarNotificaoEquipePorEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
+        Equipe equipe = equipeRepository.findById(equipeId).get();
+        return notificacaoEquipeRepository.findAllByEquipe(equipe);
+    }
     public List<NotificacaoConvite> buscarNotificaoConviteParaEquipePorEquipe(Integer equipeId) throws EquipeNaoEncontradaException {
-        Equipe equipe = equipeService.buscarUm(equipeId);
+        Equipe equipe = equipeRepository.findById(equipeId).get();
         return notificacaoConviteRepository.findNotificacaoConviteByConviteParaEquipe_Equipe(equipe);
     }
     public List<NotificacaoConvite> buscarNotificaoConviteParaProjetoPorProjeto(Integer projetoId) throws ProjetoNaoEncontradoException {
-        Projeto projeto = projetoService.buscarUm(projetoId);
+        Projeto projeto = projetoRepository.findById(projetoId).get();
         return notificacaoConviteRepository.findNotificacaoConviteByConviteParaProjeto_Projeto(projeto);
     }
 

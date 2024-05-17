@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Formatter;
 import java.util.List;
 
 public class ValorDeserializer extends StdDeserializer<Valor> {
@@ -26,25 +28,29 @@ public class ValorDeserializer extends StdDeserializer<Valor> {
         try {
              id = jsonNode.get("id").asLong();
         }catch (Exception e){
-            System.out.println(e.getMessage());
         }
 
         if(isPresent("texto")){
             String valorJson= jsonNode.get("texto").asText();
             return new Texto(id,valorJson);
 
-        }else if(isPresent("data")){
+        }if(isPresent("data")){
+            LocalDateTime data = null;
+            if(!jsonNode.get("data").isNull()){
+                String valorJson = jsonNode.get("data").asText();
 
-            String valorJson = jsonNode.get("data").asText();
-            LocalDateTime data= LocalDateTime.parse(valorJson);
+                data = LocalDateTime.parse(valorJson);
+            }
             return new Data(id,data);
 
-        }else if(isPresent("numero")){
+        }if(isPresent("numero")){
             Double valorJson= jsonNode.get("numero").asDouble();
             return new Numero(id,valorJson);
+        }if(isPresent("valores")){
+            List<String> valoresJson= jsonNode.findValuesAsText("valores");
+            return new Selecao(id, valoresJson);
         }
-        List<String> valoresJson= jsonNode.findValuesAsText("valores");
-        return new Selecao(id, valoresJson);
+        return new Texto(id,null);
     }
 
     private boolean isPresent(String texto){

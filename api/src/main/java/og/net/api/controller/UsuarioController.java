@@ -1,6 +1,7 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
+import og.net.api.exception.DadosIncompletosException;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.UsuarioJaExistenteException;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -46,7 +48,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/username")
-    public ResponseEntity<Collection<Usuario>> buscarUsuariosUsername(@RequestParam String username){
+    public ResponseEntity<Optional<Usuario>> buscarUsuariosUsername(@RequestParam String username){
         try{
             return new ResponseEntity<>(usuarioService.buscarUsuariosUsername(username),HttpStatus.OK);
         }catch (NoSuchElementException e){
@@ -55,7 +57,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Collection<Usuario>> buscarUsuariosEmail(@RequestParam String email){
+    public ResponseEntity<Optional<Usuario>> buscarUsuariosEmail(@RequestParam String email){
         try{
             return new ResponseEntity<>(usuarioService.buscarUsuariosEmail(email),HttpStatus.OK);
         }catch (NoSuchElementException e){
@@ -81,13 +83,15 @@ public class UsuarioController {
     public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
         try{
             usuarioService.cadastrar(usuarioCadastroDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
-        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (DadosIncompletosException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Usuario> editar(@RequestBody UsuarioEdicaoDTO usuarioEdicaoDTO){
         try {
             usuarioService.editar(usuarioEdicaoDTO);
@@ -98,11 +102,11 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping("/add/{userId}/{equipeId}")
+    @PatchMapping("/add/{userId}/{equipeId}/{permissaoId}")
     public void adicionarAEquipe(
             @PathVariable Integer userId,
-            @PathVariable Integer equipeId) {
-        usuarioService.adicionarAEquipe(userId, equipeId);
+            @PathVariable Integer equipeId, @PathVariable Integer permissaoId) {
+        usuarioService.adicionarAEquipe(userId, equipeId, permissaoId);
     }
 
     @PatchMapping("/add/{equipeId}")
@@ -125,4 +129,8 @@ public class UsuarioController {
         usuarioService.removerUsuarioDaEquipe( equipeId, userId);
     }
 
+    @PatchMapping("/criador/{userId}/{equipeId}")
+    public void adicionarCriador(@PathVariable Integer userId, @PathVariable Integer equipeId){
+        usuarioService.adicionaCriador(userId,equipeId);
+    }
 }

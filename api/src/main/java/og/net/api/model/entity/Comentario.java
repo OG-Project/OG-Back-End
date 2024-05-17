@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Comentario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,5 +17,10 @@ public class Comentario {
     private String conteudo;
     @ManyToOne
     private Usuario autor;
+    private LocalDateTime data;
+
+    public Comentario(){
+        this.data = LocalDateTime.now();
+    }
 
 }
