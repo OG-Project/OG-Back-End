@@ -57,10 +57,6 @@ public class Usuario {
         setUsuarioDetailsEntityCadastro();
     }
 
-    public void setSenha(String senha) {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        this.senha = encoder.encode(senha);
-    }
 
     public void setUsuarioDetailsEntityCadastro() {
         this.usuarioDetailsEntity = UsuarioDetailsEntity
