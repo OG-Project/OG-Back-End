@@ -7,6 +7,7 @@ import lombok.Data;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Date;
 import java.util.List;
@@ -68,4 +69,15 @@ public class Usuario {
 
     }
 
+    public Usuario(OAuth2User auth2User) {
+        String primeiroNome = auth2User.getAttribute("name");
+        String sobrenome = auth2User.getAttribute("family_name");
+        primeiroNome = primeiroNome.substring(0, primeiroNome.indexOf(" "));
+        this.nome = primeiroNome;
+        this.sobrenome = sobrenome;
+        this.senha = auth2User.getAttribute("email");
+        this.email = auth2User.getAttribute("email");
+        this.username = primeiroNome+sobrenome;
+
+    }
 }

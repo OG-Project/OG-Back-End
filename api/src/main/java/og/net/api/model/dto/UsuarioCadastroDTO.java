@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import og.net.api.model.entity.*;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,6 +36,18 @@ public class UsuarioCadastroDTO implements IDTO{
         a.setNome(foto.getOriginalFilename());
         a.setTipo(foto.getContentType());
         this.foto = a;
+    }
+
+    public UsuarioCadastroDTO(OAuth2User auth2User) {
+        String primeiroNome = auth2User.getAttribute("name");
+        String sobrenome = auth2User.getAttribute("family_name");
+        primeiroNome = primeiroNome.substring(0, primeiroNome.indexOf(" "));
+        this.nome = primeiroNome;
+        this.sobrenome = sobrenome;
+        this.senha = auth2User.getAttribute("email");
+        this.email = auth2User.getAttribute("email");
+        this.username = primeiroNome;
+
     }
 
 }

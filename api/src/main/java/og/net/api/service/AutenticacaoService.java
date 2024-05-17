@@ -27,4 +27,12 @@ public class AutenticacaoService implements UserDetailsService {
         }
         throw new UsernameNotFoundException("Dados invalidos");
     }
+
+    public UserDetails loadUserByEmail(String email) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(email);
+        if (usuarioOptional.isPresent()){
+            return usuarioOptional.get().getUsuarioDetailsEntity();
+        }
+        throw new UsernameNotFoundException("Dados invalidos");
+    }
 }
