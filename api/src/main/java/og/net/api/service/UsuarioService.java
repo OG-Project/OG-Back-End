@@ -1,6 +1,5 @@
 package og.net.api.service;
 
-import com.sun.tools.jconsole.JConsoleContext;
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
 import og.net.api.model.dto.EquipeCadastroDTO;
@@ -8,20 +7,18 @@ import og.net.api.model.dto.IDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.entity.*;
+import og.net.api.repository.EquipeUsuarioRepository;
+import og.net.api.repository.UsuarioDetailsEntityRepository;
+import og.net.api.repository.UsuarioRepository;
 import og.net.api.repository.*;
-import org.apache.tomcat.util.file.ConfigurationSource;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
+
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +61,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public void cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
+    public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
         Configuracao configuracao=new Configuracao();
@@ -95,6 +92,7 @@ public class UsuarioService {
             throw new DadosIncompletosException();
         }
 
+        return usuario;
     }
 
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {

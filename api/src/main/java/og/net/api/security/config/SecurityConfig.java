@@ -1,6 +1,7 @@
 package og.net.api.security.config;
 
 import lombok.AllArgsConstructor;
+import og.net.api.controller.AutenticacaoController;
 import og.net.api.model.entity.Permissao;
 import og.net.api.security.acess.IsUser;
 import og.net.api.security.acess.UsuarioDaEquipe;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private  final CorsConfigurationSource corsConfigurationSource;
     private final UsuarioTemPermissaoEquipe usuarioTemPermissaoEquipe;
     private final UsuarioTemPermissaoProjeto usuarioTemPermissaoProjeto;
+    private final AutenticacaoController autenticacaoController;
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
@@ -80,7 +82,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
-                .anyRequest().authenticated());
+                .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
 
 
 
