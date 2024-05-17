@@ -64,10 +64,9 @@ public class UsuarioService {
     public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
-<<<<<<< HEAD
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
-=======
+
         Configuracao configuracao=new Configuracao();
         configuracao.setFonteCorpo("Poppins");
         configuracao.setFonteTitulo("Source Sans 3");
@@ -97,7 +96,7 @@ public class UsuarioService {
         }
 
         return usuario;
->>>>>>> 20bf8abd6522b7f375c3d393459deb07a0f38c56
+
     }
 
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {

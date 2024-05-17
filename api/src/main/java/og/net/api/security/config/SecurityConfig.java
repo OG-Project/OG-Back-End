@@ -82,11 +82,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
+                // Historico
+                .requestMatchers(HttpMethod.POST,"/historico").permitAll()
+                .requestMatchers(HttpMethod.GET, "/historico/tarefa/{tarefaId}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/historico/projeto/{projetoId}").permitAll()
                 .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
-
-
-
-
 
         http.securityContext((context)-> context.securityContextRepository(securityContextRepository));
         http.formLogin(AbstractHttpConfigurer::disable);

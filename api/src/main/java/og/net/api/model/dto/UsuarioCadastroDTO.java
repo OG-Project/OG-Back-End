@@ -3,15 +3,13 @@ package og.net.api.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-<<<<<<< HEAD
 import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.UsuarioProjeto;
 import og.net.api.model.entity.UsuarioTarefa;
-=======
+
 import og.net.api.model.entity.*;
 import org.springframework.security.oauth2.core.user.OAuth2User;
->>>>>>> 20bf8abd6522b7f375c3d393459deb07a0f38c56
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,11 +32,8 @@ public class UsuarioCadastroDTO implements IDTO{
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
     private Arquivo foto;
-<<<<<<< HEAD
-=======
     private Configuracao configuracao;
     private UsuarioDetailsEntity usuarioDetailsEntity;
->>>>>>> 20bf8abd6522b7f375c3d393459deb07a0f38c56
 
     public void setFoto(MultipartFile foto) throws IOException {
         Arquivo a = new Arquivo();
