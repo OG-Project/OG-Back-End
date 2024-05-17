@@ -10,6 +10,7 @@ import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioDetailsEntityRepository;
 import og.net.api.repository.UsuarioRepository;
+import og.net.api.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class UsuarioService {
 
     private UsuarioRepository usuarioRepository;
     private EquipeService equipeService;
+    private UsuarioProjetoRepository usuarioProjetoRepository;
+    private UsuarioAceitoRepository usuarioAceitoRepository;
+    private ComentarioRepository  comentarioRepository;
+    private UsuarioTarefaRepository usuarioTarefaRepository;
     private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
     private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
@@ -40,6 +45,19 @@ public class UsuarioService {
     }
 
     public void deletar(Integer id) {
+        Usuario usuario=usuarioRepository.findById(id).get();
+        System.out.println(usuario);
+        comentarioRepository.deleteAllByAutor_Id(usuario.getId());
+        usuarioAceitoRepository.deleteAllByUsuario_Id(id);
+
+        usuarioProjetoRepository.deleteByIdResponsavel(id);
+        for (UsuarioTarefa tarefa: usuario.getTarefas()){
+            usuarioTarefaRepository.deleteByTarefa_Id(tarefa.getTarefa().getId());
+        }
+
+        for (EquipeUsuario equipe:usuario.getEquipes()){
+            equipeUsuarioRepository.deleteByEquipe(equipe.getEquipe());
+        }
         usuarioRepository.deleteById(id);
     }
 

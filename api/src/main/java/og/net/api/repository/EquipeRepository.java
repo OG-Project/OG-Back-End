@@ -11,4 +11,5 @@ import java.util.List;
 public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
 
     List<Equipe> findByNome(String nome_equipe);
+
 }
