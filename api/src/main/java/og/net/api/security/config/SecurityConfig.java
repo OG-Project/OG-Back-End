@@ -82,6 +82,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
+
+
+                // Mensagem
+
+                .requestMatchers(HttpMethod.DELETE, "/mensagem").hasAuthority(Permissao.DELETAR.getAuthority())
+                .requestMatchers(HttpMethod.POST, "/mensagem").hasAuthority(Permissao.CRIAR.getAuthority())
+                .requestMatchers(HttpMethod.GET, "/mensagem/{id}").hasAuthority(Permissao.VER.getAuthority())
+
+
                 .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
 
 

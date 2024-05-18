@@ -23,7 +23,7 @@ public class WebSocketControllerUsuario extends AbstractWebSocketHandler {
 //        int equipeIdDaSessao = obterIdEquipeDaSessao(session);
 //        int equipeIdDaMensagem = obterIdEquipeDaMensagem(message);
 //        if (equipeIdDaSessao == equipeIdDaMensagem) {
-        session.sendMessage(message);
+            session.sendMessage(message);
 //        }
     }
 
