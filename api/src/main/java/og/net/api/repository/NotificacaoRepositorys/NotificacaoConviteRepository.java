@@ -16,4 +16,6 @@ public interface NotificacaoConviteRepository  extends JpaRepository<Notificacao
 
     List<NotificacaoConvite> findNotificacaoConviteByConviteParaProjeto_Projeto(Projeto projeto);
 
+
+
 }
