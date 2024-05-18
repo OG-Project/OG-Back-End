@@ -83,9 +83,7 @@ public class UsuarioController {
     @PostMapping
     public ResponseEntity<Usuario> cadastrar(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
         try{
-            System.out.println("Cadastro");
             usuarioService.cadastrar(usuarioCadastroDTO);
-            System.out.println(new BCryptPasswordEncoder().encode(usuarioCadastroDTO.getSenha()));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DadosIncompletosException e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
