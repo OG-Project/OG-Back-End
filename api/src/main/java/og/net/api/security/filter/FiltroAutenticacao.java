@@ -33,7 +33,6 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private final AutenticacaoService autenticacaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest requestCopy = request;
 
         if (!rotaPublica(request)) {
             Cookie cookie = cookieUtil.getCookie(request, "JWT");
@@ -49,17 +48,20 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
             securityContextRepository.saveContext(context, request, response);
         }
 
-        if(Objects.equals(requestCopy.getRequestURI(), "/equipe") && requestCopy.getMethod().equals("PUT")){
+        if(Objects.equals(request.getRequestURI(), "/equipe") && request.getMethod().equals("PUT")){
             CustomHttpServletRequestWrapper customHttpServletRequestWrapper = new CustomHttpServletRequestWrapper(request);
             filterChain.doFilter(customHttpServletRequestWrapper, response);
         }else{
-            filterChain.doFilter(requestCopy, response);
+            filterChain.doFilter(request, response);
         }
     }
 
     private boolean rotaPublica(HttpServletRequest request){
-        return ((request.getRequestURI().equals("/login") &&
-                request.getMethod().equals("POST") || (request.getRequestURI().equals("/usuario") &&
-                request.getMethod().equals("POST"))|| (request.getRequestURI().equals("/"))));
+        System.out.println(request.getRequestURI());
+        return ((request.getRequestURI().equals("/login") && request.getMethod().equals("POST")) ||
+                (request.getRequestURI().equals("/usuario") && request.getMethod().equals("POST")) ||
+                (request.getRequestURI().equals("/")) ||
+                (request.getMethod().equals("PATCH")) && request.getRequestURI().equals("/tarefa/arquivos/{id}"));
     };
+
 }

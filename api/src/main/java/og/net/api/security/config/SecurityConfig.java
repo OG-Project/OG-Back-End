@@ -82,6 +82,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteEquipe/{equipeId}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
+
+                .requestMatchers(HttpMethod.PATCH, "/tarefa/arquivos/{id}").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/tarefa/arquivos/{id}").permitAll()
+
+
                 .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
 
 
