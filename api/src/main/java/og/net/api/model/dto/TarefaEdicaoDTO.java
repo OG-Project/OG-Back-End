@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,9 @@ public class TarefaEdicaoDTO implements IDTO {
     private List<SubTarefa> subTarefas;
     private List<Arquivo> arquivos;
     private List<Indice> indice;
+    private List<UsuarioTarefa> responsaveis;
+    private LocalTime tempoAtuacao;
+
 
 
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {

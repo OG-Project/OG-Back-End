@@ -7,19 +7,18 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioTarefa {
-
+@Data
+@Entity
+public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Tarefa tarefa;
-
-    @ManyToOne
-    private Usuario responsavel;
+    @OneToMany
+    private List<Mensagem> mensagens;
+    @OneToOne
+    private Equipe equipe;
+    @ManyToMany
+    private List<Usuario> usuarios;
 }

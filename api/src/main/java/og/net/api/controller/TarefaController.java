@@ -110,8 +110,9 @@ public class TarefaController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/{id}")
+    @PatchMapping("/arquivos/{id}")
     public void cadastrarFoto(@RequestParam MultipartFile arquivo, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        System.out.println("Entrou");
         tarefaService.atualizarFoto(id,arquivo);
     }
 

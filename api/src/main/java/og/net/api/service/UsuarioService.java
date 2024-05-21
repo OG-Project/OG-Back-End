@@ -52,9 +52,6 @@ public class UsuarioService {
         usuarioAceitoRepository.deleteAllByUsuario_Id(id);
 
         usuarioProjetoRepository.deleteByIdResponsavel(id);
-        for (UsuarioTarefa tarefa: usuario.getTarefas()){
-            usuarioTarefaRepository.deleteByTarefa_Id(tarefa.getTarefa().getId());
-        }
 
         for (EquipeUsuario equipe:usuario.getEquipes()){
             equipeUsuarioRepository.deleteByEquipe(equipe.getEquipe());

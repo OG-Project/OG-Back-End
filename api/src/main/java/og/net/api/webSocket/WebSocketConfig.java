@@ -15,5 +15,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(new WebSocketControllerProjeto(), "/og/webSocket/projeto/{id}").setAllowedOrigins("*");
         registry.addHandler(new WebSocketControllerNotificacao(), "/og/webSocket/convite/{id}").setAllowedOrigins("*");
         registry.addHandler(new WebSocketControllerNotificacao(), "/og/webSocket/notificacao/{id}").setAllowedOrigins("*");
+        registry.addHandler(new WebSocketControllerChat(), "/og/webSocket/chat/{id}").setAllowedOrigins("*");
     }
 }
