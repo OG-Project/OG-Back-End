@@ -22,7 +22,4 @@ public class ValorPropriedadeTarefa {
     @OneToOne(cascade = CascadeType.ALL)
     private Valor valor;
     private Boolean visivel;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Indice> indice;
-
 }

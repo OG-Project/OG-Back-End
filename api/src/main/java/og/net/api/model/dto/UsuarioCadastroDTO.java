@@ -7,6 +7,9 @@ import og.net.api.model.entity.Arquivo;
 import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.UsuarioProjeto;
 import og.net.api.model.entity.UsuarioTarefa;
+
+import og.net.api.model.entity.*;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,6 +32,8 @@ public class UsuarioCadastroDTO implements IDTO{
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
     private Arquivo foto;
+    private Configuracao configuracao;
+    private UsuarioDetailsEntity usuarioDetailsEntity;
 
     public void setFoto(MultipartFile foto) throws IOException {
         Arquivo a = new Arquivo();
@@ -36,6 +41,17 @@ public class UsuarioCadastroDTO implements IDTO{
         a.setNome(foto.getOriginalFilename());
         a.setTipo(foto.getContentType());
         this.foto = a;
+    }
+
+    public UsuarioCadastroDTO(OAuth2User auth2User) {
+        String primeiroNome = auth2User.getAttribute("name");
+        String sobrenome = auth2User.getAttribute("family_name");
+        primeiroNome = primeiroNome.substring(0, primeiroNome.indexOf(" "));
+        this.nome = primeiroNome;
+        this.sobrenome = sobrenome;
+        this.senha = auth2User.getAttribute("email");
+        this.email = auth2User.getAttribute("email");
+        this.username = email.substring(0,email.indexOf("@"));
     }
 
 }

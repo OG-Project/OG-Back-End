@@ -7,6 +7,10 @@ import og.net.api.model.entity.EquipeUsuario;
 import og.net.api.model.entity.UsuarioProjeto;
 import og.net.api.model.entity.UsuarioTarefa;
 
+import og.net.api.model.entity.*;
+import og.net.api.model.entity.*;
+
+
 import java.util.Date;
 import java.util.List;
 
@@ -26,4 +30,9 @@ public class UsuarioEdicaoDTO implements IDTO {
     private List<UsuarioTarefa> tarefas;
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
+    private Configuracao configuracao;
+    private Arquivo foto;
+    private UsuarioDetailsEntity usuarioDetailsEntity;
+
+
 }

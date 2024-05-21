@@ -15,4 +15,5 @@ import lombok.NoArgsConstructor;
 public class ConviteParaProjeto extends Convite{
     @ManyToOne
     private Projeto projeto;
+    private Integer idEquipe;
 }

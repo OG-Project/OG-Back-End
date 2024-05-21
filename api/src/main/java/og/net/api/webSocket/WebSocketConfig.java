@@ -1,6 +1,5 @@
-package og.net.api.webScoket;
+package og.net.api.webSocket;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
 
@@ -16,5 +15,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
         registry.addHandler(new WebSocketControllerProjeto(), "/og/webSocket/projeto/{id}").setAllowedOrigins("*");
         registry.addHandler(new WebSocketControllerNotificacao(), "/og/webSocket/convite/{id}").setAllowedOrigins("*");
         registry.addHandler(new WebSocketControllerNotificacao(), "/og/webSocket/notificacao/{id}").setAllowedOrigins("*");
+        registry.addHandler(new WebSocketControllerChat(), "/og/webSocket/chat/{id}").setAllowedOrigins("*");
     }
 }

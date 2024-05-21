@@ -15,4 +15,6 @@ public interface ProjetoRepository extends JpaRepository<Projeto, Integer> {
 
    Projeto findByProjetoEquipesContaining(ProjetoEquipe projetoEquipe);
 
+   Projeto findProjetoByTarefasContaining(Tarefa tarefa);
+
 }

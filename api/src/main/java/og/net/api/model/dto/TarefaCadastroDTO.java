@@ -22,10 +22,10 @@ public class TarefaCadastroDTO implements IDTO{
     private Boolean ativo;
     private LocalDateTime data_criacao;
     private String cor;
-    private Integer indice;
     private List<ValorPropriedadeTarefa> valorPropriedadeTarefas;
     private Status status;
     private List<SubTarefa> subTarefas;
+    private List<UsuarioTarefa> responsaveis;
 
     public LocalDateTime getData_criacao() {
         return data_criacao = LocalDateTime.now();

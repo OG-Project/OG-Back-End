@@ -12,5 +12,6 @@ import java.util.List;
 @Repository
 public interface UsuarioProjetoRepository extends JpaRepository<UsuarioProjeto,Integer> {
 
+    void deleteByIdResponsavel(Integer id);
 
 }

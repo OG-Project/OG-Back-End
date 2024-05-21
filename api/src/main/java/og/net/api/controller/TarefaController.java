@@ -7,6 +7,7 @@ import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.Comentario;
 import og.net.api.model.entity.Tarefa;
 import og.net.api.model.entity.ValorPropriedadeTarefa;
+import og.net.api.service.ProjetoService;
 import og.net.api.service.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -55,18 +56,6 @@ public class TarefaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @GetMapping("/visualizacao")
-    public ResponseEntity<Collection<Tarefa>> buscarTarefasPorVisualizacao(@RequestParam String visualizacao){
-        try{
-            List<Tarefa> tarefas = tarefaService.buscarTarefasPorVisualizacao(visualizacao);
-            for(Tarefa tarefa:tarefas){
-                atualizarComentario(tarefa);
-            }
-            return new ResponseEntity<>(tarefas,HttpStatus.OK);
-        }catch (NoSuchElementException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
 
     @GetMapping
@@ -87,7 +76,8 @@ public class TarefaController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Integer id){
+    public void deletar(@PathVariable Integer id) throws ProjetoNaoEncontradoException, TarefaInesxistenteException {
+
         tarefaService.deletar(id);
     }
 
@@ -104,8 +94,7 @@ public class TarefaController {
     @PutMapping
     public ResponseEntity<Tarefa> editar(@RequestBody TarefaEdicaoDTO tarefaEdicaoDTO){
         try {
-            tarefaService.editar(tarefaEdicaoDTO);
-            return new ResponseEntity<>( HttpStatus.CREATED);
+            return new ResponseEntity<>(tarefaService.editar(tarefaEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
             System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -121,8 +110,9 @@ public class TarefaController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PatchMapping("/{id}")
+    @PatchMapping("/arquivos/{id}")
     public void cadastrarFoto(@RequestParam MultipartFile arquivo, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
+        System.out.println("Entrou");
         tarefaService.atualizarFoto(id,arquivo);
     }
 

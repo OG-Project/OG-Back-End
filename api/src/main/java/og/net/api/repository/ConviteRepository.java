@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConviteRepository extends JpaRepository<Convite,Integer> {
+
+
+
 }
