@@ -21,10 +21,6 @@ public class UsuarioTarefa {
     private Tarefa tarefa;
 
     @ManyToOne
-    @JoinColumn(name = "responsavel_id")
     private Usuario responsavel;
 
-    @Enumerated(EnumType.ORDINAL)
-    @JoinColumn(name = "permissao_id")
-    private List<Permissao> permissao;
 }
