@@ -86,7 +86,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/tarefa/arquivos/{id}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/tarefa/arquivos/{id}").permitAll()
 
-
+                .requestMatchers(HttpMethod.DELETE, "/mensagem").hasAuthority(Permissao.DELETAR.getAuthority())
+                .requestMatchers(HttpMethod.POST, "/mensagem").hasAuthority(Permissao.CRIAR.getAuthority())
+                .requestMatchers(HttpMethod.GET, "/mensagem/{id}").hasAuthority(Permissao.VER.getAuthority())
                 .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
 
 
