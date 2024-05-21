@@ -22,5 +22,4 @@ public class UsuarioTarefa {
 
     @ManyToOne
     private Usuario responsavel;
-
 }

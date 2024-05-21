@@ -28,7 +28,6 @@ public class MensagemService {
         try {
             chat = chatService.buscarUmChat(idChat);
             usuarioService.buscarUm(mensagem.getCriador().getId());
-            mensagem.getReceptor().forEach(usuario -> usuarioService.buscarUm(usuario.getId()));
         }catch (Exception e){
             e.printStackTrace();
         }

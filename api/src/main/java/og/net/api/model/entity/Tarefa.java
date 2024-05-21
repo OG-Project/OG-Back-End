@@ -43,5 +43,4 @@ public class Tarefa {
     @OneToMany(cascade = CascadeType.ALL)
     private List<UsuarioTarefa> responsaveis;
     private LocalTime tempoAtuacao;
-
 }

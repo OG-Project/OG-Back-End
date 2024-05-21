@@ -19,6 +19,6 @@ public class Chat {
     private List<Mensagem> mensagens;
     @OneToOne
     private Equipe equipe;
-    @OneToMany
+    @ManyToMany
     private List<Usuario> usuarios;
 }

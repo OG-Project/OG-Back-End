@@ -5,6 +5,7 @@ import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeJaExistenteException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.ProjetoNaoEncontradoException;
+import og.net.api.model.dto.ChatEquipeDTO;
 import og.net.api.model.dto.EquipeCadastroDTO;
 import og.net.api.model.dto.EquipeEdicaoDTO;
 import og.net.api.model.dto.IDTO;
@@ -30,6 +31,7 @@ public class EquipeService {
     private ProjetoRepository projetoRepository;
     private UsuarioRepository usuarioRepository;
     private NotificacaoService notificacaoService;
+    private ChatService chatService;
 
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
@@ -126,7 +128,9 @@ public class EquipeService {
         EquipeCadastroDTO equipeCadastroDTO = (EquipeCadastroDTO) dto;
         Equipe equipe = new Equipe();
         modelMapper.map(equipeCadastroDTO,equipe);
-        return  equipeRepository.save(equipe);
+        Equipe equipe1 = equipeRepository.save(equipe);
+        chatService.criaChatEquipe(new ChatEquipeDTO(equipe1));
+        return equipe1;
     }
 
     public Equipe editar(IDTO dto) throws DadosNaoEncontradoException, EquipeNaoEncontradaException {

@@ -35,6 +35,7 @@ public class TarefaEdicaoDTO implements IDTO {
     private LocalTime tempoAtuacao;
 
 
+
     public void setArquivos(List<MultipartFile> listaDeArquivosRecebidos) throws IOException {
         List<Arquivo> listaDeArquivosTemporaria = new ArrayList<Arquivo>();
         listaDeArquivosTemporaria.stream().forEach(arquivoTemporario-> listaDeArquivosRecebidos.stream().forEach(arquivoRecebido -> {

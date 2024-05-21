@@ -43,7 +43,6 @@ public class AutenticacaoController {
     public ResponseEntity<?> authenticate(
             @RequestBody UsuarioLoginDto usuarioLogin, HttpServletRequest request, HttpServletResponse response){
         try {
-
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(usuarioLogin.getUsername(), usuarioLogin.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
