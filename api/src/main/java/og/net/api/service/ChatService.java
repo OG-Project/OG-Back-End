@@ -6,8 +6,11 @@ import og.net.api.model.dto.ChatEquipeDTO;
 import og.net.api.model.dto.ChatPessoalDTO;
 import og.net.api.model.entity.Chat;
 import og.net.api.model.entity.Mensagem;
+import og.net.api.model.entity.Usuario;
 import og.net.api.repository.ChatRepository;
+import og.net.api.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ChatService {
     private final ChatRepository chatRepository;
     private ModelMapper modelMapper;
+    private UsuarioRepository usuarioRepository;
     public Chat criaChatEquipe(ChatEquipeDTO chatEquipeDTO){
         Chat chat = new Chat();
         modelMapper.map(chatEquipeDTO,chat);
@@ -27,6 +31,10 @@ public class ChatService {
         Chat chat = new Chat();
         modelMapper.map(chatPessoalDTO,chat);
         return chatRepository.save(chat);
+    }
+
+    public List<Chat> buscarTodos(){
+        return chatRepository.findAll();
     }
 
     public Chat buscarChatEquipe(Integer id){
@@ -57,5 +65,27 @@ public class ChatService {
         }catch (Exception e){
             throw new ChatNaoEncontradoException();
         }
+    }
+
+    public Chat buscarChatPessoal(Integer id, Integer idUsuarioLogado) throws ChatNaoEncontradoException {
+        Usuario usuario = usuarioRepository.findById(id).get();
+        Usuario usuarioLogado = usuarioRepository.findById(idUsuarioLogado).get();
+        Boolean primeiroUsuario = false;
+        Boolean segundoUsuario = false;
+
+        for (Chat chat: buscarTodos()){
+            for (Usuario usuario1:chat.getUsuarios()){
+                if(usuario1.equals(usuario)){
+                    primeiroUsuario = true;
+                }
+                if(usuario1.equals(usuarioLogado)){
+                    segundoUsuario = true;
+                }
+            }
+            if (primeiroUsuario && segundoUsuario) {
+                return chat;
+            }
+        }
+        throw new ChatNaoEncontradoException();
     }
 }
