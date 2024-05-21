@@ -1,8 +1,10 @@
 package og.net.api.controller;
 
 import lombok.AllArgsConstructor;
+import og.net.api.exception.ChatNaoEncontradoException;
 import og.net.api.model.dto.ChatEquipeDTO;
 import og.net.api.model.dto.ChatPessoalDTO;
+import og.net.api.model.entity.Chat;
 import og.net.api.model.entity.Mensagem;
 import og.net.api.service.ChatService;
 import og.net.api.service.MensagemService;
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -27,6 +31,11 @@ public class ChatController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<Chat>> buscarTodos(){
+        return new ResponseEntity<>(chatService.buscarTodos(),HttpStatus.OK);
+    }
+
     @GetMapping("/mensagens/{id}")
     public ResponseEntity<?> buscarMensagensChat(@PathVariable Integer id){
         try {
@@ -42,6 +51,23 @@ public class ChatController {
             return new ResponseEntity<>(chatService.criaChatPessoal(chatPessoalDTO), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/equipe/{id}")
+    public ResponseEntity<?> buscarChatEquipe(@PathVariable Integer id){
+        try {
+            return new ResponseEntity<>(chatService.buscarChatEquipe(id), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e,HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/pessoal/{idUsuarioLogado}/{id}")
+    public ResponseEntity<Chat> buscarChatPessoal(@PathVariable Integer id, @PathVariable Integer idUsuarioLogado) throws ChatNaoEncontradoException {
+        try {
+            return new ResponseEntity<>(chatService.buscarChatPessoal(id,idUsuarioLogado), HttpStatus.OK);
+        }catch (Exception e){
+            throw new ChatNaoEncontradoException();
         }
     }
 

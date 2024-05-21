@@ -42,11 +42,7 @@ public class AutenticacaoController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(
             @RequestBody UsuarioLoginDto usuarioLogin, HttpServletRequest request, HttpServletResponse response){
-        System.out.println("Login");
-        System.out.println(new BCryptPasswordEncoder().encode(usuarioLogin.getPassword()));
         try {
-            System.out.println(usuarioLogin.getUsername());
-            System.out.println( usuarioLogin.getPassword());
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(usuarioLogin.getUsername(), usuarioLogin.getPassword());
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
