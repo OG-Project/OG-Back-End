@@ -25,6 +25,7 @@ public class AutenticacaoService implements UserDetailsService {
         Optional<Usuario> usuarioOptional = usuarioRepository.findByUsername(username);
 
         try{
+
             return usuarioOptional.get().getUsuarioDetailsEntity();
         }catch (Exception e){
             e.printStackTrace();
