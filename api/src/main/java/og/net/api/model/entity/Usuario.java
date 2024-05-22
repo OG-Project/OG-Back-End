@@ -34,8 +34,10 @@ public class Usuario {
     @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Configuracao configuracao;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Arquivo foto;
 

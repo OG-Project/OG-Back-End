@@ -83,17 +83,19 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/notificacao/conviteProjeto/{projetoId}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/notificacao/buscar/{recptorId}").permitAll()
 
+                // Historico
+                .requestMatchers(HttpMethod.POST,"/historico").permitAll()
+                .requestMatchers(HttpMethod.GET, "/historico/tarefa/{tarefaId}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/historico/projeto/{projetoId}").permitAll()
+
                 .requestMatchers(HttpMethod.PATCH, "/tarefa/arquivos/{id}").permitAll()
                 .requestMatchers(HttpMethod.DELETE, "/tarefa/arquivos/{id}").permitAll()
 
                 .requestMatchers(HttpMethod.DELETE, "/mensagem").hasAuthority(Permissao.DELETAR.getAuthority())
                 .requestMatchers(HttpMethod.POST, "/mensagem").hasAuthority(Permissao.CRIAR.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/mensagem/{id}").hasAuthority(Permissao.VER.getAuthority())
+
                 .anyRequest().authenticated()).oauth2Login(httpAuth2 -> httpAuth2.successHandler(autenticacaoController::loginComGoogle));
-
-
-
-
 
         http.securityContext((context)-> context.securityContextRepository(securityContextRepository));
         http.formLogin(AbstractHttpConfigurer::disable);

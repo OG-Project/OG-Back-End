@@ -3,6 +3,11 @@ package og.net.api.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import og.net.api.model.entity.Arquivo;
+import og.net.api.model.entity.EquipeUsuario;
+import og.net.api.model.entity.UsuarioProjeto;
+import og.net.api.model.entity.UsuarioTarefa;
+
 import og.net.api.model.entity.*;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.multipart.MultipartFile;
