@@ -25,6 +25,7 @@ public class UsuarioEdicaoDTO implements IDTO {
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
     private Configuracao configuracao;
+    private Boolean isGoogleLogado;
     private Arquivo foto;
     private UsuarioDetailsEntity usuarioDetailsEntity;
 

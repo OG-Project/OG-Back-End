@@ -31,7 +31,7 @@ public class Usuario {
     private String empresa;
     @Column(nullable = false)
     private String senha;
-
+    private Boolean isGoogleLogado;
     @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
@@ -73,6 +73,7 @@ public class Usuario {
         String email= auth2User.getAttribute("email");
         this.nome = primeiroNome;
         this.sobrenome = sobrenome;
+        setIsGoogleLogado(true);
         this.senha = auth2User.getAttribute("email");
         this.email = auth2User.getAttribute("email");
         System.out.println(email.substring(0,email.indexOf("@")));
