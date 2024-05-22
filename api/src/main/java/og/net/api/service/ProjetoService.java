@@ -9,10 +9,7 @@ import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.NotificacaoProjeto;
 import og.net.api.repository.*;
-<<<<<<< HEAD
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoConviteRepository;
-=======
->>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoProjetoRepository;
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoRepository;
 import org.modelmapper.ModelMapper;
@@ -36,14 +33,12 @@ public class ProjetoService {
     private ModelMapper modelMapper;
     private TarefaRepository tarefaRepository;
     private final NotificacaoProjetoRepository notificacaoRepository;
-<<<<<<< HEAD
     private HistoricoService historicoService;
     private NotificacaoConviteRepository notificacaoConviteRepository;
     private ConviteRepository conviteRepository;
     private ConviteParaProjetoRepository conviteParaProjetoRepository;
-=======
     private final UsuarioRepository usuarioRepository;
->>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
+
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {

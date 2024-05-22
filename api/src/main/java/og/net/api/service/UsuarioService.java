@@ -119,13 +119,7 @@ public class UsuarioService {
     public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
-<<<<<<< HEAD
-        modelMapper.map(usuarioCadastroDTO, usuario);
-        usuarioRepository.save(usuario);
-
-        Configuracao configuracao=new Configuracao();
-=======
-        Configuracao configuracao=configuracaoPadrao();
+        Configuracao configuracao = configuracaoPadrao();
         usuarioCadastroDTO.setConfiguracao(configuracao);
         modelMapper.map(usuarioCadastroDTO, usuario);
 
@@ -150,7 +144,6 @@ public class UsuarioService {
 
     private Configuracao configuracaoPadrao(){
         Configuracao configuracao = new Configuracao();
->>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
         configuracao.setFonteCorpo("Poppins");
         configuracao.setFonteTitulo("Source Sans 3");
         configuracao.setFonteCorpoTamanho(2.0);
@@ -167,24 +160,8 @@ public class UsuarioService {
         configuracao.setIsDark(false);
         configuracao.setIsTutorial(true);
 //        configuracao.setIsTutorialAtivo();
-<<<<<<< HEAD
-        usuarioCadastroDTO.setConfiguracao(configuracao);
 
-        modelMapper.map(usuarioCadastroDTO, usuario);
-        usuario.setEquipes(equipePadrao(usuario));
-        fotoPadrao(usuario);
-        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
-        try {
-            usuarioRepository.save(usuario);
-        } catch (Exception e) {
-            throw new DadosIncompletosException();
-        }
-
-        return usuario;
-
-=======
         return configuracao;
->>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
     }
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {
         EquipeCadastroDTO equipeCadastroDTO = new EquipeCadastroDTO(("Equipe do "+usuario.getUsername()), "Está é sua equipe para organização pessoal",null);

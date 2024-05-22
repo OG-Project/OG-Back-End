@@ -9,8 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ConviteRepository extends JpaRepository<Convite,Integer> {
-<<<<<<< HEAD
 
-=======
->>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
 }
