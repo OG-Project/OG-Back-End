@@ -22,7 +22,7 @@ public class WebSocketControllerUsuario extends AbstractWebSocketHandler {
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 //        int equipeIdDaSessao = obterIdEquipeDaSessao(session);
 //        int equipeIdDaMensagem = obterIdEquipeDaMensagem(message);
-//        if (equipeIdDaSessao == equipeIdDaMensagem) {
+//        if (equipeIdDaSessao == equipeIdDaMensagem) {'
         System.out.println("É aqui");
             session.sendMessage(message);
 //        }
