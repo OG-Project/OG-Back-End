@@ -21,13 +21,11 @@ public class WebSocketControllerChat extends AbstractWebSocketHandler {
 
 //    @Override
 //    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-//        System.out.println("Chegou");
 //        session.sendMessage(message);
 //    }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println(message);
         for(WebSocketSession s : sessions){
             s.sendMessage(message);
         }

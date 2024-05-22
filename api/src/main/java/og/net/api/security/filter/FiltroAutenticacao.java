@@ -57,7 +57,6 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     }
 
     private boolean rotaPublica(HttpServletRequest request){
-        System.out.println(request.getRequestURI());
         return ((request.getRequestURI().equals("/login") && request.getMethod().equals("POST")) ||
                 (request.getRequestURI().equals("/usuario") && request.getMethod().equals("POST")) ||
                 (request.getRequestURI().equals("/")) ||

@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin
 @Controller
 @RequestMapping("/projeto")
 public class ProjetoController {
@@ -78,7 +78,6 @@ public class ProjetoController {
         try {
             return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -88,7 +87,6 @@ public class ProjetoController {
         try {
             return new ResponseEntity<>(projetoService.editar(projetoEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
