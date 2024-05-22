@@ -52,8 +52,7 @@ public class UsuarioService {
     }
 
     public void deletar(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id).get();
-        System.out.println(usuario);
+        Usuario usuario=usuarioRepository.findById(id).get();
         comentarioRepository.deleteAllByAutor_Id(usuario.getId());
         usuarioAceitoRepository.deleteAllByUsuario_Id(id);
 

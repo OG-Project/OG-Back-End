@@ -10,6 +10,7 @@ import og.net.api.model.dto.ProjetoEdicaoDTO;
 import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.TarefaEdicaoDTO;
 import og.net.api.model.entity.*;
+import og.net.api.repository.HistoricoRepository.HistoricoRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.TarefaRepository;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ public class TarefaService {
     private ProjetoRepository projetoRepository;
     private ProjetoService projetoService;
     private ModelMapper modelMapper;
+    private HistoricoService historicoService;
 
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
         if (tarefaRepository.existsById(id)) {
@@ -52,6 +54,9 @@ public class TarefaService {
     public void deletar(Integer id) throws ProjetoNaoEncontradoException, TarefaInesxistenteException {
         Projeto projeto = projetoService.buscarPorTarefa(id);
         projeto.getTarefas().remove(tarefaRepository.findById(id).get());
+        historicoService.buscarPorTarefa(buscarUm(id)).forEach(historico -> {
+            historico.setTarefa(null);
+        });
         tarefaRepository.deleteById(id);
     }
 
