@@ -20,4 +20,8 @@ public class Indice {
     private Visualizacao visualizacao;
 
 
+    public Indice(Long indice, Visualizacao visualizacao) {
+        this.indice = indice;
+        this.visualizacao = visualizacao;
+    }
 }

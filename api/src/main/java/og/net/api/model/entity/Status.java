@@ -17,4 +17,9 @@ public class Status  {
     private Integer id;
     private String nome;
     private String cor;
+
+    public Status(String nome, String cor) {
+        this.nome = nome;
+        this.cor = cor;
+    }
 }

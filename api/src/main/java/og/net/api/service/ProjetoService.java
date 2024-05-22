@@ -8,12 +8,9 @@ import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.NotificacaoProjeto;
+import og.net.api.repository.*;
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoProjetoRepository;
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoRepository;
-import og.net.api.repository.ProjetoEquipeRepository;
-import og.net.api.repository.ProjetoRepository;
-import og.net.api.repository.TarefaRepository;
-import og.net.api.repository.VisualizacaoEmListaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
@@ -30,12 +27,12 @@ public class ProjetoService {
     private ProjetoRepository projetoRepository;
     private EquipeService equipeService;
     private ProjetoEquipeRepository projetoEquipeRepository;
-    private UsuarioService usuarioService;
     private PropriedadeService propriedadeService;
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
     private TarefaRepository tarefaRepository;
     private final NotificacaoProjetoRepository notificacaoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
@@ -110,7 +107,7 @@ public class ProjetoService {
     private List<UsuarioProjeto> criacaoResponsaveisProjeto(ProjetoCadastroDTO projetoCadastroDTO) {
         ArrayList<UsuarioProjeto> projetoResponsaveis = new ArrayList<>();
         projetoCadastroDTO.getResponsaveis().forEach((responsaveis -> {
-            Usuario usuarioAtual = usuarioService.buscarUm(responsaveis.getIdResponsavel());
+            Usuario usuarioAtual = usuarioRepository.findById(responsaveis.getIdResponsavel()).get();
             UsuarioProjeto usuarioProjeto = new UsuarioProjeto(null,responsaveis.getIdResponsavel(),List.of(Permissao.CRIAR,Permissao.VER, Permissao.EDITAR, Permissao.DELETAR) );
            projetoResponsaveis.add(usuarioProjeto);
         }));
