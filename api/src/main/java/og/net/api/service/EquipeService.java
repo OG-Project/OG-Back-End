@@ -32,6 +32,7 @@ public class EquipeService {
     private UsuarioRepository usuarioRepository;
     private NotificacaoService notificacaoService;
     private ChatService chatService;
+    private ConviteParaEquipeRepository conviteParaEquipeRepository;
 
     private VisualizacaoEmListaRepository visualizacaoEmListaRepository;
     private ModelMapper modelMapper;
@@ -83,6 +84,12 @@ public class EquipeService {
             Projeto projeto = projetoRepository.findByProjetoEquipesContaining(projetoEquipe);
             removerProjetoDaEquipe(id, projeto.getId()); // Implemente um método para remover a equipe do projeto
         }
+
+        conviteParaEquipeRepository.findConviteParaEquipeByEquipe(equipe).forEach(convite ->{
+            convite.setEquipe(null);
+            conviteParaEquipeRepository.delete(convite);
+        });
+
         // Agora a equipe pode ser excluída
         equipeRepository.delete(equipe);
     }
