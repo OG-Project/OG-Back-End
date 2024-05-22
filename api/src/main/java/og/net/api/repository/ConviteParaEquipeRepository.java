@@ -1,0 +1,16 @@
+package og.net.api.repository;
+
+import og.net.api.model.entity.ConviteParaEquipe;
+import og.net.api.model.entity.ConviteParaProjeto;
+import og.net.api.model.entity.Equipe;
+import og.net.api.model.entity.Projeto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ConviteParaEquipeRepository extends JpaRepository<ConviteParaEquipe,Integer> {
+
+    List<ConviteParaEquipe> findConviteParaEquipeByEquipe(Equipe equipe);
+}

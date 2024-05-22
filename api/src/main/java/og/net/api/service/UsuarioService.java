@@ -52,8 +52,7 @@ public class UsuarioService {
     }
 
     public void deletar(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id).get();
-        System.out.println(usuario);
+        Usuario usuario=usuarioRepository.findById(id).get();
         comentarioRepository.deleteAllByAutor_Id(usuario.getId());
         usuarioAceitoRepository.deleteAllByUsuario_Id(id);
 
@@ -120,7 +119,7 @@ public class UsuarioService {
     public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
-        Configuracao configuracao=configuracaoPadrao();
+        Configuracao configuracao = configuracaoPadrao();
         usuarioCadastroDTO.setConfiguracao(configuracao);
         modelMapper.map(usuarioCadastroDTO, usuario);
 
@@ -161,6 +160,7 @@ public class UsuarioService {
         configuracao.setIsDark(false);
         configuracao.setIsTutorial(true);
 //        configuracao.setIsTutorialAtivo();
+
         return configuracao;
     }
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {

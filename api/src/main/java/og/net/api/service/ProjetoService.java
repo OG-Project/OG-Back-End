@@ -9,6 +9,7 @@ import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.model.entity.Notificacao.NotificacaoProjeto;
 import og.net.api.repository.*;
+import og.net.api.repository.NotificacaoRepositorys.NotificacaoConviteRepository;
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoProjetoRepository;
 import og.net.api.repository.NotificacaoRepositorys.NotificacaoRepository;
 import org.modelmapper.ModelMapper;
@@ -32,7 +33,12 @@ public class ProjetoService {
     private ModelMapper modelMapper;
     private TarefaRepository tarefaRepository;
     private final NotificacaoProjetoRepository notificacaoRepository;
+    private HistoricoService historicoService;
+    private NotificacaoConviteRepository notificacaoConviteRepository;
+    private ConviteRepository conviteRepository;
+    private ConviteParaProjetoRepository conviteParaProjetoRepository;
     private final UsuarioRepository usuarioRepository;
+
 
     public Projeto buscarUm(Integer id) throws ProjetoNaoEncontradoException {
         if (projetoRepository.existsById(id)) {
@@ -73,6 +79,7 @@ public class ProjetoService {
             propriedadeService.deletar(propriedade.getId());
         });
 
+
         List<NotificacaoProjeto> notificacaoProjeto= null;
         try {
             notificacaoProjeto = notificacaoRepository.findNotificacaoProjetoByProjeto(projeto);
@@ -83,10 +90,25 @@ public class ProjetoService {
         if (visualizacaoEmLista != null) {
             visualizacaoEmListaRepository.delete(visualizacaoEmLista);
         }
+
+        Projeto projetoDeletar = buscarUm(id);
+        notificacaoConviteRepository.findNotificacaoConviteByConviteParaProjeto_Projeto(projetoDeletar).forEach( convite ->{
+            convite.setConviteParaProjeto(null);
+            notificacaoConviteRepository.delete(convite);
+        });
+
+        conviteParaProjetoRepository.findConviteParaProjetoByProjeto(projetoDeletar).forEach(convite ->{
+            convite.setProjeto(null);
+            conviteParaProjetoRepository.delete(convite);
+        });
+
+        historicoService.buscarPorProjeto(buscarUm(id)).forEach( historico -> {
+            historico.setProjeto(null);
+            historicoService.deletar(historico.getId());
+        });
+
         projetoRepository.deleteById(id);
     }
-
-
 
     public Projeto cadastrar(IDTO dto) throws IOException {
         ProjetoCadastroDTO projetoCadastroDTO = (ProjetoCadastroDTO) dto;

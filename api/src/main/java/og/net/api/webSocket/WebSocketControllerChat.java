@@ -18,7 +18,6 @@ public class WebSocketControllerChat extends AbstractWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println(message);
         for(WebSocketSession s : sessions){
             s.sendMessage(message);
         }
