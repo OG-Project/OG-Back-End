@@ -2,10 +2,7 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
-import og.net.api.model.dto.EquipeCadastroDTO;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.UsuarioCadastroDTO;
-import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioDetailsEntityRepository;
@@ -17,11 +14,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 @Service
 @AllArgsConstructor
@@ -31,12 +34,15 @@ public class UsuarioService {
     private EquipeService equipeService;
     private UsuarioProjetoRepository usuarioProjetoRepository;
     private UsuarioAceitoRepository usuarioAceitoRepository;
-    private ComentarioRepository  comentarioRepository;
+    private ComentarioRepository comentarioRepository;
     private UsuarioTarefaRepository usuarioTarefaRepository;
     private EquipeUsuarioRepository equipeUsuarioRepository;
     private ModelMapper modelMapper;
     private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
     private final PasswordEncoder passwordEncoder;
+    private ProjetoRepository projetoRepository;
+    private TarefaService tarefaService;
+
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
     }
@@ -47,25 +53,104 @@ public class UsuarioService {
 
     public void deletar(Integer id) {
         Usuario usuario=usuarioRepository.findById(id).get();
-        System.out.println(usuario);
         comentarioRepository.deleteAllByAutor_Id(usuario.getId());
         usuarioAceitoRepository.deleteAllByUsuario_Id(id);
 
         usuarioProjetoRepository.deleteByIdResponsavel(id);
-
-        for (EquipeUsuario equipe:usuario.getEquipes()){
+        for (EquipeUsuario equipe : usuario.getEquipes()) {
             equipeUsuarioRepository.deleteByEquipe(equipe.getEquipe());
         }
         usuarioRepository.deleteById(id);
     }
 
+    public void enviaEmail(Usuario usuario) {
+        try {
+            Properties properties = System.getProperties();
+
+            // define os dados básicos
+            String host = "smtp.gmail.com";
+            String email = "og.project.weg@gmail.com";
+            String password = "sryx rozm wixy iool" ;
+
+            //liga os protocolo tudo
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+            properties.put("mail.smtp.host", host);
+            properties.put("mail.smtp.port", "587");
+            properties.put("mail.smtp.ssl.trust", host);
+
+            Session session = Session.getDefaultInstance(properties, new Authenticator() {
+                protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(email, password);
+                }
+            });
+
+            try {
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(email, "OG TESTE MLK"));
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(usuario.getEmail()));
+                message.setSubject("Confirme Seu Email!");
+
+                String htmlContent = "<html><body style='background-color: #f6f8fa;'>" +
+                        "<div style='margin: 0 auto; max-width: 600px; padding: 20px; text-align: center;'>" +
+                        "<img src='api/src/main/resources/logo.jpg' " +
+                        "alt='OG LOGO' style='margin-bottom: 20px; width: 140px; height: auto;'>" +
+                        "<div style='background-color: #fff; border-radius: 6px; padding: 40px;'>" +
+                        "<p style='font-size: 14px; color: #586069;'>" + usuario.getUsername() + " </p>" +
+                        "<h1 style='font-size: 36px; color: #092C4C; margin-top: 10px; margin-bottom: 30px;'>  </h1>" +
+                        "<h2 style='color: #092C4C; font-weight: 500;'><a href='http://localhost:8082" + usuario.getEmail() + "'>Confirmar E-mail</a></h2>" +
+                        "</div>" +
+                        "</div>" +
+                        "</body></html>";
+
+                message.setContent(htmlContent, "text/html; charset=utf-8");
+
+                Transport.send(message);
+            } catch (MessagingException mex) {
+                mex.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            System.out.println("Falha E-mail");
+        }
+    }
+
     public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
+<<<<<<< HEAD
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
 
         Configuracao configuracao=new Configuracao();
+=======
+        Configuracao configuracao=configuracaoPadrao();
+        usuarioCadastroDTO.setConfiguracao(configuracao);
+        modelMapper.map(usuarioCadastroDTO, usuario);
+
+        fotoPadrao(usuario);
+        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
+        try {
+            usuarioRepository.save(usuario);
+//            enviaEmail(usuario);
+        } catch (Exception e) {
+            throw new DadosIncompletosException();
+        }
+        List<EquipeUsuario> equipesUsuario = equipePadrao(usuario);
+        usuario.setEquipes(equipesUsuario);
+        usuarioRepository.save(usuario);
+         equipesUsuario.forEach(equipeUsuario -> {
+             projetoPadrao(equipeUsuario.getEquipe(),usuario);
+         });
+        usuario.setEquipes(equipesUsuario);
+        return usuarioRepository.save(usuario);
+    }
+
+
+    private Configuracao configuracaoPadrao(){
+        Configuracao configuracao = new Configuracao();
+>>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
         configuracao.setFonteCorpo("Poppins");
         configuracao.setFonteTitulo("Source Sans 3");
         configuracao.setFonteCorpoTamanho(2.0);
@@ -82,6 +167,7 @@ public class UsuarioService {
         configuracao.setIsDark(false);
         configuracao.setIsTutorial(true);
 //        configuracao.setIsTutorialAtivo();
+<<<<<<< HEAD
         usuarioCadastroDTO.setConfiguracao(configuracao);
 
         modelMapper.map(usuarioCadastroDTO, usuario);
@@ -96,8 +182,10 @@ public class UsuarioService {
 
         return usuario;
 
+=======
+        return configuracao;
+>>>>>>> d1099f540daf7e2a72f856a1c4fdf16870ccad36
     }
-
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {
         EquipeCadastroDTO equipeCadastroDTO = new EquipeCadastroDTO(("Equipe do "+usuario.getUsername()), "Está é sua equipe para organização pessoal",null);
         List<EquipeUsuario> equipeUsuarios = new ArrayList<>();
@@ -112,9 +200,99 @@ public class UsuarioService {
         equipeUsuario.setCriador(true);
         equipeUsuario.setPermissao(List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.PATCH));
         equipeUsuarios.add(equipeUsuario);
+
         return equipeUsuarios;
     }
 
+
+    private void projetoPadrao(Equipe equipe, Usuario usuario ){
+        List<Status> statusPadrao = new ArrayList<>();
+        Status naoIniciado = new Status("Não iniciado", "36213E");
+        Status pronto = new Status("Pronto", "38a31a");
+        Status emProgresso = new Status("Em Progresso", "17179c");
+        statusPadrao.add(pronto);
+        statusPadrao.add(emProgresso);
+        statusPadrao.add(naoIniciado);
+        Projeto projeto = new Projeto(statusPadrao);
+        projetoRepository.save(projeto);
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Ler um livro.",
+                "Já leu um pouco hoje? tire 10 minutinhos para ler um livro hoje.",
+                true,
+                LocalDateTime.now(),
+                "263478",
+                null,
+                naoIniciado,
+                null,null);
+        TarefaCadastroDTO tarefaCadastroDTO2 = new TarefaCadastroDTO("Fazer uma afirmação positiva.",
+                "Faça uma afirmação positiva sobre você mesmo ou sobre o próximo o dia fica mais leve assim.",
+                true,
+                LocalDateTime.now(),
+                "b36302",
+                null,
+                emProgresso,
+                null,null);
+
+        TarefaCadastroDTO tarefaCadastroDTO3 = new TarefaCadastroDTO("Olhe suas tarefas diárias.",
+                "Essa tarefa você já conclui, parabéns seu dia vai ser um sucesso.",
+                true,
+                LocalDateTime.now(),
+                "600573",
+                null,
+                pronto,
+                null,null);
+
+        Tarefa tarefaPadrao1= null;
+        Tarefa tarefaPadrao2= null;
+        Tarefa tarefaPadrao3= null;
+        try {
+           tarefaPadrao1= tarefaService.cadastrar(tarefaCadastroDTO,projeto.getId());
+           tarefaPadrao2 =tarefaService.cadastrar(tarefaCadastroDTO2,projeto.getId());
+           tarefaPadrao3= tarefaService.cadastrar(tarefaCadastroDTO3,projeto.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+        List<Tarefa> tarefasPadroes = new ArrayList<>();
+
+        tarefasPadroes
+                .add(tarefaPadrao1);
+        tarefasPadroes
+                .add(tarefaPadrao2);
+        tarefasPadroes
+                .add(tarefaPadrao3);
+
+        List<ProjetoEquipe> projetoEquipes = new ArrayList<>();
+        projetoEquipes.add(new ProjetoEquipe(equipe));
+
+        List<UsuarioProjeto> usuarioProjetos = new ArrayList<>();
+        usuarioProjetos.add(new UsuarioProjeto(usuario.getId(), List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.PATCH,Permissao.DELETAR)));
+        ProjetoCadastroDTO projetoCadastroDTO = new ProjetoCadastroDTO("Rotina","Aqui você pode manter suas tarefas diarias",
+                LocalDateTime.now(),
+                statusPadrao,
+                tarefasPadroes,
+                null,
+                projetoEquipes,
+                null,
+                null,
+                "meus-projetos"
+                );
+        projetoCadastroDTO.setResponsaveis(usuarioProjetos);
+        projetoCadastroDTO.setProjetoEquipes(projetoEquipes);
+        projetoRepository.save(projeto);
+        modelMapper.map(projetoCadastroDTO,projeto);
+        projeto.setProjetoEquipes(projetoEquipes);
+        try {
+           Projeto projeto1= projetoRepository.save(projeto);
+           System.out.println(projeto1.getDataCriacao());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     private Usuario fotoPadrao(Usuario usuario) throws IOException {
         ClassPathResource resource = new ClassPathResource ("fotoPadraoDoUsuario.png");
         byte[] content = Files.readAllBytes(resource.getFile().toPath());

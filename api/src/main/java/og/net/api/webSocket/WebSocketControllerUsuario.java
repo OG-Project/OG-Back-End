@@ -20,25 +20,11 @@ public class WebSocketControllerUsuario extends AbstractWebSocketHandler {
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-//        int equipeIdDaSessao = obterIdEquipeDaSessao(session);
-//        int equipeIdDaMensagem = obterIdEquipeDaMensagem(message);
-//        if (equipeIdDaSessao == equipeIdDaMensagem) {
-        System.out.println("É aqui");
-            session.sendMessage(message);
-//        }
+        for (WebSocketSession session1 : sessions){
+            session1.sendMessage(message);
+        }
     }
 
-    private int obterIdUsuarioDaSessao(WebSocketSession session) {
-
-        String uri = session.getUri().toString();
-        String[] parts = uri.split("/");
-        return Integer.parseInt(parts[parts.length - 1]);
-    }
-
-    private int obterIdUsuarioDaMensagem(TextMessage message) {
-        String [] usuarioIdDaMensagem = message.getPayload().split(":");
-        return Integer.parseInt(usuarioIdDaMensagem[usuarioIdDaMensagem.length-1]);
-    }
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         sessions.remove(session);

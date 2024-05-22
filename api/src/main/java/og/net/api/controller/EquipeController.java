@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/equipe")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin
 public class EquipeController {
 
     private EquipeService equipeService;
@@ -79,7 +79,6 @@ public class EquipeController {
 
             return new ResponseEntity<>(equipeService.cadastrar(equipeCadastroDTO), HttpStatus.CREATED);
         }catch (Exception e){
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }

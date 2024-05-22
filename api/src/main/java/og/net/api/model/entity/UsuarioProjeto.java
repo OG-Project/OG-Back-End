@@ -27,6 +27,8 @@ public class UsuarioProjeto {
     @JoinColumn(name = "permissao_id")
     private List<Permissao> permissao = List.of(Permissao.CRIAR,Permissao.EDITAR,Permissao.PATCH, Permissao.VER);
 
-
-
+    public UsuarioProjeto(Integer idResponsavel, List<Permissao> permissao) {
+        this.idResponsavel = idResponsavel;
+        this.permissao = permissao;
+    }
 }

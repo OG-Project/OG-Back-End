@@ -67,7 +67,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/projeto/{equipeId}").access(usuarioTemPermissaoEquipe)
                 .requestMatchers(HttpMethod.PUT, "/projeto").hasAuthority(Permissao.EDITAR.getAuthority())
                 .requestMatchers(HttpMethod.PUT, "/projeto/{equipeId}").access(usuarioTemPermissaoEquipe)
-                .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").access(usuarioTemPermissaoEquipe)
+                .requestMatchers(HttpMethod.GET, "/projeto/buscarProjetos/{equipeId}").hasAuthority(Permissao.VER.getAuthority())
                 .requestMatchers(HttpMethod.DELETE, "/projeto/removerProjetoEquipe/{equipeId}/{projetoId}").access(usuarioTemPermissaoProjeto)
                 .requestMatchers(HttpMethod.DELETE, "/projeto/deletarPropriedade/{idPropriedade}/{idProjeto}").access(usuarioTemPermissaoProjeto)
 

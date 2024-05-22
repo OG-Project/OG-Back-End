@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin
 @RequestMapping("/tarefa")
 public class TarefaController {
 
@@ -86,7 +86,6 @@ public class TarefaController {
         try{
              return new ResponseEntity<>(tarefaService.cadastrar(tarefaCadastroDTO, projetoId), HttpStatus.CREATED);
         }catch (Exception e){
-            System.out.println(e.getMessage());
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
     }
@@ -96,7 +95,6 @@ public class TarefaController {
         try {
             return new ResponseEntity<>(tarefaService.editar(tarefaEdicaoDTO), HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -106,13 +104,11 @@ public class TarefaController {
             tarefaService.editarValorPropriedadetarefa(id,valorPropriedadeTarefas);
             return new ResponseEntity<>( HttpStatus.CREATED);
         }catch (DadosNaoEncontradoException e){
-            System.out.println(e.getMessage());
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     @PatchMapping("/arquivos/{id}")
     public void cadastrarFoto(@RequestParam MultipartFile arquivo, @PathVariable Integer id  ) throws IOException, TarefaInesxistenteException {
-        System.out.println("Entrou");
         tarefaService.atualizarFoto(id,arquivo);
     }
 
