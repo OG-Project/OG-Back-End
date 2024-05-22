@@ -2,10 +2,7 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
-import og.net.api.model.dto.EquipeCadastroDTO;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.UsuarioCadastroDTO;
-import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioDetailsEntityRepository;
@@ -59,8 +56,8 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
-        UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
+    public Usuario cadastrar(UsuarioCadastroDTO usuarioCadastroDTO) throws IOException, DadosIncompletosException {
+        System.out.println(usuarioCadastroDTO);
         Usuario usuario = new Usuario();
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuarioRepository.save(usuario);
@@ -81,13 +78,14 @@ public class UsuarioService {
         configuracao.setIsVisualizaProjetos(true);
         configuracao.setIsDark(false);
         configuracao.setIsTutorial(true);
-//        configuracao.setIsTutorialAtivo();
+        System.out.println(usuarioCadastroDTO.getIsGoogleLogado());
+        usuarioCadastroDTO.setIsGoogleLogado(usuarioCadastroDTO.getIsGoogleLogado());
         usuarioCadastroDTO.setConfiguracao(configuracao);
 
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuario.setEquipes(equipePadrao(usuario));
         fotoPadrao(usuario);
-        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
+        usuario.setSenha(passwordEncoder, usuarioCadastroDTO.getSenha());
         try {
             usuarioRepository.save(usuario);
         } catch (Exception e) {
@@ -96,6 +94,13 @@ public class UsuarioService {
 
         return usuario;
 
+    }
+
+    public Usuario alteraSenha(Integer id, SenhaDTO senhaNova){
+        Usuario usuario = usuarioRepository.findById(id).get();
+        usuario.setSenha(passwordEncoder,senhaNova.getSenhaNova());
+        return usuarioRepository.save(usuario);
+//        return senhaNova;
     }
 
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {
@@ -139,10 +144,10 @@ public class UsuarioService {
 
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
-        Usuario usuarioBusca = usuarioRepository.findById(ucdto.getId()).get();
-        UsuarioDetailsEntity usuarioDetailsEntity = usuarioDetailsEntityRepository.findByUsuario(usuarioBusca);
-        Usuario usuario = new Usuario(usuarioDetailsEntity);
+        Usuario usuario = new Usuario();
         modelMapper.map(ucdto, usuario);
+//        usuario.setSenha(passwordEncoder, ucdto.getSenha());
+//        System.out.println(usuario.getSenha());
         if (usuarioRepository.existsById(usuario.getId())) {
             usuarioRepository.save(usuario);
             return usuario;
