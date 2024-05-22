@@ -35,7 +35,6 @@ public class TarefaService {
     public Tarefa buscarUm(Integer id) throws TarefaInesxistenteException {
         if (tarefaRepository.existsById(id)) {
             return tarefaRepository.findById(id).get();
-
         }
         throw new TarefaInesxistenteException();
     }
@@ -100,7 +99,9 @@ public class TarefaService {
     }
 
     public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
+        System.out.println("Entrou");
         TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
+        System.out.println(tarefaEdicaoDTO);
         Tarefa tarefa = new Tarefa();
         modelMapper.map(tarefaEdicaoDTO,tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
