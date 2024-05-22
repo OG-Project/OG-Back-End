@@ -68,13 +68,20 @@ public class TarefaService {
                 new Indice(null, 0L, Visualizacao.TIMELINE),
                 new Indice(null, 0L, Visualizacao.KANBAN));
         tarefa.setIndice(lista);
-        for (Propriedade propriedade : projeto.getPropriedades()){
+        if (projeto.getProjetoEquipes()!=null) {
+            for (Propriedade propriedade : projeto.getPropriedades()) {
 
-            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade),false);
-            valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+                ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false);
+                valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+            }
+            tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         }
-        tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
-        Tarefa tarefaReturn = tarefaRepository.save(tarefa);
+        Tarefa tarefaReturn = null;
+        try {
+            tarefaReturn = tarefaRepository.save(tarefa);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         projeto.getTarefas().add(tarefa);
         projetoService.editar(new ProjetoEdicaoDTO(projeto));
         return tarefaReturn;
