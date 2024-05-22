@@ -44,13 +44,12 @@ public class Usuario {
     @JsonIgnore
     @ToString.Exclude
     private UsuarioDetailsEntity usuarioDetailsEntity;
-
     public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
             setUsuarioDetailsEntity(usuarioDetailsEntity);
     }
 
-    public void setSenha(String senha) {
-        this.senha =  new BCryptPasswordEncoder().encode(senha);
+    public void setSenha(PasswordEncoder passwordEncoder, String senha) {
+        this.senha = passwordEncoder.encode(senha);
     }
 
     public Usuario(){

@@ -84,7 +84,7 @@ public class UsuarioService {
         modelMapper.map(usuarioCadastroDTO, usuario);
         usuario.setEquipes(equipePadrao(usuario));
         fotoPadrao(usuario);
-        usuario.setSenha(usuarioCadastroDTO.getSenha());
+        usuario.setSenha(passwordEncoder, usuarioCadastroDTO.getSenha());
         try {
             usuarioRepository.save(usuario);
         } catch (Exception e) {
@@ -136,10 +136,9 @@ public class UsuarioService {
     public Usuario editar(IDTO dto) throws DadosNaoEncontradoException {
         UsuarioEdicaoDTO ucdto = (UsuarioEdicaoDTO) dto;
         Usuario usuario = new Usuario();
-        usuario.setSenha(ucdto.getSenha());
-        System.out.println(ucdto);
-
         modelMapper.map(ucdto, usuario);
+        usuario.setSenha(passwordEncoder, ucdto.getSenha());
+        System.out.println(usuario.getSenha());
         if (usuarioRepository.existsById(usuario.getId())) {
             usuarioRepository.save(usuario);
             return usuario;
