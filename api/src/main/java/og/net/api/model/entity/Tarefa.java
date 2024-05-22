@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,21 @@ public class Tarefa {
     private List<Arquivo> arquivos;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Indice> indice;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<UsuarioTarefa> responsaveis;
+    private LocalTime tempoAtuacao;
 
+
+    public Tarefa(String nome, String descricao, String cor,  Status status,List<Indice> indice) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.dataCriacao = LocalDateTime.now();
+        this.cor = cor;
+        this.valorPropriedadeTarefas = null;
+        this.status = status;
+        this.subTarefas = null;
+        this.comentarios = null;
+        this.arquivos = null;
+        this.indice = indice;
+    }
 }

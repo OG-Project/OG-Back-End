@@ -9,6 +9,7 @@ import org.hibernate.annotations.Cascade;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,17 +26,17 @@ public class Projeto {
     private String descricao;
     @Column(updatable = false)
     private LocalDateTime dataCriacao;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Tarefa>  tarefas;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Propriedade> propriedades;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
     private List<Status> statusList;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "projeto_id")
     private List<ProjetoEquipe> projetoEquipes;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "projeto_id")
     private List<UsuarioProjeto>  responsaveis;
     private LocalTime tempoAtuacao;
@@ -48,5 +49,12 @@ public class Projeto {
     public Projeto() {
         this.categoria = "meus-projetos";
         this.indexLista = +1;
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    public Projeto(List<Status> statusList) {
+        this.statusList = statusList;
+        this.tarefas = new ArrayList<>();
+        this.dataCriacao = LocalDateTime.now();
     }
 }

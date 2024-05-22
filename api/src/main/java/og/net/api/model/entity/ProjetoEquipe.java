@@ -19,4 +19,7 @@ public class ProjetoEquipe {
     private Equipe equipe;
 
 
+    public ProjetoEquipe(Equipe equipe) {
+        this.equipe=equipe;
+    }
 }

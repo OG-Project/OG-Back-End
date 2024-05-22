@@ -19,6 +19,7 @@ public class ProjetoCadastroDTO implements IDTO{
 
     private String nome;
     private String descricao;
+    private LocalDateTime dataCriacao =LocalDateTime.now();
     private List<Status> statusList;
     private List<Tarefa> tarefas;
     private List<Propriedade> propriedades;
@@ -26,11 +27,14 @@ public class ProjetoCadastroDTO implements IDTO{
     private List<UsuarioProjeto> responsaveis;
     private LocalDate dataFinal;
     private String categoria = "meus-projetos";
-    private Integer indexLista =1 ;
 
 
     //Define a data da criação!
     public LocalDateTime getDataCriacao() {
         return LocalDateTime.now();
     }
+
+
+
+
 }
