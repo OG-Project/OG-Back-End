@@ -33,4 +33,6 @@ public class ProjetoCadastroDTO implements IDTO{
     public LocalDateTime getDataCriacao() {
         return LocalDateTime.now();
     }
+
+
 }

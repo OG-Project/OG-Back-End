@@ -2,10 +2,7 @@ package og.net.api.service;
 
 import lombok.AllArgsConstructor;
 import og.net.api.exception.*;
-import og.net.api.model.dto.EquipeCadastroDTO;
-import og.net.api.model.dto.IDTO;
-import og.net.api.model.dto.UsuarioCadastroDTO;
-import og.net.api.model.dto.UsuarioEdicaoDTO;
+import og.net.api.model.dto.*;
 import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeUsuarioRepository;
 import og.net.api.repository.UsuarioDetailsEntityRepository;
@@ -23,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +40,8 @@ public class UsuarioService {
     private ModelMapper modelMapper;
     private final UsuarioDetailsEntityRepository usuarioDetailsEntityRepository;
     private final PasswordEncoder passwordEncoder;
+    private ProjetoRepository projetoRepository;
+    private TarefaService tarefaService;
 
     public Usuario buscarUm(Integer id) {
         return usuarioRepository.findById(id).get();
@@ -124,7 +124,25 @@ public class UsuarioService {
     public Usuario cadastrar(IDTO dto) throws IOException, DadosIncompletosException {
         UsuarioCadastroDTO usuarioCadastroDTO = (UsuarioCadastroDTO) dto;
         Usuario usuario = new Usuario();
-        Configuracao configuracao=new Configuracao();
+        Configuracao configuracao=configuracaoPadrao();
+        usuarioCadastroDTO.setConfiguracao(configuracao);
+        modelMapper.map(usuarioCadastroDTO, usuario);
+        usuario.setEquipes(equipePadrao(usuario));
+        fotoPadrao(usuario);
+        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
+        try {
+            usuarioRepository.save(usuario);
+//            enviaEmail(usuario);
+        } catch (Exception e) {
+            throw new DadosIncompletosException();
+        }
+
+        return usuario;
+    }
+
+
+    private Configuracao configuracaoPadrao(){
+        Configuracao configuracao = new Configuracao();
         configuracao.setFonteCorpo("Poppins");
         configuracao.setFonteTitulo("Source Sans 3");
         configuracao.setFonteCorpoTamanho(2.0);
@@ -141,22 +159,8 @@ public class UsuarioService {
         configuracao.setIsDark(false);
         configuracao.setIsTutorial(true);
 //        configuracao.setIsTutorialAtivo();
-        usuarioCadastroDTO.setConfiguracao(configuracao);
-
-        modelMapper.map(usuarioCadastroDTO, usuario);
-        usuario.setEquipes(equipePadrao(usuario));
-        fotoPadrao(usuario);
-        usuario.setSenha(passwordEncoder.encode(usuarioCadastroDTO.getSenha()));
-        try {
-            usuarioRepository.save(usuario);
-//            enviaEmail(usuario);
-        } catch (Exception e) {
-            throw new DadosIncompletosException();
-        }
-
-        return usuario;
+        return configuracao;
     }
-
     private List<EquipeUsuario> equipePadrao(Usuario usuario)  {
         EquipeCadastroDTO equipeCadastroDTO = new EquipeCadastroDTO(("Equipe do "+usuario.getUsername()), "Está é sua equipe para organização pessoal",null);
         List<EquipeUsuario> equipeUsuarios = new ArrayList<>();
@@ -171,9 +175,90 @@ public class UsuarioService {
         equipeUsuario.setCriador(true);
         equipeUsuario.setPermissao(List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.PATCH));
         equipeUsuarios.add(equipeUsuario);
+        projetoPadrao(equipe,usuario);
         return equipeUsuarios;
     }
 
+
+    private void projetoPadrao(Equipe equipe, Usuario usuario ){
+        List<Status> statusPadrao = new ArrayList<>();
+        Status naoIniciado = new Status("Não iniciado", "36213E");
+        Status pronto = new Status("Pronto", "38a31a");
+        Status emProgresso = new Status("Em Progresso", "17179c");
+        Projeto projeto = new Projeto();
+        projetoRepository.save(projeto);
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Lavar a Louça.",
+                "Já lavou a louça hoje? tire 10 minutinhos para lavar a louça e pensar na vida.",
+                true,
+                LocalDateTime.now(),
+                "263478",
+                null,
+                naoIniciado,
+                null);
+        TarefaCadastroDTO tarefaCadastroDTO2 = new TarefaCadastroDTO("Fazer uma afirmação positiva.",
+                "Faça uma afirmação positiva sobre você mesmo ou sobre o próximo o dia fica mais leve assim.",
+                true,
+                LocalDateTime.now(),
+                "b36302",
+                null,
+                emProgresso,
+                null);
+
+        TarefaCadastroDTO tarefaCadastroDTO3 = new TarefaCadastroDTO("Olhe suas tarefas diárias.",
+                "Essa tarefa você já conclui, parabéns seu dia vai ser um sucesso.",
+                true,
+                LocalDateTime.now(),
+                "600573",
+                null,
+                pronto,
+                null);
+
+        Tarefa tarefaPadrao1= null;
+        Tarefa tarefaPadrao2= null;
+        Tarefa tarefaPadrao3= null;
+        try {
+           tarefaPadrao1= tarefaService.cadastrar(tarefaCadastroDTO,projeto.getId());
+           tarefaPadrao2 =tarefaService.cadastrar(tarefaCadastroDTO2,projeto.getId());
+           tarefaPadrao3= tarefaService.cadastrar(tarefaCadastroDTO3,projeto.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        statusPadrao.add(pronto);
+        statusPadrao.add(emProgresso);
+        statusPadrao.add(naoIniciado);
+
+        List<Tarefa> tarefasPadroes = new ArrayList<>();
+
+        tarefasPadroes
+                .add(tarefaPadrao1);
+        tarefasPadroes
+                .add(tarefaPadrao2);
+        tarefasPadroes
+                .add(tarefaPadrao3);
+
+        List<ProjetoEquipe> projetoEquipes = new ArrayList<>();
+        projetoEquipes.add(new ProjetoEquipe(equipe));
+
+        List<UsuarioProjeto> usuarioProjetos = new ArrayList<>();
+        usuarioProjetos.add(new UsuarioProjeto(usuario.getId(), List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.PATCH,Permissao.DELETAR)));
+
+        ProjetoCadastroDTO projetoCadastroDTO = new ProjetoCadastroDTO("Rotina","Aqui você pode manter suas tarefas diarias",
+                statusPadrao,
+                tarefasPadroes,
+                null,
+                projetoEquipes,
+                usuarioProjetos,
+                null,
+                "meus-projetos",
+                1);
+
+        modelMapper.map(projetoCadastroDTO,projeto);
+        projetoRepository.save(projeto);
+
+    }
     private Usuario fotoPadrao(Usuario usuario) throws IOException {
         ClassPathResource resource = new ClassPathResource ("fotoPadraoDoUsuario.png");
         byte[] content = Files.readAllBytes(resource.getFile().toPath());

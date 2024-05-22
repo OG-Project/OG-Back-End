@@ -40,4 +40,16 @@ public class Tarefa {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Indice> indice;
 
+    public Tarefa(String nome, String descricao, String cor,  Status status,List<Indice> indice) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.dataCriacao = LocalDateTime.now();
+        this.cor = cor;
+        this.valorPropriedadeTarefas = null;
+        this.status = status;
+        this.subTarefas = null;
+        this.comentarios = null;
+        this.arquivos = null;
+        this.indice = indice;
+    }
 }
