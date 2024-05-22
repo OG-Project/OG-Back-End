@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.beans.Encoder;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,10 @@ public class Usuario {
 
     public Usuario(UsuarioDetailsEntity usuarioDetailsEntity){
             setUsuarioDetailsEntity(usuarioDetailsEntity);
+    }
+
+    public void setSenha(String senha) {
+        this.senha =  new BCryptPasswordEncoder().encode(senha);
     }
 
     public Usuario(){
