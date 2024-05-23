@@ -69,11 +69,44 @@ public class AutenticacaoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/logOut")
+    public ResponseEntity<?> logOut(HttpServletResponse response, HttpServletRequest request){
+        try {
+
+            removeCookiesAntigos(request,response);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void removeCookiesAntigos(HttpServletRequest request, HttpServletResponse response){
+        Cookie cookieJwt = cookieUtil.getCookie(request, "JWT");
+        if (cookieJwt != null) {
+            cookieJwt.setMaxAge(0);
+            cookieJwt.setPath("http://localhost:5173");
+            response.addCookie(cookieJwt);
+            cookieJwt.setPath("http://localhost:8082");
+            response.addCookie(cookieJwt);
+        }
+
+        Cookie cookieJsessionId = cookieUtil.getCookie(request, "JSESSIONID");
+        if (cookieJsessionId != null) {
+            cookieJsessionId.setMaxAge(0);
+            cookieJsessionId.setPath("http://localhost:5173");
+            response.addCookie(cookieJsessionId);
+            cookieJsessionId.setPath("http://localhost:8082");
+            response.addCookie(cookieJsessionId);
+        }
+    }
     public void loginComGoogle(HttpServletRequest
                                        request, HttpServletResponse response,
                                Authentication authentication) throws IOException {
         OAuth2User auth2User= (OAuth2User) authentication.getPrincipal();
 
+        removeCookiesAntigos(request,response);
        String email= auth2User.getAttribute("email");
        try {
            UserDetails  userDetails = autenticacaoService.loadUserByEmail(email);

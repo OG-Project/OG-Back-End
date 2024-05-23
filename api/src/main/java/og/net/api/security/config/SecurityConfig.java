@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // LOGIN
 
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
-
+                .requestMatchers(HttpMethod.POST, "/logOut").permitAll()
                 //USUARIO
 
                 .requestMatchers(HttpMethod.POST,"/usuario").permitAll()
