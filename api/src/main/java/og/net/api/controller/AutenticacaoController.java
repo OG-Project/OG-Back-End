@@ -83,6 +83,7 @@ public class AutenticacaoController {
 
        }catch (Exception e){
            UsuarioCadastroDTO usuario = new UsuarioCadastroDTO(auth2User);
+           usuario.setIsGoogleLogado(true);
            Usuario usuario1 = null;
            try {
                usuario1 = usuarioService.cadastrar(usuario);

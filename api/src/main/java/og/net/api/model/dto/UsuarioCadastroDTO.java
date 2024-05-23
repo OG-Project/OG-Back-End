@@ -28,6 +28,7 @@ public class UsuarioCadastroDTO implements IDTO{
     private List<EquipeUsuario> equipes;
     private Arquivo foto;
     private Configuracao configuracao;
+    private Boolean isGoogleLogado;
     private UsuarioDetailsEntity usuarioDetailsEntity;
 
     public void setFoto(MultipartFile foto) throws IOException {

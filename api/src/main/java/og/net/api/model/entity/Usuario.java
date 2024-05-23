@@ -31,7 +31,7 @@ public class Usuario {
     private String empresa;
     @Column(nullable = false)
     private String senha;
-
+    private Boolean isGoogleLogado;
     @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
     private List<EquipeUsuario> equipes;
