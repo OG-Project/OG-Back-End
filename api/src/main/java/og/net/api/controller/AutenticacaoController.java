@@ -105,6 +105,7 @@ public class AutenticacaoController {
 
             }catch (Exception e){
                 UsuarioCadastroDTO usuario = new UsuarioCadastroDTO(auth2User);
+               usuario.setIsGoogleLogado(true);
                 Usuario usuario1 = null;
                 try {
                     usuario1 = usuarioService.cadastrar(usuario);
@@ -114,7 +115,6 @@ public class AutenticacaoController {
                 Cookie cookie = cookieUtil.gerarCookieJwt(usuario1.getUsuarioDetailsEntity());
                 response.addCookie(cookie);
             }
-
             response.sendRedirect("http://localhost:5173");
         } catch (Exception e) {
             e.printStackTrace();
