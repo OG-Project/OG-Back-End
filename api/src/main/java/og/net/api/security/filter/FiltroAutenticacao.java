@@ -33,10 +33,14 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private final AutenticacaoService autenticacaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println(request.getRequestURI());
-        System.out.println(rotaPublica(request));
         if (!rotaPublica(request)) {
-            Cookie cookie = cookieUtil.getCookie(request, "JWT");
+            Cookie cookie = null;
+            try {
+                cookie = cookieUtil.getCookie(request, "JWT");
+            } catch (Exception e) {
+                response.setStatus(401);
+                throw new RuntimeException(e);
+            }
             String token = cookie.getValue();
             String username = jwtUtil.getUsername(token);
             UserDetails user = autenticacaoService.loadUserByUsername(username);

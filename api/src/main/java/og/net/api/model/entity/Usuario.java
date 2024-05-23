@@ -73,7 +73,6 @@ public class Usuario {
         this.sobrenome = sobrenome;
         this.senha = auth2User.getAttribute("email");
         this.email = auth2User.getAttribute("email");
-        System.out.println(email.substring(0,email.indexOf("@")));
         this.username = email.substring(0,email.indexOf("@"));
     }
 }
