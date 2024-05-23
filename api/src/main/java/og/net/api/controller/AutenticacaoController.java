@@ -67,15 +67,16 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/logOut")
-    public void logOut(HttpServletResponse response, HttpServletRequest request){
+    public ResponseEntity<?> logOut(HttpServletResponse response, HttpServletRequest request){
         try {
 
             for (Cookie cookie: removeCookiesAntigos(request)){
                 response.addCookie(cookie);
             }
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(401);
+           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
