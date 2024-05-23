@@ -52,6 +52,7 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
             CustomHttpServletRequestWrapper customHttpServletRequestWrapper = new CustomHttpServletRequestWrapper(request);
             filterChain.doFilter(customHttpServletRequestWrapper, response);
         }else{
+            System.out.println(request.getRequestURI());
             filterChain.doFilter(request, response);
         }
     }
@@ -60,6 +61,7 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
         return ((request.getRequestURI().equals("/login") && request.getMethod().equals("POST")) ||
                 (request.getRequestURI().equals("/usuario") && request.getMethod().equals("POST")) ||
                 (request.getRequestURI().equals("/")) ||
+                (request.getMethod().equals("PATCH")) && request.getRequestURI().equals("/usuario/senha/{id}") ||
                 (request.getMethod().equals("PATCH")) && request.getRequestURI().equals("/tarefa/arquivos/{id}"));
     };
 

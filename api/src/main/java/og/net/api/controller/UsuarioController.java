@@ -5,6 +5,7 @@ import og.net.api.exception.DadosIncompletosException;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeNaoEncontradaException;
 import og.net.api.exception.UsuarioJaExistenteException;
+import og.net.api.model.dto.SenhaDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
 import og.net.api.model.dto.UsuarioEdicaoDTO;
 import og.net.api.model.entity.Usuario;
@@ -99,6 +100,17 @@ public class UsuarioController {
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (DadosNaoEncontradoException e){
             e.getMessage();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/senha/{id}")
+    public ResponseEntity<Usuario> alteraSenha(@PathVariable Integer id,@RequestBody SenhaDTO senhaNova){
+        System.out.println();
+        try {
+            usuarioService.alteraSenha(id, senhaNova);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
