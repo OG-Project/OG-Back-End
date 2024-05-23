@@ -37,8 +37,8 @@ public class EquipeController {
         }
     }
 
-    @GetMapping("/nome")
-    public ResponseEntity<Collection<Equipe>> buscarEquipesNome(@RequestParam String nome){
+    @GetMapping("/{nome}")
+    public ResponseEntity<Collection<Equipe>> buscarEquipesNome(@PathVariable String nome){
         try{
             return new ResponseEntity<>(equipeService.buscarEquipesNome(nome),HttpStatus.OK);
         }catch (NoSuchElementException e){
