@@ -32,7 +32,6 @@ public class UsuarioCadastroDTO implements IDTO{
     private List<UsuarioProjeto>  projetos;
     private List<EquipeUsuario> equipes;
     private Arquivo foto;
-    private Boolean isGoogleLogado;
     private Configuracao configuracao;
     private UsuarioDetailsEntity usuarioDetailsEntity;
 

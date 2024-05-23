@@ -52,7 +52,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/usuario/{id}").access(eUsuario)
                 .requestMatchers(HttpMethod.PATCH, "/usuario/add/{usuarioId}/{equipeId}/{permissaoId}").hasAuthority(Permissao.PATCH.getAuthority())
                 .requestMatchers(HttpMethod.GET, "/usuario/buscarMembros/{equipeId}").hasAuthority(Permissao.VER.getAuthority())
-                .requestMatchers(HttpMethod.PATCH, "/usuario/senha/{id}").hasAnyAuthority(Permissao.PATCH.getAuthority())
 
                 //EQUIPE
                 .requestMatchers(HttpMethod.POST, "/equipe").hasAuthority(Permissao.CRIAR.getAuthority())

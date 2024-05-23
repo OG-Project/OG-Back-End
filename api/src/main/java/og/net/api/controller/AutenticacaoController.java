@@ -83,11 +83,8 @@ public class AutenticacaoController {
 
        }catch (Exception e){
            UsuarioCadastroDTO usuario = new UsuarioCadastroDTO(auth2User);
-           usuario.setIsGoogleLogado(true);
            Usuario usuario1 = null;
-
            try {
-               System.out.println(usuario);
                usuario1 = usuarioService.cadastrar(usuario);
            } catch (DadosIncompletosException ex) {
                throw new RuntimeException(ex);
