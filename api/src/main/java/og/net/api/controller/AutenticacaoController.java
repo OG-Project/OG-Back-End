@@ -1,7 +1,6 @@
 package og.net.api.controller;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -18,20 +17,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin
 public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
@@ -69,30 +65,60 @@ public class AutenticacaoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/logOut")
+    public void logOut(HttpServletResponse response, HttpServletRequest request){
+        try {
+
+            for (Cookie cookie: removeCookiesAntigos(request)){
+                response.addCookie(cookie);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(401);
+        }
+    }
+
+    private List<Cookie> removeCookiesAntigos(HttpServletRequest request){
+        for(Cookie cookie: request.getCookies()){
+            System.out.println(cookie.getName());
+        }
+        Cookie cookieJwt = cookieUtil.getCookie(request,"JWT");
+        Cookie cookieJsession = cookieUtil.getCookie(request,"JSESSIONID");
+        cookieJwt.setMaxAge(0);
+        cookieJsession.setMaxAge(0);
+        return List.of(cookieJsession,cookieJwt);
+
+
+    }
     public void loginComGoogle(HttpServletRequest
                                        request, HttpServletResponse response,
                                Authentication authentication) throws IOException {
-        OAuth2User auth2User= (OAuth2User) authentication.getPrincipal();
+        try {
+            OAuth2User auth2User= (OAuth2User) authentication.getPrincipal();
 
-       String email= auth2User.getAttribute("email");
-       try {
-           UserDetails  userDetails = autenticacaoService.loadUserByEmail(email);
-           Cookie cookie =cookieUtil.gerarCookieJwt(userDetails);
-           response.addCookie(cookie);
+            String email= auth2User.getAttribute("email");
+            try {
+                UserDetails  userDetails = autenticacaoService.loadUserByEmail(email);
+                Cookie cookie =cookieUtil.gerarCookieJwt(userDetails);
+                response.addCookie(cookie);
 
-       }catch (Exception e){
-           UsuarioCadastroDTO usuario = new UsuarioCadastroDTO(auth2User);
-           usuario.setIsGoogleLogado(true);
-           Usuario usuario1 = null;
-           try {
-               usuario1 = usuarioService.cadastrar(usuario);
-           } catch (DadosIncompletosException ex) {
-               throw new RuntimeException(ex);
-           }
-           Cookie cookie = cookieUtil.gerarCookieJwt(usuario1.getUsuarioDetailsEntity());
-           response.addCookie(cookie);
-       }
-
-       response.sendRedirect("http://localhost:5173");
+            }catch (Exception e){
+                UsuarioCadastroDTO usuario = new UsuarioCadastroDTO(auth2User);
+               usuario.setIsGoogleLogado(true);
+                Usuario usuario1 = null;
+                try {
+                    usuario1 = usuarioService.cadastrar(usuario);
+                } catch (DadosIncompletosException ex) {
+                    throw new RuntimeException(ex);
+                }
+                Cookie cookie = cookieUtil.gerarCookieJwt(usuario1.getUsuarioDetailsEntity());
+                response.addCookie(cookie);
+            }
+            response.sendRedirect("http://localhost:5173");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

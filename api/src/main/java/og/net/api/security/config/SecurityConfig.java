@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // LOGIN
 
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
-
+                .requestMatchers(HttpMethod.POST, "/logOut").permitAll()
                 //USUARIO
 
                 .requestMatchers(HttpMethod.POST,"/usuario").permitAll()
@@ -99,7 +99,7 @@ public class SecurityConfig {
 
         http.securityContext((context)-> context.securityContextRepository(securityContextRepository));
         http.formLogin(AbstractHttpConfigurer::disable);
-        http.logout((Customizer.withDefaults()));
+        http.logout((AbstractHttpConfigurer:: disable));
         http.sessionManagement(config ->{
             config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });

@@ -34,7 +34,13 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (!rotaPublica(request)) {
-            Cookie cookie = cookieUtil.getCookie(request, "JWT");
+            Cookie cookie = null;
+            try {
+                cookie = cookieUtil.getCookie(request, "JWT");
+            } catch (Exception e) {
+                response.setStatus(401);
+                throw new RuntimeException(e);
+            }
             String token = cookie.getValue();
             String username = jwtUtil.getUsername(token);
             UserDetails user = autenticacaoService.loadUserByUsername(username);
@@ -56,9 +62,12 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     }
 
     private boolean rotaPublica(HttpServletRequest request){
-        return ((request.getRequestURI().equals("/login") && request.getMethod().equals("POST")) ||
+        return ((request.getRequestURI().equals("/login")) ||
+                (request.getRequestURI().equals("/logOut")) ||
                 (request.getRequestURI().equals("/usuario") && request.getMethod().equals("POST")) ||
+                (request.getRequestURI().equals("/usuario") && request.getMethod().equals("GET")) ||
                 (request.getRequestURI().equals("/")) ||
+                (request.getRequestURI().equals("/favicon.ico")) ||
                 (request.getMethod().equals("PATCH")) && request.getRequestURI().equals("/tarefa/arquivos/{id}"));
     };
 
