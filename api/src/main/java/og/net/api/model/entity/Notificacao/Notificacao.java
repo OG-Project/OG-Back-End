@@ -24,4 +24,5 @@ public class Notificacao {
     @ManyToMany
     private List<Usuario> receptores;
     private LocalDateTime dataDeEnvio = LocalDateTime.now();
+    private Boolean visto = false;
 }

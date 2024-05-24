@@ -147,4 +147,14 @@ public class NoticacaoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PatchMapping("/visto/{id}")
+    public ResponseEntity<?> mudaNotificaoParaVista(@PathVariable Integer id){
+        try{
+            notificacaoService.patchVista(id);
+            return new ResponseEntity<>( HttpStatus.OK);
+        }catch (NoSuchElementException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
