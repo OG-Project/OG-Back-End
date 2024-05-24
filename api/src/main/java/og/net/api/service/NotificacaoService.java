@@ -14,6 +14,7 @@ import og.net.api.repository.ProjetoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -86,5 +87,12 @@ public class NotificacaoService {
     }
     public List<Notificacao> buscarPorUsuario(Usuario receptor){
         return notificacaoRepository.findNotificacaosByReceptoresContaining(receptor);
+    }
+
+    public void patchVista(Integer id) {
+        Notificacao notificacao = buscarUm(id);
+        notificacao.setVisto(true);
+        notificacaoRepository.save(notificacao);
+
     }
 }
