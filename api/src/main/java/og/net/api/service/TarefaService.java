@@ -121,10 +121,10 @@ public class TarefaService {
         }
     }
 
-    public Tarefa editar(IDTO dto) throws DadosNaoEncontradoException {
-        TarefaEdicaoDTO tarefaEdicaoDTO = (TarefaEdicaoDTO) dto;
+    public Tarefa editar(TarefaEdicaoDTO dto) throws DadosNaoEncontradoException {
         Tarefa tarefa = new Tarefa();
-        modelMapper.map(tarefaEdicaoDTO,tarefa);
+        modelMapper.map(dto,tarefa);
+        System.out.println(tarefa);
         if (tarefaRepository.existsById(tarefa.getId())){
             return  tarefaRepository.save(tarefa);
         }
