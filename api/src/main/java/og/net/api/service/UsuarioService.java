@@ -192,6 +192,9 @@ public class UsuarioService {
         statusPadrao.add(naoIniciado);
         Projeto projeto = new Projeto(statusPadrao);
         projetoRepository.save(projeto);
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
 
         TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Ler um livro.",
                 "Já leu um pouco hoje? tire 10 minutinhos para ler um livro hoje.",
@@ -200,7 +203,8 @@ public class UsuarioService {
                 "263478",
                 null,
                 naoIniciado,
-                null,null);
+                null,usuarioTarefaList);
+
         TarefaCadastroDTO tarefaCadastroDTO2 = new TarefaCadastroDTO("Fazer uma afirmação positiva.",
                 "Faça uma afirmação positiva sobre você mesmo ou sobre o próximo o dia fica mais leve assim.",
                 true,
@@ -208,7 +212,7 @@ public class UsuarioService {
                 "b36302",
                 null,
                 emProgresso,
-                null,null);
+                null,usuarioTarefaList);
 
         TarefaCadastroDTO tarefaCadastroDTO3 = new TarefaCadastroDTO("Olhe suas tarefas diárias.",
                 "Essa tarefa você já conclui, parabéns seu dia vai ser um sucesso.",
@@ -217,7 +221,7 @@ public class UsuarioService {
                 "600573",
                 null,
                 pronto,
-                null,null);
+                null,usuarioTarefaList);
 
         Tarefa tarefaPadrao1= null;
         Tarefa tarefaPadrao2= null;

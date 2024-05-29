@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioTarefaRepository extends JpaRepository<UsuarioTarefa, Integer> {
 
-    void deleteByTarefa_Id(Integer id);
+
 
 }
