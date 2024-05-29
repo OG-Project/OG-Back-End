@@ -82,6 +82,7 @@ public class TarefaService {
             tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         }
         Tarefa tarefaReturn = null;
+        tarefa.setResponsaveis(colocaResponsaveisTarefa(tarefaCadastroDTO));
         try {
             tarefaReturn = tarefaRepository.save(tarefa);
         } catch (Exception e) {
@@ -90,6 +91,16 @@ public class TarefaService {
         projeto.getTarefas().add(tarefa);
         projetoService.editar(new ProjetoEdicaoDTO(projeto));
         return tarefaReturn;
+    }
+
+
+    private List<UsuarioTarefa> colocaResponsaveisTarefa(TarefaCadastroDTO tarefaCadastroDTO){
+        List<UsuarioTarefa> usuarioTarefas = new ArrayList<>();
+        tarefaCadastroDTO.getResponsaveis().forEach(usuarioTarefa -> {
+            UsuarioTarefa usuarioTarefa1 = new UsuarioTarefa(null,usuarioTarefa.getIdResponsavel());
+            usuarioTarefas.add(usuarioTarefa1);
+        });
+        return usuarioTarefas;
     }
 
     private Valor gerarValor(Propriedade propriedade){

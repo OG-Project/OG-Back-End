@@ -17,9 +17,6 @@ public class UsuarioTarefa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Tarefa tarefa;
 
-    @ManyToOne
-    private Usuario responsavel;
+    private Integer idResponsavel;
 }
