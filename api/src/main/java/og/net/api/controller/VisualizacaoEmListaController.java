@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/visualizacaoEmLista")
 public class VisualizacaoEmListaController {
 

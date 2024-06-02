@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/equipe")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class EquipeController {
 
     private EquipeService equipeService;

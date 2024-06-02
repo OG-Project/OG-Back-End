@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/comentario")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class ComentarioController {
 
     private ComentarioService comentarioService;
