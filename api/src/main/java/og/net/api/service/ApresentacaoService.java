@@ -1,7 +1,6 @@
 package og.net.api.service;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import og.net.api.exception.DadosIncompletosException;
 import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeJaExistenteException;
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,9 +106,166 @@ public class ApresentacaoService {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-//        criProjetoPadraoTi();
+        List<UsuarioProjeto> responsaveisProjetoTI= new ArrayList<>(List.of(usuarioProjetoAntonio));
 
+        Projeto projetoTi= criProjetoPadraoTi(ti,responsaveisProjetoTI);
+        criaTarefaDiretrizesEmpresa(projetoTi, gabrielaBanco);
+        criaTarefaEntregaDoModeloRelacionalBanco(projetoTi, gabrielaBanco);
+        criaTarefaCriacaoBroker(projetoTi,antonioBanco);
+        criaTarefaInterceptacaoRequestNode(projetoTi,antonioBanco);
     }
+
+    private void criaTarefaDiretrizesEmpresa(Projeto projetoRh, Usuario usuario) {
+        Status emProgresso = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Em Progresso")){
+                emProgresso = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+        List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
+
+        for (Propriedade propriedade: projetoRh.getPropriedades()){
+            Data dataEntrega= new Data();
+            LocalDate localDate;
+            dataEntrega.setData(LocalDateTime.of(LocalDate.of(124,6,3), LocalTime.of(13,40,0)));
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null,propriedade,dataEntrega,true);
+            valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+        }
+        SubTarefa subTarefa1 = new SubTarefa(null,"Ler código de Conduta",true);
+        SubTarefa subTarefa2 = new SubTarefa(null,"Fazer curso de ética",true);
+        SubTarefa subTarefa3 = new SubTarefa(null,"Ler normas de Segurança",false);
+        List<SubTarefa> subTarefas = new ArrayList<>(List.of(subTarefa1, subTarefa2, subTarefa3));
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Ler as diretrizes da empresa",
+                "Ler e compreender as diretrizes da empresa e entender seu papel como funcionário",
+                true,
+                LocalDateTime.now(),
+                "888a08",
+                valorPropriedadeTarefas,
+                emProgresso,
+                subTarefas,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void criaTarefaEntregaDoModeloRelacionalBanco(Projeto projetoRh, Usuario usuario) {
+        Status emProgresso = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Em Progresso")){
+                emProgresso = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+        List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
+
+        for (Propriedade propriedade: projetoRh.getPropriedades()){
+            Data dataEntrega= new Data();
+            dataEntrega.setData(LocalDateTime.of(LocalDate.of(124,6,3), LocalTime.of(13,40,0)));
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null,propriedade,dataEntrega,true);
+            valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+        }
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Fazer um modelo de banco de dados Relacional",
+                "Este modelo de banco de dados será usado para guardar dados dos motores equipados com o sensor iot",
+                true,
+                LocalDateTime.now(),
+                "8a0828",
+                valorPropriedadeTarefas,
+                emProgresso,
+                null,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void criaTarefaInterceptacaoRequestNode(Projeto projetoRh, Usuario usuario) {
+        Status emProgresso = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Em Progresso")){
+                emProgresso = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+        List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
+
+        for (Propriedade propriedade: projetoRh.getPropriedades()){
+            Data dataEntrega= new Data();
+            dataEntrega.setData(LocalDateTime.of(LocalDate.of(124,6,12), LocalTime.of(13,40,0)));
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null,propriedade,dataEntrega,true);
+            valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+        }
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Desenvolver uma api em node.js para interceptação das request fornecidas pelo microcontrolador",
+                "Este modelo de banco de dados será usado para guardar dados dos motores equipados com o sensor iot",
+                true,
+                LocalDateTime.now(),
+                "046161",
+                valorPropriedadeTarefas,
+                emProgresso,
+                null,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void criaTarefaCriacaoBroker(Projeto projetoRh, Usuario usuario) {
+        Status pronto = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Pronto")){
+                pronto = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+        List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
+
+        for (Propriedade propriedade: projetoRh.getPropriedades()){
+            Data dataEntrega= new Data();
+            dataEntrega.setData(LocalDateTime.of(LocalDate.of(124,6,4), LocalTime.of(13,40,0)));
+            ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null,propriedade,dataEntrega,true);
+            valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+        }
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Criar um Broker Mqtt",
+                "Este modelo de banco de dados será usado para guardar dados dos motores equipados com o sensor iot",
+                true,
+                LocalDateTime.now(),
+                "520602",
+                valorPropriedadeTarefas,
+                pronto,
+                null,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
     private void criaTarefaSelecaoCandidatosRh(Projeto projetoRh, Usuario usuario) {
         Status pronto = new Status();
@@ -208,7 +365,31 @@ public class ApresentacaoService {
         }
     }
 
-    private void criProjetoPadraoTi() {
+    private Projeto criProjetoPadraoTi(Equipe equipe, List<UsuarioProjeto> responsaveis) {
+        List<Status> statusPadrao = new ArrayList<>();
+        Status naoIniciado = new Status("Não iniciado", "36213E");
+        Status pronto = new Status("Pronto", "38a31a");
+        Status emProgresso = new Status("Em Progresso", "17179c");
+        statusPadrao.add(pronto);
+        statusPadrao.add(emProgresso);
+        statusPadrao.add(naoIniciado);
+        List<Propriedade> propriedades = new ArrayList<>();
+        Propriedade propriedade = new Propriedade(null,"Data de entrega",Tipo.DATA);
+        propriedades.add(propriedade);
+        List<ProjetoEquipe> projetoEquipes = new ArrayList<>();
+        ProjetoEquipe projetoEquipeRh = new ProjetoEquipe(equipe);
+        projetoEquipes.add(projetoEquipeRh);
+        LocalDate dataFinal= null;
+        ProjetoCadastroDTO projetoCadastroDTO = new ProjetoCadastroDTO("Desenvolvimento WEGnology",
+                "Desenvolver aplicações para monitoramento de motores na fábrica",
+                LocalDateTime.now(),
+                statusPadrao,new ArrayList<>(),propriedades,projetoEquipes, responsaveis,LocalDate.of(124,6,6),"meus-projetos");
+
+        try {
+            return projetoService.cadastrar(projetoCadastroDTO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Projeto criaProjetoPadraoRh(Equipe equipe, List<UsuarioProjeto> responsaveis) {

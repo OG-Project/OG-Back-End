@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@lombok.Data
 public class Data extends Valor {
     private LocalDateTime data;
 
