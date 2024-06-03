@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 @AllArgsConstructor
 @RestController
 //@CrossOrigin(origins = "http://localhost:5173")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/propriedade")
 public class PropriedadeController {
 

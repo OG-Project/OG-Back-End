@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
@@ -81,9 +81,6 @@ public class AutenticacaoController {
     }
 
     private List<Cookie> removeCookiesAntigos(HttpServletRequest request){
-        for(Cookie cookie: request.getCookies()){
-            System.out.println(cookie.getName());
-        }
         Cookie cookieJwt = cookieUtil.getCookie(request,"JWT");
         Cookie cookieJsession = cookieUtil.getCookie(request,"JSESSIONID");
         cookieJwt.setMaxAge(0);

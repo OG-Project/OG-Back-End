@@ -39,7 +39,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                 // LOGIN
-
+                .requestMatchers(HttpMethod.POST,"/apresentacao").permitAll()
                 .requestMatchers(HttpMethod.POST,"/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/logOut").permitAll()
                 //USUARIO

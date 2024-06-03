@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @Controller
 @RequestMapping("/notificacao")
 public class NoticacaoController {
