@@ -3,20 +3,24 @@ package og.net.api.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import og.net.api.exception.DadosIncompletosException;
+import og.net.api.exception.DadosNaoEncontradoException;
 import og.net.api.exception.EquipeJaExistenteException;
+import og.net.api.exception.TarefaInesxistenteException;
 import og.net.api.model.dto.EquipeCadastroDTO;
+import og.net.api.model.dto.ProjetoCadastroDTO;
+import og.net.api.model.dto.TarefaCadastroDTO;
 import og.net.api.model.dto.UsuarioCadastroDTO;
-import og.net.api.model.entity.Equipe;
-import og.net.api.model.entity.EquipeUsuario;
-import og.net.api.model.entity.Permissao;
-import og.net.api.model.entity.Usuario;
+import og.net.api.model.entity.*;
 import og.net.api.repository.EquipeRepository;
 import og.net.api.repository.ProjetoRepository;
 import og.net.api.repository.TarefaRepository;
 import og.net.api.repository.UsuarioRepository;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,16 +82,155 @@ public class ApresentacaoService {
         lucasBanco.setEquipes(equipeUsuariosLucas);
 
 
+
         try {
-            antonioBanco= usuarioService.cadastrar(antonio);
-            lucasBanco= usuarioService.cadastrar(lucas);
-            gabrielaBanco = usuarioService.cadastrar(gabriela);
+          antonioBanco= usuarioRepository.save(antonioBanco);
+          lucasBanco= usuarioRepository.save(lucasBanco);
+          gabrielaBanco= usuarioRepository.save(gabrielaBanco);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+        UsuarioProjeto usuarioProjetoAntonio = new UsuarioProjeto(antonioBanco.getId(),
+                List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.DELETAR,Permissao.PATCH));
+        UsuarioProjeto usuarioProjetoLucas = new UsuarioProjeto(lucasBanco.getId(),
+                List.of(Permissao.CRIAR,Permissao.VER,Permissao.EDITAR,Permissao.DELETAR,Permissao.PATCH));
 
+        List<UsuarioProjeto> responsaveisProjetoRH = new ArrayList<>(List.of(usuarioProjetoAntonio, usuarioProjetoLucas));
+       Projeto projetoRh = criaProjetoPadraoRh(rh, responsaveisProjetoRH);
+        criaTarefaSelecaoCandidatosRh(projetoRh,antonioBanco);
+        criaTarefaProvasRh(projetoRh,antonioBanco);
+        try {
+            criaTarefaEntrevistasRh(projetoRh,antonioBanco,lucasBanco);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+//        criProjetoPadraoTi();
 
+    }
+
+    private void criaTarefaSelecaoCandidatosRh(Projeto projetoRh, Usuario usuario) {
+        Status pronto = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Pronto")){
+                pronto = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Seleção de Candidatos",
+                "Selecionar os candidatos para a primeira fase do processo seletivo",
+                true,
+                LocalDateTime.now(),
+                "5e1b6b",
+                null,
+                pronto,
+                null,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void criaTarefaProvasRh(Projeto projetoRh, Usuario usuario) {
+        Status pronto = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Pronto")){
+                pronto = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, usuario.getId());
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Provas",
+                "Aplicar provas de raciocínio lógico, matemática básica e concentração, com o resultado das provas selecionar os canditados que vão para a entrevista",
+                true,
+                LocalDateTime.now(),
+                "1b3e6b",
+                null,
+                pronto,
+                null,usuarioTarefaList);
+
+        try {
+            tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void criaTarefaEntrevistasRh(Projeto projetoRh, Usuario antonio, Usuario lucas) throws IOException {
+        Status emProgresso = new Status();
+        for (Status status: projetoRh.getStatusList()){
+            if(status.getNome().equals("Em Progresso")){
+                emProgresso = status;
+            }
+        }
+
+        UsuarioTarefa usuarioTarefa = new UsuarioTarefa(null, antonio.getId());
+        UsuarioTarefa usuarioTarefaLucas = new UsuarioTarefa(null, lucas.getId());
+
+        List<UsuarioTarefa> usuarioTarefaList = new ArrayList<>();
+        usuarioTarefaList.add(usuarioTarefa);
+        usuarioTarefaList.add(usuarioTarefaLucas);
+
+        TarefaCadastroDTO tarefaCadastroDTO = new TarefaCadastroDTO("Entrevistas",
+                "Entrevistar os candidatos finais e avaliar a perspectiva de futuro dos mesmos",
+                true,
+                LocalDateTime.now(),
+                "1e4f08",
+                null,
+                emProgresso,
+                null,usuarioTarefaList);
+
+        Tarefa tarefa=null;
+        try {
+           tarefa= tarefaService.cadastrar(tarefaCadastroDTO,projetoRh.getId());
+        } catch (DadosNaoEncontradoException e) {
+            throw new RuntimeException(e);
+        }
+
+        ClassPathResource resource = new ClassPathResource ("AprovadosCentroWeg.pdf");
+        byte[] content = Files.readAllBytes(resource.getFile().toPath());
+        Arquivo result = new Arquivo("AprovadosCentroWeg.pdf", content,"application/pdf");
+        try {
+            tarefaService.atualizarArquivo(tarefa.getId(),result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void criProjetoPadraoTi() {
+    }
+
+    private Projeto criaProjetoPadraoRh(Equipe equipe, List<UsuarioProjeto> responsaveis) {
+        List<Status> statusPadrao = new ArrayList<>();
+        Status naoIniciado = new Status("Não iniciado", "36213E");
+        Status pronto = new Status("Pronto", "38a31a");
+        Status emProgresso = new Status("Em Progresso", "17179c");
+        statusPadrao.add(pronto);
+        statusPadrao.add(emProgresso);
+        statusPadrao.add(naoIniciado);
+        List<ProjetoEquipe> projetoEquipes = new ArrayList<>();
+        ProjetoEquipe projetoEquipeRh = new ProjetoEquipe(equipe);
+        projetoEquipes.add(projetoEquipeRh);
+        LocalDate dataFinal= null;
+        ProjetoCadastroDTO projetoCadastroDTO = new ProjetoCadastroDTO("Seleção CTW","Fazer o Processo seletivo para nova turma CTW",LocalDateTime.now(),
+                statusPadrao,new ArrayList<>(),new ArrayList<>(),projetoEquipes, responsaveis,LocalDate.of(2024,6,6),"meus-projetos");
+
+        try {
+            return projetoService.cadastrar(projetoCadastroDTO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

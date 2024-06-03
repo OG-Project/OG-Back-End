@@ -37,7 +37,7 @@ public class Tarefa {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comentario> comentarios;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Arquivo> arquivos;
+    private List<Arquivo> arquivos = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<Indice> indice;
     @OneToMany(cascade = CascadeType.ALL)
@@ -54,7 +54,7 @@ public class Tarefa {
         this.status = status;
         this.subTarefas = null;
         this.comentarios = null;
-        this.arquivos = null;
+        this.arquivos = new ArrayList<>();
         this.indice = indice;
     }
 }

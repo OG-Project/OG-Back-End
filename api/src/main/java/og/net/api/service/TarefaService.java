@@ -67,22 +67,25 @@ public class TarefaService {
         modelMapper.map(tarefaCadastroDTO,tarefa);
         Projeto projeto = projetoRepository.findById(projetoId).get();
         List<ValorPropriedadeTarefa> valorPropriedadeTarefas = new ArrayList<>();
-        List<Indice> lista = List.of(
+        List<Indice> lista = new ArrayList<>(List.of(
                 new Indice(null, 0L, Visualizacao.CALENDARIO),
                 new Indice(null, 0L, Visualizacao.LISTA),
                 new Indice(null, 0L, Visualizacao.TIMELINE),
-                new Indice(null, 0L, Visualizacao.KANBAN));
+                new Indice(null, 0L, Visualizacao.KANBAN)));
         tarefa.setIndice(lista);
         if (projeto.getProjetoEquipes()!=null) {
-            for (Propriedade propriedade : projeto.getPropriedades()) {
+            if (projeto.getPropriedades()!=null) {
+                for (Propriedade propriedade : projeto.getPropriedades()) {
 
-                ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false);
-                valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+                    ValorPropriedadeTarefa valorPropriedadeTarefa = new ValorPropriedadeTarefa(null, propriedade, gerarValor(propriedade), false);
+                    valorPropriedadeTarefas.add(valorPropriedadeTarefa);
+                }
+                tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
             }
-            tarefa.setValorPropriedadeTarefas(valorPropriedadeTarefas);
         }
         Tarefa tarefaReturn = null;
         tarefa.setResponsaveis(colocaResponsaveisTarefa(tarefaCadastroDTO));
+        tarefa.setArquivos(new ArrayList<>());
         try {
             tarefaReturn = tarefaRepository.save(tarefa);
         } catch (Exception e) {
@@ -111,6 +114,16 @@ public class TarefaService {
         Tarefa tarefa = buscarUm(id);
         Arquivo arquivo1 = new Arquivo(arquivo);
         tarefa.getArquivos().add(arquivo1);
+        tarefaRepository.save(tarefa);
+    }
+
+    public void atualizarArquivo(Integer id, Arquivo arquivo) throws IOException, TarefaInesxistenteException {
+        Tarefa tarefa = buscarUm(id);
+        if(tarefa.getArquivos().isEmpty()){
+            tarefa.setArquivos(new ArrayList<>());
+        }
+        System.out.println(tarefa.getArquivos());
+        tarefa.getArquivos().add(arquivo);
         tarefaRepository.save(tarefa);
     }
 
