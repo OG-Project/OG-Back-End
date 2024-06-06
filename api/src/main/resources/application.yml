@@ -1,0 +1,7 @@
+server:
+  port: 9090
+
+topicos:
+  log:
+    request:
+      topic: "historyError.request.topic.v1"
