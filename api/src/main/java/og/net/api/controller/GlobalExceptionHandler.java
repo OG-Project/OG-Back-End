@@ -1,20 +1,21 @@
 package og.net.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import og.net.api.service.ExceptionLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice
+@RestController
+@RequestMapping("/teste-kafka")
 public class GlobalExceptionHandler {
 
     @Autowired
     private ExceptionLogService exceptionLogService;
 
+    @PostMapping
     @ExceptionHandler(Exception.class)
-    public void handleException(Exception e) {
+    public void handleException(@RequestBody String e) throws JsonProcessingException {
         // Log the exception
-        exceptionLogService.logException(e.getMessage());
+        exceptionLogService.logException(e);
     }
 }
